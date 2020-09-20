@@ -1,11 +1,44 @@
 import { libWrapper } from './libwrapper-shim.js'
 
 const MODULE_ID = 'roll-from-compendium'
-
+const COMPENDIUM_ROLL_IMAGE = 'icons/svg/d20-highlight.svg'
+const DUMMY_ACTOR_NAME = '(Compendium Roll)'
 let dummyActor = null
 
-async function rollItemFromCompendium (item) {
-  console.log(`Rolling item from compendium: ${item.name}`)
+async function rollFromCompendium (item) {
+  console.log(`Roll From Compendium | Rolling from compendium: ${item.name}`)
+  if (item instanceof JournalEntry) return rollSimple(item, item.data.content)
+  if (item instanceof Actor) return rollSimple(item)
+  if (item instanceof Scene) return rollSimple(item)
+  if (item instanceof Macro) return rollMacro(item)
+  if (item instanceof RollTable) return rollRollableTable(item)
+  if (item instanceof Item) return rollItem(item)
+  console.error(`Roll From Compendium | Unknown class for ${item.name}: ${item.constructor.name}`)
+}
+
+async function rollSimple (item, extraContents) {
+  const img = item.img || item.data.img || COMPENDIUM_ROLL_IMAGE
+  const content =
+    `<div class="${game.system.id} chat-card item-card">
+          <header class="card-header flexrow">
+          <img src="${img}" width="36" height="36"/>
+          <h3 class="item-name">${item.name}</h3>
+          </header>
+      </div>
+      ${extraContents || ''}
+      `
+  return await ChatMessage.create({ content })
+}
+
+async function rollMacro (item) {
+  return await item.execute()
+}
+
+async function rollRollableTable (item) {
+  return await item.draw()
+}
+
+async function rollItem (item) {
   if (dummyActor === null) {
     dummyActor = await findOrCreateDummyActor()
   }
@@ -41,8 +74,7 @@ function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
 }
 
 async function findOrCreateDummyActor () {
-  const dummyActorName = "(Compendium Roll)"
-  const foundActor = game.actors.find(a => a.name === dummyActorName)
+  const foundActor = game.actors.find(a => a.name === DUMMY_ACTOR_NAME)
   if (foundActor !== null) {
     return foundActor
   }
@@ -53,8 +85,8 @@ async function findOrCreateDummyActor () {
 
   // Setup entity data
   const createData = {
-    name: dummyActorName,
-    img: 'icons/svg/d20-highlight.svg',
+    name: DUMMY_ACTOR_NAME,
+    img: COMPENDIUM_ROLL_IMAGE,
     type: types[0],
     types: types[0],
   }
@@ -74,7 +106,7 @@ function rollFromCompendiumContextMenuItem () {
     icon: '<i class="fas fa-dice-d20"></i>',
     callback: li => {
       const entryId = li.attr('data-entry-id')
-      this.getEntity(entryId).then(rollItemFromCompendium)
+      this.getEntity(entryId).then(rollFromCompendium)
     }
   }
 }
@@ -127,5 +159,5 @@ Hooks.once('setup', function () {
     _contextMenu_Override,
     'OVERRIDE'
   )
-  console.log('Done setting up Zoom/Pan Options.')
+  console.log('Roll From Compendium | Done setting up.')
 })
