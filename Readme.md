@@ -17,14 +17,18 @@ When clicking this option, the item will be "rolled", and a card will be shown i
 - A spell will be cast
 - A weapon will be used, allowing an attack and damage roll
 - A feature will be described
-- etc. for "Item" type compendiums (all of which have a roll() function)
+- etc. for "Item" type compendiums (all of which have a `roll()` function, which this module calls)
 - Journal Entries will show a message with their title and description
 - Actors and Scenes will just have their basic info (image and name) shown in the chat
 
 ![](github_media/Screenshot_2.png)
+
 ![](github_media/Screenshot_3.png)
+
 ![](github_media/Screenshot_4.png)
+
 ![](github_media/Screenshot_5.png)
+
 ![](github_media/Screenshot_6.png)
 
 # Dummy Actor
@@ -40,6 +44,6 @@ be found in the Actors tab, named "(Compendium Roll)". If you want to change the
 ![](github_media/Screenshot_9.png)
 
 # Note for D&D 5th Edition
-- When casting a spell with no actor or a spell your selected character is unable to cast, you'll want to toggle
- off "Consume spell slot" in the dialog that opens; otherwise it will fail to cast. This is because of a bug in
+- When casting a spell with a dummy actor when your selected character doesn't have the spell slots for it, you'll want 
+to toggle off "Consume spell slot" in the dialog that opens; otherwise it will fail to cast. This is because of a bug in
  the 5e system - its code can't deal with someone casting a spell they don't have the right spell slots for.
