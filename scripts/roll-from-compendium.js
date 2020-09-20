@@ -2,9 +2,63 @@ import { libWrapper } from './libwrapper-shim.js'
 
 const MODULE_ID = 'roll-from-compendium'
 
-function rollItemFromCompendium(item) {
+let dummyActor = null
+
+async function rollItemFromCompendium (item) {
   console.log(`Rolling item from compendium: ${item.name}`)
-  item.roll()
+  if (dummyActor === null) {
+    dummyActor = await findOrCreateDummyActor()
+  }
+  const actor = canvas.tokens.controlled[0]?.actor || dummyActor
+  actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
+  item.options.actor = actor
+  item._getChatCardActor = () => actor
+  if (actor?.sheet?._onItemRoll) {
+    // a hack, to be compatible with 5e sheet's _onItemRoll
+    const pseudoEvent = {
+      preventDefault: () => {},
+      currentTarget: {
+        closest: () => {
+          return {
+            dataset: {
+              itemId: item.id
+            }
+          }
+        }
+      }
+    }
+    actor.sheet._onItemRoll(pseudoEvent)
+  } else {
+    item.roll()
+  }
+}
+
+function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
+  return function (itemId) {
+    if (itemId === compendiumItem.id) return compendiumItem
+    else return getOwnedItem.bind(this)(itemId)
+  }
+}
+
+async function findOrCreateDummyActor () {
+  const dummyActorName = "(Compendium Roll)"
+  const foundActor = game.actors.find(a => a.name === dummyActorName)
+  if (foundActor !== null) {
+    return foundActor
+  }
+
+  const ent = 'Actor'
+  const cls = CONFIG.Actor.entityClass
+  const types = game.system.entityTypes[ent]
+
+  // Setup entity data
+  const createData = {
+    name: dummyActorName,
+    img: 'icons/svg/d20-highlight.svg',
+    type: types[0],
+    types: types[0],
+  }
+  return cls.create(createData, { renderSheet: false })
 }
 
 function _contextMenu_Override (html) {
@@ -70,9 +124,7 @@ Hooks.once('setup', function () {
   libWrapper.register(
     MODULE_ID,
     'Compendium.prototype._contextMenu',
-    (html) => {
-      return _contextMenu_Override(html)
-    },
+    _contextMenu_Override,
     'OVERRIDE'
   )
   console.log('Done setting up Zoom/Pan Options.')
