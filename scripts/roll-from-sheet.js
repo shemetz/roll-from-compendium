@@ -1,7 +1,7 @@
 import { rollFromCompendium, rollItem } from './roll-from-compendium.js'
 
 export function _getHeaderButtons__Item_Override (wrapped) {
-  const buttons = wrapped()
+  const buttons = wrapped.bind(this)()
 
   // Add a Roll button
   buttons.unshift({
@@ -16,7 +16,7 @@ export function _getHeaderButtons__Item_Override (wrapped) {
 }
 
 export function _getHeaderButtons__Journal_Override (wrapped) {
-  const buttons = wrapped()
+  const buttons = wrapped.bind(this)()
 
   // Add a Show in chat button
   buttons.unshift({
