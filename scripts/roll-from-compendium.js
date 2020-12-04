@@ -1,18 +1,15 @@
-import { libWrapper } from './libwrapper-shim.js'
-
-const MODULE_ID = 'roll-from-compendium'
 const COMPENDIUM_ROLL_IMAGE = 'icons/svg/d20-highlight.svg'
 const DUMMY_ACTOR_NAME = '(Compendium Roll)'
 let dummyActor = null
 
-async function rollFromCompendium (item) {
+export async function rollFromCompendium (item, event) {
   console.log(`Roll From Compendium | Rolling from compendium: ${item.name}`)
   if (item instanceof JournalEntry) return rollSimple(item, item.data.content)
   if (item instanceof Actor) return rollSimple(item)
   if (item instanceof Scene) return rollSimple(item)
   if (item instanceof Macro) return rollMacro(item)
   if (item instanceof RollTable) return rollRollableTable(item)
-  if (item instanceof Item) return rollItem(item)
+  if (item instanceof Item) return rollItem(item, event)
   console.error(`Roll From Compendium | Unknown class for ${item.name}: ${item.constructor.name}`)
 }
 
@@ -38,7 +35,7 @@ async function rollRollableTable (item) {
   return await item.draw()
 }
 
-async function rollItem (item) {
+export async function rollItem (item, event) {
   if (dummyActor === null) {
     dummyActor = await findOrCreateDummyActor()
   }
@@ -46,6 +43,11 @@ async function rollItem (item) {
   actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
   item.options.actor = actor
   item._getChatCardActor = () => actor
+  if (Array.from(game.modules).some(m => m[0].startsWith("betterrolls"))) {
+    const customRollItem = BetterRolls.rollItem(item, {event: event, preset: 0})
+    customRollItem.consumeCharge = () => Promise.resolve(true)
+    return customRollItem.toMessage()
+  }
   if (actor?.sheet?._onItemRoll) {
     // a hack, to be compatible with 5e sheet's _onItemRoll
     const pseudoEvent = {
@@ -66,7 +68,7 @@ async function rollItem (item) {
   }
 }
 
-function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
+export function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
   return function (itemId) {
     if (itemId === compendiumItem.id) return compendiumItem
     else return getOwnedItem.bind(this)(itemId)
@@ -93,7 +95,7 @@ async function findOrCreateDummyActor () {
   return cls.create(createData, { renderSheet: false })
 }
 
-function _contextMenu_Override (html) {
+export function _contextMenu_Override (html) {
   new ContextMenu(html, '.directory-item', [
     rollFromCompendiumContextMenuItem.bind(this)(),
     ...coreFoundryContextMenuItems.bind(this)()
@@ -105,8 +107,11 @@ function rollFromCompendiumContextMenuItem () {
     name: 'Roll',
     icon: '<i class="fas fa-dice-d20"></i>',
     callback: li => {
+      const mouseEvent = event
       const entryId = li.attr('data-entry-id')
-      this.getEntity(entryId).then(rollFromCompendium)
+      this.getEntity(entryId).then(item => {
+        rollFromCompendium(item, mouseEvent)
+      })
     }
   }
 }
@@ -151,13 +156,3 @@ function coreFoundryContextMenuItems () {
     }
   ]
 }
-
-Hooks.once('setup', function () {
-  libWrapper.register(
-    MODULE_ID,
-    'Compendium.prototype._contextMenu',
-    _contextMenu_Override,
-    'OVERRIDE'
-  )
-  console.log('Roll From Compendium | Done setting up.')
-})

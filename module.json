@@ -7,7 +7,7 @@
   "minimumCoreVersion": "0.6.0",
   "compatibleCoreVersion": "0.7.7",
   "esmodules": [
-    "scripts/roll-from-compendium.js"
+    "scripts/hooks.js"
   ],
   "url": "https://github.com/itamarcu/roll-from-compendium",
   "manifest": "https://github.com/itamarcu/roll-from-compendium/raw/master/module.json",
