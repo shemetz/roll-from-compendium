@@ -8,6 +8,8 @@ Add compendium context menu option to roll an item (casting a spell, showing a f
 
 ![](github_media/Screenshot_1.png)
 
+![](github_media/Screenshot_7.png)
+
 # Features
 
 This module adds a new context menu button to the Compendium window. When right-clicking an item from the list,
@@ -21,6 +23,8 @@ When clicking this option, the item will be "rolled", and a card will be shown i
 - Journal Entries will show a message with their title and description
 - Actors and Scenes will just have their basic info (image and name) shown in the chat
 
+A button will also be added to the header of the item sheet (and journal sheet) - behaving in the same way.
+
 ![](github_media/Screenshot_2.png)
 
 ![](github_media/Screenshot_3.png)
@@ -32,16 +36,24 @@ When clicking this option, the item will be "rolled", and a card will be shown i
 ![](github_media/Screenshot_6.png)
 
 # Dummy Actor
-When Item items (spells, weapons, equipment, features...) are rolled, they will be rolled as if they belong to an actor.
+When "Item" items (spells, weapons, equipment, features...) are rolled, they will be rolled as if they belong to an actor.
 
-If you are selecting a token while rolling, it will be as if the item is used by that actor. This means that, for
-example, a weapon will use the abilities of the character, and a 5e spell will have a saving throw DC based on the
-character's statistics.
+If you are selecting a token while rolling (or if you're rolling from the sheet header on an item that belongs to an 
+ actor), it will be as if the item is used by that actor. This means that, for example, a weapon will use the abilities 
+ of the character, and a 5e spell will have a saving throw DC based on the
+ character's statistics.
 
 However, if no token is selected, a "dummy actor" will be created (once) and used for that purpose. The dummy actor can
-be found in the Actors tab, named "(Compendium Roll)". If you want to change the default actor used to cast
+ be found in the Actors tab, named "(Compendium Roll)". If you want to change the default actor used for this purpose,
+ you'll need to alter this actor after it has been created for the first time, or rename an existing actor to have that
+ name.
 
 ![](github_media/Screenshot_9.png)
+
+# BetterRolls
+
+This module is compatible with [BetterRolls for 5e](https://github.com/RedReign/FoundryVTT-BetterRolls5e), and will call
+ the BetterRolls' "quick roll" option on items.
 
 # Note for D&D 5th Edition
 - When casting a spell with a dummy actor when your selected character doesn't have the spell slots for it, you'll want 
