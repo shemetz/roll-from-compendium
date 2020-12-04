@@ -43,8 +43,8 @@ export async function rollItem (item, event) {
   actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
   item.options.actor = actor
   item._getChatCardActor = () => actor
-  if (Array.from(game.modules).some(m => m[0].startsWith("betterrolls"))) {
-    const customRollItem = BetterRolls.rollItem(item, {event: event, preset: 0})
+  if (Array.from(game.modules).some(m => m[0].startsWith('betterrolls'))) {
+    const customRollItem = BetterRolls.rollItem(item, { event: event, preset: 0 })
     customRollItem.consumeCharge = () => Promise.resolve(true)
     return customRollItem.toMessage()
   }
@@ -56,11 +56,11 @@ export async function rollItem (item, event) {
         closest: () => {
           return {
             dataset: {
-              itemId: item.id
-            }
+              itemId: item.id,
+            },
           }
-        }
-      }
+        },
+      },
     }
     actor.sheet._onItemRoll(pseudoEvent)
   } else {
@@ -98,7 +98,7 @@ async function findOrCreateDummyActor () {
 export function _contextMenu_Override (html) {
   new ContextMenu(html, '.directory-item', [
     rollFromCompendiumContextMenuItem.bind(this)(),
-    ...coreFoundryContextMenuItems.bind(this)()
+    ...coreFoundryContextMenuItems.bind(this)(),
   ])
 }
 
@@ -112,7 +112,7 @@ function rollFromCompendiumContextMenuItem () {
       this.getEntity(entryId).then(item => {
         rollFromCompendium(item, mouseEvent)
       })
-    }
+    },
   }
 }
 
@@ -125,7 +125,7 @@ function coreFoundryContextMenuItems () {
         const entryId = li.attr('data-entry-id')
         const entities = this.cls.collection
         return entities.importFromCollection(this.collection, entryId, {}, { renderSheet: true })
-      }
+      },
     },
     {
       name: 'Delete',
@@ -142,17 +142,17 @@ function coreFoundryContextMenuItems () {
               yes: {
                 icon: '<i class="fas fa-trash"></i>',
                 label: 'Delete',
-                callback: () => this.deleteEntity(entryId)
+                callback: () => this.deleteEntity(entryId),
               },
               no: {
                 icon: '<i class="fas fa-times"></i>',
-                label: 'Cancel'
-              }
+                label: 'Cancel',
+              },
             },
-            default: 'yes'
+            default: 'yes',
           }).render(true)
         })
-      }
-    }
+      },
+    },
   ]
 }
