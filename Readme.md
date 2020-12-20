@@ -6,9 +6,9 @@
 
 Add compendium context menu option to roll an item (casting a spell, showing a feature, etc).
 
-![](github_media/Screenshot_1.png)
+![](metadata/Screenshot_1.png)
 
-![](github_media/Screenshot_7.png)
+![](metadata/Screenshot_7.png)
 
 # Features
 
@@ -25,15 +25,15 @@ When clicking this option, the item will be "rolled", and a card will be shown i
 
 A button will also be added to the header of the item sheet (and journal sheet) - behaving in the same way.
 
-![](github_media/Screenshot_2.png)
+![](metadata/Screenshot_2.png)
 
-![](github_media/Screenshot_3.png)
+![](metadata/Screenshot_3.png)
 
-![](github_media/Screenshot_4.png)
+![](metadata/Screenshot_4.png)
 
-![](github_media/Screenshot_5.png)
+![](metadata/Screenshot_5.png)
 
-![](github_media/Screenshot_6.png)
+![](metadata/Screenshot_6.png)
 
 # Dummy Actor
 When "Item" items (spells, weapons, equipment, features...) are rolled, they will be rolled as if they belong to an actor.
@@ -48,7 +48,7 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
  you'll need to alter this actor after it has been created for the first time, or rename an existing actor to have that
  name.
 
-![](github_media/Screenshot_9.png)
+![](metadata/Screenshot_9.png)
 
 # BetterRolls
 
