@@ -2,7 +2,23 @@ import { libWrapper } from './libwrapper-shim.js'
 import { _contextMenu_Override } from './roll-from-compendium.js'
 import { _getHeaderButtons__Item_Override, _getHeaderButtons__Journal_Override } from './roll-from-sheet.js'
 
-const MODULE_ID = 'roll-from-compendium'
+export const MODULE_ID = 'roll-from-compendium'
+
+Hooks.once('init', function () {
+  game.settings.register(MODULE_ID, 'window-header-button', {
+    name: 'Window header button',
+    hint: 'Affects how the added header button looks in windows',
+    scope: 'client',
+    config: false,
+    type: String,
+    choices: {
+      'Full': 'Default: will look like "🎲Roll"',
+      'Only icon': '"🎲"',
+      'Hide': 'Will not add any header button to your sheets.',
+    },
+    default: 'Full',
+  })
+})
 
 Hooks.once('setup', function () {
   libWrapper.register(
