@@ -43,7 +43,7 @@ export async function rollItem (item, event) {
   actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
   item.options.actor = actor
   item._getChatCardActor = () => actor
-  if (window.BetterRolls !== undefined) {
+  if (!event.altKey && window.BetterRolls !== undefined) {
     const customRollItem = BetterRolls.rollItem(item, { event: event, preset: 0 })
     customRollItem.consumeCharge = () => Promise.resolve(true)
     return customRollItem.toMessage()

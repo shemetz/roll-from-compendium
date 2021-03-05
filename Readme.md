@@ -25,6 +25,8 @@ When clicking this option, the item will be "rolled", and a card will be shown i
 
 A button will also be added to the header of the item sheet (and journal sheet) - behaving in the same way.
 
+A similar button will be added to the "Items" sidebar, for each item, when right-clicking it.
+
 ![](metadata/Screenshot_2.png)
 
 ![](metadata/Screenshot_3.png)
@@ -34,6 +36,8 @@ A button will also be added to the header of the item sheet (and journal sheet) 
 ![](metadata/Screenshot_5.png)
 
 ![](metadata/Screenshot_6.png)
+
+![](metadata/Screenshot_10.png)
 
 # Dummy Actor
 When "Item" items (spells, weapons, equipment, features...) are rolled, they will be rolled as if they belong to an actor.
@@ -53,7 +57,7 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
 # BetterRolls
 
 This module is compatible with [BetterRolls for 5e](https://github.com/RedReign/FoundryVTT-BetterRolls5e), and will call
- the BetterRolls' "quick roll" option on items.
+ the BetterRolls' "quick roll" option on items.  However, if you want to see the full item description (instead of e.g. a )
 
 # Note for D&D 5th Edition
 - When casting a spell with a dummy actor when your selected character doesn't have the spell slots for it, you'll want 
