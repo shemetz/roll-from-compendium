@@ -40,32 +40,36 @@ export async function rollItem (item, event) {
     dummyActor = await findOrCreateDummyActor()
   }
   const actor = canvas.tokens.controlled[0]?.actor || dummyActor
+  // overriding to pretend like the actor owns the item
   actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
-  item.options.actor = actor
-  item._getChatCardActor = () => actor
+  const originalActorItemsGet = actor.items.get
+  actor.items.get = (key, ...args) => {
+    if (key === item.id) {
+      return item
+    } else return originalActorItemsGet.bind(actor.items)(key, ...args)
+  }
+  // overriding to pretend like the item is owned by the actor
+  // (overriding the read-only item.actor with some UGLY HACKS)
+  Object.defineProperty(item, 'actor', {
+    value: actor,
+    configurable: true,
+  })
+  Object.defineProperty(item, 'isOwned', {
+    value: true,
+    configurable: true,
+  })
   if (!event.altKey && window.BetterRolls !== undefined) {
     const customRollItem = BetterRolls.rollItem(item, { event: event, preset: 0 })
     customRollItem.consumeCharge = () => Promise.resolve(true)
     return customRollItem.toMessage()
   }
-  if (actor?.sheet?._onItemRoll) {
-    // a hack, to be compatible with 5e sheet's _onItemRoll
-    const pseudoEvent = {
-      preventDefault: () => {},
-      currentTarget: {
-        closest: () => {
-          return {
-            dataset: {
-              itemId: item.id,
-            },
-          }
-        },
-      },
+  return item.roll().then(chatDataOrMessage => {
+    if (game.system.id === 'dnd5e') {
+      // embed the item data in the chat message
+      chatDataOrMessage.setFlag('dnd5e', 'itemData', item.data)
     }
-    actor.sheet._onItemRoll(pseudoEvent)
-  } else {
-    item.roll()
-  }
+    return chatDataOrMessage
+  })
 }
 
 export function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
@@ -108,8 +112,8 @@ function rollFromCompendiumContextMenuItem () {
     icon: '<i class="fas fa-dice-d20"></i>',
     callback: li => {
       const mouseEvent = event
-      const entryId = li.attr('data-entry-id')
-      this.getEntity(entryId).then(item => {
+      const entryId = li.attr('data-document-id')
+      this.collection.getDocument(entryId).then(item => {
         rollFromCompendium(item, mouseEvent)
       })
     },
@@ -122,7 +126,7 @@ function coreFoundryContextMenuItems () {
       name: 'Import',
       icon: '<i class="fas fa-download"></i>',
       callback: li => {
-        const entryId = li.attr('data-entry-id')
+        const entryId = li.attr('data-document-id')
         const entities = this.cls.collection
         return entities.importFromCollection(this.collection, entryId, {}, { renderSheet: true })
       },
@@ -131,8 +135,8 @@ function coreFoundryContextMenuItems () {
       name: 'Delete',
       icon: '<i class="fas fa-trash"></i>',
       callback: li => {
-        let entryId = li.attr('data-entry-id')
-        this.getEntity(entryId).then(entry => {
+        let entryId = li.attr('data-document-id')
+        this.collection.getDocument(entryId).then(entry => {
           new Dialog({
             title: `Delete ${entry.name}`,
             content: '<h3>Are you sure?</h3>' +

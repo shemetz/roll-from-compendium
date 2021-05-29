@@ -63,3 +63,8 @@ This module is compatible with [BetterRolls for 5e](https://github.com/RedReign/
 - When casting a spell with a dummy actor when your selected character doesn't have the spell slots for it, you'll want 
 to toggle off "Consume spell slot" in the dialog that opens; otherwise it will fail to cast. This is because of a bug in
  the 5e system - its code can't deal with someone casting a spell they don't have the right spell slots for.
+- If you press a button on the rolled item's chat message (e.g. the damage of a sword attack) - it will treat the item
+ as if it belongs to the latest actor that used the compendium item, regardless of which actor was linked to the message.
+  This means it might be using the wrong actor's stats if you press a button on an "old" message after switching your
+  selected actor.
+  This is a known bug (that I don't know how to solve).
