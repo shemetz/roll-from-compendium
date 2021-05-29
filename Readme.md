@@ -57,7 +57,7 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
 # BetterRolls
 
 This module is compatible with [BetterRolls for 5e](https://github.com/RedReign/FoundryVTT-BetterRolls5e), and will call
- the BetterRolls' "quick roll" option on items.  However, if you want to see the full item description (instead of e.g. a )
+ the BetterRolls' "quick roll" option on items.  If you want to disable/ignore it, hold the Alt key while clicking.
 
 # Note for D&D 5th Edition
 - When casting a spell with a dummy actor when your selected character doesn't have the spell slots for it, you'll want 
