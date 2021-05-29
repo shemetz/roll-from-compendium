@@ -1,6 +1,6 @@
 {
   "name": "roll-from-compendium",
-  "title": "Roll from Compendium",
+  "title": "Roll From Compendium",
   "description": "Add compendium context menu option to roll an item (casting a spell, showing a feature, etc).",
   "author": "shem",
   "version": "1.1.0",
@@ -12,7 +12,9 @@
   "url": "https://github.com/itamarcu/roll-from-compendium",
   "manifest": "https://github.com/itamarcu/roll-from-compendium/raw/master/module.json",
   "download": "https://github.com/itamarcu/roll-from-compendium/archive/master.zip",
-  "readme": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/README.md",
+  "readme": "https://github.com/itamarcu/roll-from-compendium/blob/master/Readme.md",
+  "changelog": "https://github.com/itamarcu/roll-from-compendium/blob/master/Changelog.md",
+  "license": "https://github.com/itamarcu/roll-from-compendium/blob/master/License.md",
   "bugs": "https://github.com/itamarcu/roll-from-compendium/issues",
   "authors": [
     {
@@ -22,15 +24,17 @@
       "reddit": "u/Shemetz"
     }
   ],
-  "manifestPlusVersion": "1.0.0",
+  "manifestPlusVersion": "1.2.0",
   "media": [
     {
       "type": "screenshot",
-      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/Screenshot_1.png"
+      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/Screenshot_1.png",
+      "caption": "Roll From Compendium - Fireball example"
     },
     {
       "type": "cover",
-      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/Screenshot_1.png"
+      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/Screenshot_1.png",
+      "caption": "Roll From Compendium"
     }
   ]
 }
