@@ -123,38 +123,27 @@ function rollFromCompendiumContextMenuItem () {
 function coreFoundryContextMenuItems () {
   return [
     {
-      name: 'Import',
+      name: 'COMPENDIUM.ImportEntry',
       icon: '<i class="fas fa-download"></i>',
+      condition: () => this.collection.documentClass.canUserCreate(game.user),
       callback: li => {
-        const entryId = li.attr('data-document-id')
-        const entities = this.cls.collection
-        return entities.importFromCollection(this.collection, entryId, {}, { renderSheet: true })
+        const collection = game.collections.get(this.collection.documentName)
+        const id = li.data('document-id')
+        return collection.importFromCompendium(this.collection, id, {}, { renderSheet: true })
       },
     },
     {
-      name: 'Delete',
+      name: 'COMPENDIUM.DeleteEntry',
       icon: '<i class="fas fa-trash"></i>',
-      callback: li => {
-        let entryId = li.attr('data-document-id')
-        this.collection.getDocument(entryId).then(entry => {
-          new Dialog({
-            title: `Delete ${entry.name}`,
-            content: '<h3>Are you sure?</h3>' +
-              '<p>This compendium entry and its data will be deleted.</p>' +
-              '<p>If you do not own this compendium, your change could be reverted by future updates.</p>',
-            buttons: {
-              yes: {
-                icon: '<i class="fas fa-trash"></i>',
-                label: 'Delete',
-                callback: () => this.deleteEntity(entryId),
-              },
-              no: {
-                icon: '<i class="fas fa-times"></i>',
-                label: 'Cancel',
-              },
-            },
-            default: 'yes',
-          }).render(true)
+      condition: () => game.user.isGM,
+      callback: async li => {
+        const id = li.data('document-id')
+        const document = await this.collection.getDocument(id)
+        return Dialog.confirm({
+          title: `${game.i18n.localize('COMPENDIUM.DeleteEntry')} ${document.name}`,
+          content: `<h4>${game.i18n.localize('AreYouSure')}</h4><p>${game.i18n.localize(
+            'COMPENDIUM.DeleteEntryWarning')}</p>`,
+          yes: () => document.delete(),
         })
       },
     },
