@@ -68,3 +68,7 @@ to toggle off "Consume spell slot" in the dialog that opens; otherwise it will f
   This means it might be using the wrong actor's stats if you press a button on an "old" message after switching your
   selected actor.
   This is a known bug (that I don't know how to solve).
+
+# Note for Pathfinder 2nd Edition
+- Compatibility is limited right now, but it's on my to-do list!  Currently most things should work but not buttons on 
+spells.
