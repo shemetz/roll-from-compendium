@@ -1,3 +1,5 @@
+import { createSpellcastingInCompendiumRoll, getSpellcasting } from './pf2e-compatibility.js'
+
 const COMPENDIUM_ROLL_IMAGE = 'icons/svg/d20-highlight.svg'
 const DUMMY_ACTOR_NAME = '(Compendium Roll)'
 let dummyActor = null
@@ -18,7 +20,7 @@ async function rollSimple (item, extraContents) {
   const content =
     `<div class="${game.system.id} chat-card item-card">
           <header class="card-header flexrow">
-          <img src="${img}" width="36" height="36"/>
+          <img src="${img}" width="36" height="36" alt="${item.name || img}"/>
           <h3 class="item-name">${item.name}</h3>
           </header>
       </div>
@@ -63,13 +65,23 @@ export async function rollItem (item, event) {
     customRollItem.consumeCharge = () => Promise.resolve(true)
     return customRollItem.toMessage()
   }
-  return item.roll().then(chatDataOrMessage => {
-    if (game.system.id === 'dnd5e') {
+  if (game.system.id === 'pf2e') {
+    Object.defineProperty(item, 'spellcasting', {
+      value: getSpellcasting(actor, dummyActor),
+      configurable: true,
+    })
+    // TODO: figure out a way to make buttons on spells work.
+    // current issue: the chat card doesn't have an item
+    return item.toMessage(event)
+  }
+  if (game.system.id === 'dnd5e') {
+    return item.roll().then(chatDataOrMessage => {
       // embed the item data in the chat message
       chatDataOrMessage.setFlag('dnd5e', 'itemData', item.data)
-    }
-    return chatDataOrMessage
-  })
+      return chatDataOrMessage
+    })
+  }
+  return item.roll()
 }
 
 export function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
@@ -96,7 +108,11 @@ async function findOrCreateDummyActor () {
     type: types[0],
     types: types[0],
   }
-  return cls.create(createData, { renderSheet: false })
+  const actor = await cls.create(createData, { renderSheet: false })
+  if (game.system.id === 'pf2e') {
+    await createSpellcastingInCompendiumRoll(actor)
+  }
+  return actor
 }
 
 export function _contextMenu_Override (html) {
