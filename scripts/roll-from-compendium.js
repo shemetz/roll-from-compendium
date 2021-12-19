@@ -1,4 +1,5 @@
-import { createSpellcastingInCompendiumRoll, getSpellcasting } from './pf2e-compatibility.js'
+import { dnd5eRollItem } from './dnd5e-compatibility.js'
+import { pf2eInitializeDummyActor, pf2eCastSpell } from './pf2e-compatibility.js'
 
 const COMPENDIUM_ROLL_IMAGE = 'icons/svg/d20-highlight.svg'
 const DUMMY_ACTOR_NAME = '(Compendium Roll)'
@@ -38,48 +39,41 @@ async function rollRollableTable (item) {
 }
 
 export async function rollItem (item, event) {
+  event && event.preventDefault()
   if (dummyActor === null) {
     dummyActor = await findOrCreateDummyActor()
   }
   const actor = canvas.tokens.controlled[0]?.actor || dummyActor
-  // overriding to pretend like the actor owns the item
-  actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
-  const originalActorItemsGet = actor.items.get
-  actor.items.get = (key, ...args) => {
-    if (key === item.id) {
-      return item
-    } else return originalActorItemsGet.bind(actor.items)(key, ...args)
-  }
-  // overriding to pretend like the item is owned by the actor
-  // (overriding the read-only item.actor with some UGLY HACKS)
-  Object.defineProperty(item, 'actor', {
-    value: actor,
-    configurable: true,
-  })
-  Object.defineProperty(item, 'isOwned', {
-    value: true,
-    configurable: true,
-  })
-  if (!event.altKey && window.BetterRolls !== undefined) {
-    const customRollItem = BetterRolls.rollItem(item, { event: event, preset: 0 })
-    customRollItem.consumeCharge = () => Promise.resolve(true)
-    return customRollItem.toMessage()
-  }
-  if (game.system.id === 'pf2e') {
-    Object.defineProperty(item, 'spellcasting', {
-      value: getSpellcasting(actor, dummyActor),
+  const actorHasItem = !!actor.items.get(item.id)
+  if (!actorHasItem) {
+    // overriding to pretend like the actor owns the item
+    actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
+    const originalActorItemsGet = actor.items.get
+    actor.items.get = (key, ...args) => {
+      if (key === item.id) {
+        return item
+      } else return originalActorItemsGet.bind(actor.items)(key, ...args)
+    }
+    // overriding to pretend like the item is owned by the actor
+    // (overriding the read-only item.actor with some UGLY HACKS)
+    Object.defineProperty(item, 'actor', {
+      value: actor,
       configurable: true,
     })
-    // TODO: figure out a way to make buttons on spells work.
-    // current issue: the chat card doesn't have an item
-    return item.toMessage(event)
+    Object.defineProperty(item, 'isOwned', {
+      value: true,
+      configurable: true,
+    })
+  }
+  if (game.system.id === 'pf2e') {
+    if (item.type === 'spell') {
+      return pf2eCastSpell(item, actor, dummyActor)
+    } else {
+      return item.toMessage()
+    }
   }
   if (game.system.id === 'dnd5e') {
-    return item.roll().then(chatDataOrMessage => {
-      // embed the item data in the chat message
-      chatDataOrMessage.setFlag('dnd5e', 'itemData', item.data)
-      return chatDataOrMessage
-    })
+    return dnd5eRollItem(item, actor, actorHasItem)
   }
   return item.roll()
 }
@@ -93,24 +87,23 @@ export function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
 
 async function findOrCreateDummyActor () {
   const foundActor = game.actors.find(a => a.name === DUMMY_ACTOR_NAME)
-  if (foundActor !== null) {
+  if (foundActor) {
     return foundActor
   }
 
-  const ent = 'Actor'
-  const cls = CONFIG.Actor.entityClass
-  const types = game.system.entityTypes[ent]
+  const cls = CONFIG.Actor.documentClass
+  const types = game.system.documentTypes.Actor
 
-  // Setup entity data
+  // Setup document data
   const createData = {
     name: DUMMY_ACTOR_NAME,
     img: COMPENDIUM_ROLL_IMAGE,
-    type: types[0],
+    type: types[0],  // e.g. 'character' in dnd5e and pf2e
     types: types[0],
   }
-  const actor = await cls.create(createData, { renderSheet: false })
+  let actor = await cls.create(createData, { renderSheet: false })
   if (game.system.id === 'pf2e') {
-    await createSpellcastingInCompendiumRoll(actor)
+    actor = await pf2eInitializeDummyActor(actor)
   }
   return actor
 }
