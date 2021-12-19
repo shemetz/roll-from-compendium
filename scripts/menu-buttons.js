@@ -44,7 +44,7 @@ export function _getEntryContextOptions__Item_Override (wrapped) {
     class: 'roll-from-sheet',
     icon: '<i class="fas fa-dice-d20"></i>',
     callback: li => {
-      const item = game.items.get(li.data("entityId"));
+      const item = game.items.get(li.data("documentId"));
       return rollItem(item, event)  // don't worry, event DOES exist
     },
   })
