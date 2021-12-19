@@ -69,6 +69,5 @@ to toggle off "Consume spell slot" in the dialog that opens; otherwise it will f
   selected actor.
   This is a known bug (that I don't know how to solve).
 
-# Note for Pathfinder 2nd Edition
-- Compatibility is limited right now, but it's on my to-do list!  Currently most things should work but not buttons on 
-spells.
+# Note for Pathfinder 2nd Edition (pf2e)
+- Fully compatible! (as of v1.2.0)
