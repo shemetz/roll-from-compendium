@@ -86,8 +86,12 @@ export function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
 }
 
 async function findOrCreateDummyActor () {
-  const foundActor = game.actors.find(a => a.name === DUMMY_ACTOR_NAME)
+  let foundActor = game.actors.find(a => a.name === DUMMY_ACTOR_NAME)
   if (foundActor) {
+    // migration to v9
+    if (game.system.id === 'pf2e' && !foundActor.spellcasting.filter(sc => sc)[0]) {
+      foundActor = await pf2eInitializeDummyActor(foundActor)
+    }
     return foundActor
   }
 
