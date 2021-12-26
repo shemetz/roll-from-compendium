@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2021-12-26
+- Explicitly marked libWrapper as a dependency, and updated libWrapper shim code
+
 ## [1.2.1] - 2021-12-25
 - Migration fix for Pf2e 
 
@@ -33,10 +36,11 @@ See https://github.com/itamarcu/roll-from-compendium/issues/4 for details.
 
 ## See also: [Unreleased]
 
-[Unreleased]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.1...HEAD
+[Unreleased]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.2...HEAD
 [1.0.5]: https://github.com/itamarcu/ZoomPanOptions/compare/1.0.3...1.0.5
 [1.1.0]: https://github.com/itamarcu/ZoomPanOptions/compare/1.0.5...1.1.0
 [1.1.2]: https://github.com/itamarcu/ZoomPanOptions/compare/1.1.0...1.1.2
 [1.1.3]: https://github.com/itamarcu/ZoomPanOptions/compare/1.1.2...1.1.3
 [1.2.0]: https://github.com/itamarcu/ZoomPanOptions/compare/1.1.3...1.2.0
 [1.2.1]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.0...1.2.1
+[1.2.2]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.1...1.2.2
