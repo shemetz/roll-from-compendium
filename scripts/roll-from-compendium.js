@@ -113,21 +113,29 @@ async function findOrCreateDummyActor () {
 }
 
 export function _contextMenu_Override (html) {
+  const rollActionName = {
+    'Actor': 'Post Image+Name To Chat',
+    'Item': 'Roll/Activate/Cast',
+    'Macro': 'Execute',
+    'JournalEntry': 'Post To Chat',
+    'RollTable': 'Draw From Table',
+    'Scene': 'Post Image+Name to Chat',
+  }[this.metadata.type] || 'Roll'
   new ContextMenu(html, '.directory-item', [
-    rollFromCompendiumContextMenuItem.bind(this)(),
+    rollFromCompendiumContextMenuItem.bind(this)(rollActionName),
     ...coreFoundryContextMenuItems.bind(this)(),
   ])
 }
 
-function rollFromCompendiumContextMenuItem () {
+function rollFromCompendiumContextMenuItem (rollActionName) {
   return {
-    name: 'Roll',
+    name: rollActionName,
     icon: '<i class="fas fa-dice-d20"></i>',
     callback: li => {
       const mouseEvent = event
       const entryId = li.attr('data-document-id')
       this.collection.getDocument(entryId).then(item => {
-        rollFromCompendium(item, mouseEvent)
+        return rollFromCompendium(item, mouseEvent)
       })
     },
   }
