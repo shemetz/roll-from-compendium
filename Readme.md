@@ -3,6 +3,8 @@
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/itamarcu/roll-from-compendium?style=for-the-badge) 
 ![GitHub Releases](https://img.shields.io/github/downloads/itamarcu/roll-from-compendium/latest/total?style=for-the-badge) 
 ![GitHub All Releases](https://img.shields.io/github/downloads/itamarcu/roll-from-compendium/total?style=for-the-badge&label=Downloads+total)  
+![Latest Supported Foundry Version](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/itamarcu/roll-from-compendium/raw/master/module.json)
+
 
 Add compendium context menu option to roll an item (casting a spell, showing a feature, etc).
 
