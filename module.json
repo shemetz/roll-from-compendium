@@ -2,7 +2,7 @@
   "name": "roll-from-compendium",
   "title": "Roll From Compendium",
   "description": "Add compendium context menu option to roll an item (casting a spell, showing a feature, etc).",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "minimumCoreVersion": "0.8.9",
   "compatibleCoreVersion": "9",
   "esmodules": [
