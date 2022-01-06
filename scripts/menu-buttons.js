@@ -1,4 +1,4 @@
-import { rollFromCompendium, rollItem } from './roll-from-compendium.js'
+import { getRollActionName, rollFromCompendium, rollItem } from './roll-from-compendium.js'
 import { MODULE_ID } from './hooks.js'
 
 export function _getHeaderButtons__Item_Override (wrapped) {
@@ -8,10 +8,11 @@ export function _getHeaderButtons__Item_Override (wrapped) {
 
   // Add a Roll button
   buttons.unshift({
-    label: setting === 'Only icon' ? '' : 'Roll',
+    label: setting === 'Only icon' ? '' : getRollActionName('Item'),
     class: 'roll-from-sheet',
     icon: 'fas fa-dice-d20',
-    onclick: ev => {
+    onclick: async ev => {
+      this.close()
       return rollItem(this.item, ev)
     },
   })
@@ -25,10 +26,11 @@ export function _getHeaderButtons__Journal_Override (wrapped) {
 
   // Add a Show in chat button
   buttons.unshift({
-    label: setting === 'Only icon' ? '' : 'Show in chat',
+    label: setting === 'Only icon' ? '' : getRollActionName('Journal'),
     class: 'roll-from-sheet',
     icon: 'fas fa-dice-d20',
-    onclick: ev => {
+    onclick: async ev => {
+      this.close()
       return rollFromCompendium(this.object, ev)
     },
   })
@@ -40,11 +42,11 @@ export function _getEntryContextOptions__Item_Override (wrapped) {
 
   // Add a Roll button
   buttons.unshift({
-    name: 'Roll',  // is "Roll" in game.i18n
+    name: getRollActionName('Item'),
     class: 'roll-from-sheet',
     icon: '<i class="fas fa-dice-d20"></i>',
     callback: li => {
-      const item = game.items.get(li.data("documentId"));
+      const item = game.items.get(li.data('documentId'))
       return rollItem(item, event)  // don't worry, event DOES exist
     },
   })

@@ -1,5 +1,5 @@
 import { dnd5eRollItem } from './dnd5e-compatibility.js'
-import { pf2eInitializeDummyActor, pf2eCastSpell } from './pf2e-compatibility.js'
+import { pf2eInitializeDummyActor, pf2eCastSpell, pf2eItemToMessage } from './pf2e-compatibility.js'
 
 const COMPENDIUM_ROLL_IMAGE = 'icons/svg/d20-highlight.svg'
 const DUMMY_ACTOR_NAME = '(Compendium Roll)'
@@ -47,12 +47,13 @@ export async function rollItem (item, event) {
   const actorHasItem = !!actor.items.get(item.id)
   if (!actorHasItem) {
     // overriding to pretend like the actor owns the item
+    actor.originalGetOwnedItem = actor.getOwnedItem
     actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
-    const originalActorItemsGet = actor.items.get
+    actor.originalActorItemsGet = actor.items.get
     actor.items.get = (key, ...args) => {
       if (key === item.id) {
         return item
-      } else return originalActorItemsGet.bind(actor.items)(key, ...args)
+      } else return actor.originalActorItemsGet.bind(actor.items)(key, ...args)
     }
     // overriding to pretend like the item is owned by the actor
     // (overriding the read-only item.actor with some UGLY HACKS)
@@ -65,14 +66,36 @@ export async function rollItem (item, event) {
       configurable: true,
     })
   }
+  return rollDependingOnSystem(item, actor, dummyActor).then(chatMessage => {
+    // undoing ugly hack override
+    if (!actorHasItem) {
+      actor.getOwnedItem = actor.originalGetOwnedItem
+      actor.items.get = actor.originalActorItemsGet
+      Object.defineProperty(item, 'actor', {
+        value: undefined,
+        writable: true,
+        configurable: true,
+      })
+      Object.defineProperty(item, 'isOwned', {
+        value: false,
+        writable: true,
+        configurable: true,
+      })
+    }
+    return chatMessage
+  })
+}
+
+async function rollDependingOnSystem (item, actor, dummyActor) {
   if (game.system.id === 'pf2e') {
     if (item.type === 'spell') {
       return pf2eCastSpell(item, actor, dummyActor)
     } else {
-      return item.toMessage()
+      return pf2eItemToMessage(item)
     }
   }
   if (game.system.id === 'dnd5e') {
+    const actorHasItem = !!actor.items.get(item.id)
     return dnd5eRollItem(item, actor, actorHasItem)
   }
   return item.roll()
@@ -112,15 +135,19 @@ async function findOrCreateDummyActor () {
   return actor
 }
 
-export function _contextMenu_Override (html) {
-  const rollActionName = {
+export const getRollActionName = (type) => {
+  return {
     'Actor': 'Post Image+Name To Chat',
     'Item': 'Roll/Activate/Cast',
     'Macro': 'Execute',
     'JournalEntry': 'Post To Chat',
     'RollTable': 'Draw From Table',
     'Scene': 'Post Image+Name to Chat',
-  }[this.metadata.type] || 'Roll'
+  }[type] || 'Roll'
+}
+
+export function _contextMenu_Override (html) {
+  const rollActionName = getRollActionName(this.metadata.type)
   new ContextMenu(html, '.directory-item', [
     rollFromCompendiumContextMenuItem.bind(this)(rollActionName),
     ...coreFoundryContextMenuItems.bind(this)(),

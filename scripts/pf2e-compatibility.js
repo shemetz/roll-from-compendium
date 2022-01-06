@@ -54,6 +54,17 @@ export const pf2eCastSpell = (item, actor, dummyActor) => {
   })
 }
 
+export const pf2eItemToMessage = (item) => {
+  const originalItemDataType = item.data.type
+  if (['ancestry', 'background', 'class'].includes(originalItemDataType)) {
+    item.data.type = 'feat'
+  }
+  return item.toMessage().then(async chatMessage => {
+    item.data.type = originalItemDataType
+    return chatMessage
+  })
+}
+
 function escapeHtml (string) {
   const replacements = {
     '&': '&amp;',
