@@ -1,24 +1,26 @@
 import { libWrapper } from './libwrapper-shim.js'
-import { _contextMenu_Override } from './roll-from-compendium.js'
 import {
-  _getEntryContextOptions__Item_Override,
-  _getHeaderButtons__Item_Override,
-  _getHeaderButtons__Journal_Override,
+  addButtonToSheetHeader,
+  Compendium__getEntryContextOptions_Wrapper,
+  SidebarDirectory__getEntryContextOptions_Wrapper,
 } from './menu-buttons.js'
-
-export const MODULE_ID = 'roll-from-compendium'
+import { MODULE_ID, MODULE_NAME } from './consts.js'
+import {
+  DND5e_AbilityUseDialog__getSpellData_Wrapper,
+  DND5e_AbilityUseDialog_create_Wrapper
+} from './dnd5e-compatibility.js'
 
 Hooks.once('init', function () {
   game.settings.register(MODULE_ID, 'window-header-button', {
     name: 'Window header button',
-    hint: 'Affects how the added header button looks in windows',
+    hint: 'Affects how the added header button looks in sheet windows',
     scope: 'client',
     config: false,
     type: String,
     choices: {
-      'Full': 'Default: will look like "🎲Roll"',
+      'Full': 'Default: will look like "🎲 Quick Roll To Chat"',
       'Only icon': '"🎲"',
-      'Hide': 'Will not add any header button to your sheets.',
+      'Hide': 'Will not add any header button to sheets',
     },
     default: 'Full',
   })
@@ -27,27 +29,32 @@ Hooks.once('init', function () {
 Hooks.once('setup', function () {
   libWrapper.register(
     MODULE_ID,
-    'Compendium.prototype._contextMenu',
-    _contextMenu_Override,
-    'OVERRIDE',
-  )
-  libWrapper.register(
-    MODULE_ID,
-    'ItemSheet.prototype._getHeaderButtons',
-    _getHeaderButtons__Item_Override,
+    'Compendium.prototype._getEntryContextOptions',
+    Compendium__getEntryContextOptions_Wrapper,
     'WRAPPER',
   )
   libWrapper.register(
     MODULE_ID,
-    `JournalSheet.prototype._getHeaderButtons`,
-    _getHeaderButtons__Journal_Override,
+    `SidebarDirectory.prototype._getEntryContextOptions`,
+    SidebarDirectory__getEntryContextOptions_Wrapper,
     'WRAPPER',
   )
-  libWrapper.register(
-    MODULE_ID,
-    `ItemDirectory.prototype._getEntryContextOptions`,
-    _getEntryContextOptions__Item_Override,
-    'WRAPPER',
-  )
-  console.log('Roll From Compendium | Done setting up.')
+  if (game?.dnd5e?.applications?.AbilityUseDialog?._getSpellData) {
+    libWrapper.register(
+      MODULE_ID,
+      `game.dnd5e.applications.AbilityUseDialog._getSpellData`,
+      DND5e_AbilityUseDialog__getSpellData_Wrapper,
+      'WRAPPER',
+    )
+    libWrapper.register(
+      MODULE_ID,
+      `game.dnd5e.applications.AbilityUseDialog.create`,
+      DND5e_AbilityUseDialog_create_Wrapper,
+      'WRAPPER',
+    )
+  }
+  Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
+  Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
+  Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
+  console.log(`${MODULE_NAME} | Done setting up.`)
 })

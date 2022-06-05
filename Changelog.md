@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2022-06-05
+- Renamed module from 'Roll From Compendium' to 'Quick Roll To Chat'
+- Renamed dummy actor from "(Compendium Roll)" to "(Quick Roll To Chat - Dummy Actor)"
+- Improved button handling everywhere
+- Added buttons to roll from inside folders of items, macros, etc (same right click style)
+- Improved PF2e integration for specific naming of roll actions
+
 ## [1.2.4] - 2022-01-06
 - Improved names of 'Roll' action - now they will say stuff like "Draw From Table" or "Post Image+Name To Chat"
 - Improved PF2e integration - fixing a bug that happened with some less common item types
