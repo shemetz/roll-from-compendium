@@ -32,13 +32,13 @@
   "media": [
     {
       "type": "screenshot",
-      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/Screenshot_1.png",
-      "caption": "Roll From Compendium - Fireball example"
+      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/screenshots/Screenshot_1.png",
+      "caption": "Quick Roll To Chat - Fireball example"
     },
     {
       "type": "cover",
-      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/Screenshot_1.png",
-      "caption": "Roll From Compendium"
+      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/screenshots/Screenshot_1.png",
+      "caption": "Quick Roll To Chat"
     }
   ]
 }
