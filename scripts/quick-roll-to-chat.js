@@ -188,7 +188,7 @@ export const getRollActionName = (documentName, documentSubtype) => {
     'Actor': 'Image To Chat',
     'Item': 'Quick Roll To Chat',
     'Macro': 'Execute',
-    'JournalEntry': 'Text/Image To Chat',
+    'JournalEntry': 'Text+Image To Chat',
     'RollTable': 'Draw From Table',
     'Scene': 'Image to Chat',
   }[documentName] || 'Quick Roll To Chat'
