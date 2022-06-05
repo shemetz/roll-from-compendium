@@ -1,4 +1,3 @@
-import { libWrapper } from './libwrapper-shim.js'
 import {
   addButtonToSheetHeader,
   Compendium__getEntryContextOptions_Wrapper,
@@ -15,7 +14,7 @@ Hooks.once('init', function () {
     name: 'Window header button',
     hint: 'Affects how the added header button looks in sheet windows',
     scope: 'client',
-    config: false,
+    config: true,
     type: String,
     choices: {
       'Full': 'Default: will look like "🎲 Quick Roll To Chat"',
