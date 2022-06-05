@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved button handling everywhere
 - Added buttons to roll from inside folders of items, macros, etc (same right click style)
 - Improved PF2e integration for specific naming of roll actions
+- Changed Window header button config to be visible in the settings
 
 ## [1.2.4] - 2022-01-06
 - Improved names of 'Roll' action - now they will say stuff like "Draw From Table" or "Post Image+Name To Chat"
@@ -48,7 +49,6 @@ See https://github.com/itamarcu/roll-from-compendium/issues/4 for details.
 
 ## See also: [Unreleased]
 
-[Unreleased]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.4...HEAD
 [1.0.5]: https://github.com/itamarcu/ZoomPanOptions/compare/1.0.3...1.0.5
 [1.1.0]: https://github.com/itamarcu/ZoomPanOptions/compare/1.0.5...1.1.0
 [1.1.2]: https://github.com/itamarcu/ZoomPanOptions/compare/1.1.0...1.1.2
@@ -57,3 +57,5 @@ See https://github.com/itamarcu/roll-from-compendium/issues/4 for details.
 [1.2.1]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.0...1.2.1
 [1.2.2]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.1...1.2.2
 [1.2.4]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.2...1.2.4
+[1.3.0]: https://github.com/itamarcu/ZoomPanOptions/compare/1.2.4...1.3.0
+[Unreleased]: https://github.com/itamarcu/ZoomPanOptions/compare/1.3.0...HEAD
