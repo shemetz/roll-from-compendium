@@ -1,4 +1,4 @@
-# [Roll From Compendium](https://foundryvtt.com/packages/roll-from-compendium/)
+# [Quick Roll To Chat](https://foundryvtt.com/packages/roll-from-compendium/)
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/itamarcu/roll-from-compendium?style=for-the-badge) 
 ![GitHub Releases](https://img.shields.io/github/downloads/itamarcu/roll-from-compendium/latest/total?style=for-the-badge) 
@@ -6,40 +6,45 @@
 ![Latest Supported Foundry Version](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/itamarcu/roll-from-compendium/raw/master/module.json)
 
 
-Add compendium context menu option to roll an item (casting a spell, showing a feature, etc).
+Add easy buttons to post things to chat.  Quickly cast a spell from a compendium, roll from a table, post the image of an NPC, or attack with a weapon that isn't in your inventory.
 
-![](metadata/Screenshot_1.png)
+![](metadata/screenshots/Screenshot_1.png)
 
-![](metadata/Screenshot_7.png)
+![](metadata/screenshots/Screenshot_2.png)
+
+![](metadata/screenshots/Screenshot_10.png)
 
 # Features
 
-This module adds a new context menu button to the Compendium window. When right-clicking an item from the list,
-you will have a new option - Roll.
+This module adds several buttons that do pretty much the same thing: Post/roll something.
 
-When clicking this option, the item will be "rolled", and a card will be shown in the chat:
-- A spell will be cast
-- A weapon will be used, allowing an attack and damage roll
-- A feature will be described
-- etc. for "Item" type compendiums (all of which have a `roll()` function, which this module calls)
-- Journal Entries will show a message with their title and description
-- Actors and Scenes will just have their basic info (image and name) shown in the chat
+Right click (context menu options) are added to:
+- Compendium pack contents
+- Sidebar entries (including in folders) for actors, items, journals, scenes, etc
 
-A button will also be added to the header of the item sheet (and journal sheet) - behaving in the same way.
+As are header buttons for sheets of Actors, Items, and Journals.
 
-A similar button will be added to the "Items" sidebar, for each item, when right-clicking it.
+The new option is named Quick Roll To Chat, Description To Chat, Cast To Chat, Image To Chat, etc.
 
-![](metadata/Screenshot_2.png)
+When clicking this option, the sheet's contents will be used to post a card in the chat, depending on the exact document type:
+- (dnd5e, pf2e) A spell will be cast.  Spell slot can be chosen.
+- (dnd5e) A weapon will be used, allowing an attack and damage roll (compatible with Better Rolls for 5e)
+- (pf2e) An Effect will be posted to the chat, along with an embedded link that can be immediately dragged onto a token.
+- Any other Item will have its name, image, and full description posted.
+- Actors, and Scenes will post the name and the image (name will be a separate private message which you can choose to reveal)
+- Journal Entries will show their contents along with an image if one exists.
+- Rollable Tables will have a random item drawn from them.
+- Macros will be executed.
 
-![](metadata/Screenshot_3.png)
+![](metadata/screenshots/Screenshot_3.png)
 
-![](metadata/Screenshot_4.png)
+![](metadata/screenshots/Screenshot_4.png)
 
-![](metadata/Screenshot_5.png)
+![](metadata/screenshots/Screenshot_5.png)
 
-![](metadata/Screenshot_6.png)
+![](metadata/screenshots/Screenshot_7.png)
 
-![](metadata/Screenshot_10.png)
+![](metadata/screenshots/Screenshot_8.png)
 
 # Dummy Actor
 When "Item" items (spells, weapons, equipment, features...) are rolled, they will be rolled as if they belong to an actor.
@@ -54,7 +59,7 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
  you'll need to alter this actor after it has been created for the first time, or rename an existing actor to have that
  name.
 
-![](metadata/Screenshot_9.png)
+![](metadata/screenshots/Screenshot_6.png)
 
 # BetterRolls
 
@@ -62,14 +67,13 @@ This module is compatible with [BetterRolls for 5e](https://github.com/RedReign/
  the BetterRolls' "quick roll" option on items.  If you want to disable/ignore it, hold the Alt key while clicking.
 
 # Note for D&D 5th Edition
-- When casting a spell with a dummy actor when your selected character doesn't have the spell slots for it, you'll want 
-to toggle off "Consume spell slot" in the dialog that opens; otherwise it will fail to cast. This is because of a bug in
- the 5e system - its code can't deal with someone casting a spell they don't have the right spell slots for.
 - If you press a button on the rolled item's chat message (e.g. the damage of a sword attack) - it will treat the item
  as if it belongs to the latest actor that used the compendium item, regardless of which actor was linked to the message.
   This means it might be using the wrong actor's stats if you press a button on an "old" message after switching your
   selected actor.
   This is a known bug (that I don't know how to solve).
 
+![](metadata/screenshots/Screenshot_9.png)
+
 # Note for Pathfinder 2nd Edition (pf2e)
-- Fully compatible! (as of v1.2.0)
+- Fully compatible! (as of v1.3.0)
