@@ -17,9 +17,9 @@ Hooks.once('init', function () {
     config: true,
     type: String,
     choices: {
-      'Full': 'Default: will look like "🎲 Quick Roll To Chat"',
-      'Only icon': '"🎲"',
-      'Hide': 'Will not add any header button to sheets',
+      'Full': 'Full (default): will look like "🎲 Quick Roll To Chat"',
+      'Only icon': 'Only icon: "🎲"',
+      'Hide': 'Hide: will not add any header button to sheets',
     },
     default: 'Full',
   })
