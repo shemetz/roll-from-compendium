@@ -134,9 +134,14 @@ async function findOrCreateDummyActor () {
   let oldActor = game.actors.find(a => a.name === '(Compendium Roll)')
   if (oldActor) {
     console.log(`${MODULE_NAME} | Migrating actor: ${oldActor.name}`)
-    await oldActor.update({ name: DUMMY_ACTOR_NAME })
-    await pf2eInitializeDummyActor(oldActor)
-    return oldActor
+    let updatedActor = await oldActor.update({ name: DUMMY_ACTOR_NAME })
+    if (game.system.id === 'pf2e') {
+      updatedActor = await pf2eInitializeDummyActor(oldActor)
+    }
+    if (game.system.id === 'dnd5e') {
+      updatedActor = await dnd5eInitializeDummyActor(oldActor)
+    }
+    return updatedActor
   }
 
   const cls = CONFIG.Actor.documentClass

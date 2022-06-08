@@ -6,6 +6,7 @@
   "minimumCoreVersion": "9",
   "compatibleCoreVersion": "9",
   "esmodules": [
+    "scripts/roll-from-compendium.js",
     "scripts/hooks.js"
   ],
   "url": "https://github.com/itamarcu/roll-from-compendium",
