@@ -1,12 +1,14 @@
 {
-  "name": "roll-from-compendium",
+  "id": "roll-from-compendium",
   "title": "Quick Roll To Chat",
   "description": "Add easy buttons to post things to chat.  Quickly cast a spell from a compendium, roll from a table, post the image of an NPC, or share an item's description.  Extra integration for DND5e and PF2e",
   "version": "1.3.2",
-  "minimumCoreVersion": "9",
-  "compatibleCoreVersion": "9",
+  "compatibility": {
+    "minimum": "10",
+    "verified": "10"
+  },
   "esmodules": [
-    "scripts/roll-from-compendium.js",
+    "scripts/roll-from-compendium-was-renamed.js",
     "scripts/hooks.js"
   ],
   "url": "https://github.com/itamarcu/roll-from-compendium",
@@ -24,11 +26,19 @@
       "reddit": "u/Shemetz"
     }
   ],
-  "dependencies": [
-    {
-      "name": "lib-wrapper"
-    }
-  ],
+  "relationships": {
+    "requires": [
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
+        "compatibility": {
+          "minimum": "1.0.0.0",
+          "verified": "1.12.6.0"
+        }
+      }
+    ]
+  },
   "manifestPlusVersion": "1.2.0",
   "media": [
     {

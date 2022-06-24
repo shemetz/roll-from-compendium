@@ -1,16 +1,16 @@
 import { DUMMY_ACTOR_NAME } from './consts.js'
 
 export const dnd5eRollItem = (item, actor, actorHasItem) => {
-  if (item.data?.data?.preparation?.mode !== undefined && !actorHasItem) {
+  if (item.system?.preparation?.mode !== undefined && !actorHasItem) {
     // setting preparation mode to innate so that it doesn't try to consume slots
     // (this also prevents upcasting, but that's okay for most use cases anyways)
-    item.data.data.preparation.mode = 'innate'
+    item.system.preparation.mode = 'innate'
   }
-  if (!actorHasItem && item.data?.data?.save?.ability) {
+  if (!actorHasItem && item.system?.save?.ability) {
     // adding a saving throw DC to spells rolled from a compendium
     const dc = getProperty(actor.data, 'data.attributes.spelldc')
-    if (!item.data?.data?.save?.dc)
-      item.data.data.save.dc = dc
+    if (!item.system?.save?.dc)
+      item.system.save.dc = dc
     if (item.labels?.save && item.labels.save.includes('DC  '))
       item.labels.save = item.labels.save.replace('DC  ', `DC ${dc} `)
   }

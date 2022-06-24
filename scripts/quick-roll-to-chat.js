@@ -6,7 +6,7 @@ let dummyActor = null
 
 export async function quickRollToChat (item, event, overrideImg) {
   console.log(`${MODULE_NAME} | Rolling item: ${item.name}`)
-  if (item instanceof JournalEntry) return rollSimple(item, item.data.content, overrideImg)
+  if (item instanceof JournalEntry) return rollSimple(item, item.content, overrideImg)
   if (item instanceof Actor) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Scene) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Macro) return rollMacro(item)
@@ -16,7 +16,7 @@ export async function quickRollToChat (item, event, overrideImg) {
 }
 
 export async function rollSimple (item, extraContents, overrideImg) {
-  const img = overrideImg || item.img || item.data.img
+  const img = overrideImg || item.img
   const imgElem = img ? `<img src=${img} alt="${item.name || img}"/>` : ''
   // first message - private, only name
   await ChatMessage.create({

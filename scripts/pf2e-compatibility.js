@@ -38,6 +38,10 @@ const getSpellcasting = (actor, dummyActor) => {
   else return dummyActor.spellcasting.getName('(Quick Roll To Chat; Spellcasting)')
 }
 
+/**
+ * KNOWN BUG:  Casting spells with "variants" (e.g. Acid Splash, Heal) will not show buttons.
+ * https://github.com/foundryvtt/pf2e/issues/3382
+ */
 export const pf2eCastSpell = async (item, actor, dummyActor) => {
   const spellcasting = getSpellcasting(actor, dummyActor)
   Object.defineProperty(item, 'spellcasting', {
@@ -47,17 +51,17 @@ export const pf2eCastSpell = async (item, actor, dummyActor) => {
   const shiftPressed = game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.SHIFT)
   const overrideSpellLevel = shiftPressed ? await upcastSpellLevel(item) : undefined
 
-  const originalAutoHeightenLevel = item.data.data.location.autoHeightenLevel
-  item.data.data.location.autoHeightenLevel = overrideSpellLevel || originalAutoHeightenLevel
+  const originalAutoHeightenLevel = item.system.location.autoHeightenLevel
+  item.system.location.autoHeightenLevel = overrideSpellLevel || originalAutoHeightenLevel
+  item.isFromConsumable = true // to make it embed data
   const chatMessage = await item.toMessage(undefined, { create: false, data: { spellLvl: overrideSpellLevel } })
 
   const dataItemId = `data-item-id="${item.id}"`
-  item.data.data.location.value = spellcasting.id
+  item.system.location.value = spellcasting.id
   const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
-  const editedContent = chatMessage.data.content.replace(dataItemId, `${dataItemId} ${dataEmbeddedItem}`)
-  await chatMessage.data.update({ content: editedContent })
+  chatMessage.content = chatMessage.content.replace(dataItemId, `${dataItemId} ${dataEmbeddedItem}`)
 
-  return ChatMessage.create(chatMessage.data)
+  return ChatMessage.create(chatMessage)
 }
 
 export const pf2eItemToMessage = async (item) => {
