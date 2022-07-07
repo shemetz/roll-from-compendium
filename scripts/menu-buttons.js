@@ -9,7 +9,12 @@ import { COMPATIBLE_DOCUMENT_TYPES } from './consts.js'
 export function addButtonToSheetHeader (sheet, buttons) {
   const setting = game.settings.get(MODULE_ID, 'window-header-button')
   if (setting === 'Hide') return buttons
-  if (!sheet.object.testUserPermission(game.user, 'OBSERVER')) return buttons
+  if (
+    // special case:  hide button if it's a journal temporarily shown to the players
+    sheet.document.documentName === 'JournalEntry'
+    && !sheet.object.testUserPermission(game.user, 'OBSERVER')
+    && !sheet.object.pack
+  ) return buttons
 
   // Add a Sheet To Chat button
   buttons.unshift({
