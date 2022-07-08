@@ -68,7 +68,7 @@ export const pf2eItemToMessage = async (item) => {
   const chatMessage = await item.toMessage()
   item.data.type = originalItemDataType
 
-  if (['effect', 'condition'].includes(originalItemDataType)) {
+  if (['effect', 'condition'].includes(originalItemDataType) && !!item.sourceId) {
     // add an extra chat message for draggable effects
     const contentStr = item.pack
       ? `@Compendium[${item.pack}.${item.id}]{${item.name}}`
