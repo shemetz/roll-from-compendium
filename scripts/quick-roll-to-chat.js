@@ -78,24 +78,24 @@ export async function rollItem (item, event) {
       configurable: true,
     })
   }
-  return rollDependingOnSystem(item, actor, dummyActor).then(chatMessage => {
-    // undoing ugly hack override
-    if (!actorHasItem) {
-      actor.getOwnedItem = actor.originalGetOwnedItem
-      actor.items.get = actor.originalActorItemsGet
-      Object.defineProperty(item, 'actor', {
-        value: undefined,
-        writable: true,
-        configurable: true,
-      })
-      Object.defineProperty(item, 'isOwned', {
-        value: false,
-        writable: true,
-        configurable: true,
-      })
-    }
-    return chatMessage
-  })
+  return rollDependingOnSystem(item, actor, dummyActor)
+    .finally(() => {
+      // undoing ugly hack override
+      if (!actorHasItem) {
+        actor.getOwnedItem = actor.originalGetOwnedItem
+        actor.items.get = actor.originalActorItemsGet
+        Object.defineProperty(item, 'actor', {
+          value: undefined,
+          writable: true,
+          configurable: true,
+        })
+        Object.defineProperty(item, 'isOwned', {
+          value: false,
+          writable: true,
+          configurable: true,
+        })
+      }
+    })
 }
 
 async function rollDependingOnSystem (item, actor, dummyActor) {
@@ -184,7 +184,7 @@ export const getRollActionName = (documentName, documentSubtype) => {
     'spell': 'Cast To Chat',
     'weapon': game.system.id === 'dnd5e' ? 'Quick Roll To Chat' : 'Description To Chat',
     'treasure': 'Description To Chat',
-    // Actpr
+    // Actor
     'npc': 'Image To Chat',
     'character': 'Image To Chat',
     'hazard': 'Image To Chat',
@@ -222,7 +222,7 @@ export const guessCompendiumSubtype = (compendiumMetadata) => {
     if (name.includes('conditionitems')) return 'effect'
     if (name.includes('effects')) return 'effect'
     if (name.includes('pathfinder-society-boons')) return 'feat'
-    if (name.includes('deities')) return 'deity'
+    if (name.includes('deities')) return 'background'
     if (name.includes('ac-advanced-maneuvers')) return 'feat'
     if (name.includes('ac-support')) return 'action'
     if (name.includes('ac-eidolons')) return 'ancestry'

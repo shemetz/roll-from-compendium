@@ -65,12 +65,12 @@ export const pf2eCastSpell = async (item, actor, dummyActor) => {
 }
 
 export const pf2eItemToMessage = async (item) => {
-  const originalItemDataType = item.data.type
-  if (['ancestry', 'background', 'class'].includes(originalItemDataType)) {
-    item.data.type = 'feat'
+  const originalItemDataType = item.type
+  if (['ancestry', 'background', 'class', 'deity'].includes(originalItemDataType)) {
+    item.type = 'feat'
   }
   const chatMessage = await item.toMessage()
-  item.data.type = originalItemDataType
+  item.type = originalItemDataType
 
   if (['effect', 'condition'].includes(originalItemDataType) && !!item.sourceId) {
     // add an extra chat message for draggable effects
