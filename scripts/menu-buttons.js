@@ -29,7 +29,7 @@ export function addButtonToSheetHeader (sheet, buttons) {
 }
 
 export function addCompendiumContextOptions (application, buttons) {
-  const pack = game.packs.get(application[0].dataset.pack);
+  const pack = game.packs.get(application[0].dataset.pack)
   const documentName = pack?.metadata.type
   if (!pack || !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) return
 
@@ -52,7 +52,6 @@ export function addCompendiumContextOptions (application, buttons) {
     },
   })
 }
-
 
 export function addSidebarContextOptions (application, buttons) {
   const tab = ui[application[0].dataset.tab]

@@ -26,7 +26,7 @@ Hooks.once('init', function () {
 })
 
 Hooks.once('setup', function () {
-  if (dnd5e?.applications?.item?.AbilityUseDialog?._getSpellData) {
+  if (game?.dnd5e?.applications?.item?.AbilityUseDialog?._getSpellData) {
     libWrapper.register(
       MODULE_ID,
       `dnd5e.applications.item.AbilityUseDialog._getSpellData`,
@@ -43,7 +43,7 @@ Hooks.once('setup', function () {
   Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
-  Hooks.on("getCompendiumEntryContext", addCompendiumContextOptions)
-  Hooks.on("getSidebarTabEntryContext", addSidebarContextOptions)
+  Hooks.on('getCompendiumEntryContext', addCompendiumContextOptions)
+  Hooks.on('getSidebarTabEntryContext', addSidebarContextOptions)
   console.log(`${MODULE_NAME} | Done setting up.`)
 })

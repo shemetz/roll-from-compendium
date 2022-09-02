@@ -64,6 +64,8 @@ export const DND5e_AbilityUseDialog__getSpellData_Wrapper = (originalFunction, a
     for (const spLev of mergedData.spellLevels) { spLev.hasSlots = true }
     mergedData.errors = ['Quick Roll To Chat: no real slots will be used']
     isQuickCasting = true
+  } else {
+    isQuickCasting = false
   }
   return mergedData
 }
