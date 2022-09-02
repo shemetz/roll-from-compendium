@@ -1,9 +1,9 @@
 # [Quick Roll To Chat](https://foundryvtt.com/packages/roll-from-compendium/)
 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/itamarcu/roll-from-compendium?style=for-the-badge) 
-![GitHub Releases](https://img.shields.io/github/downloads/itamarcu/roll-from-compendium/latest/total?style=for-the-badge) 
-![GitHub All Releases](https://img.shields.io/github/downloads/itamarcu/roll-from-compendium/total?style=for-the-badge&label=Downloads+total)  
-![Latest Supported Foundry Version](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/itamarcu/roll-from-compendium/raw/master/module.json)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/shemetz/roll-from-compendium?style=for-the-badge) 
+![GitHub Releases](https://img.shields.io/github/downloads/shemetz/roll-from-compendium/latest/total?style=for-the-badge) 
+![GitHub All Releases](https://img.shields.io/github/downloads/shemetz/roll-from-compendium/total?style=for-the-badge&label=Downloads+total)  
+![Latest Supported Foundry Version](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/shemetz/roll-from-compendium/raw/master/module.json)
 
 
 Add easy buttons to post things to chat.  Quickly cast a spell from a compendium, roll from a table, post the image of an NPC, or attack with a weapon that isn't in your inventory.

@@ -11,18 +11,18 @@
     "scripts/roll-from-compendium-was-renamed.js",
     "scripts/hooks.js"
   ],
-  "url": "https://github.com/itamarcu/roll-from-compendium",
-  "manifest": "https://github.com/itamarcu/roll-from-compendium/raw/master/module.json",
-  "download": "https://github.com/itamarcu/roll-from-compendium/archive/master.zip",
-  "readme": "https://github.com/itamarcu/roll-from-compendium/blob/master/Readme.md",
-  "changelog": "https://github.com/itamarcu/roll-from-compendium/blob/master/Changelog.md",
-  "license": "https://github.com/itamarcu/roll-from-compendium/blob/master/License.md",
-  "bugs": "https://github.com/itamarcu/roll-from-compendium/issues",
+  "url": "https://github.com/shemetz/roll-from-compendium",
+  "manifest": "https://github.com/shemetz/roll-from-compendium/raw/master/module.json",
+  "download": "https://github.com/shemetz/roll-from-compendium/archive/master.zip",
+  "readme": "https://github.com/shemetz/roll-from-compendium/blob/master/Readme.md",
+  "changelog": "https://github.com/shemetz/roll-from-compendium/blob/master/Changelog.md",
+  "license": "https://github.com/shemetz/roll-from-compendium/blob/master/License.md",
+  "bugs": "https://github.com/shemetz/roll-from-compendium/issues",
   "authors": [
     {
-      "name": "shem",
+      "name": "shemetz",
       "email": "itamarcu+foundry@gmail.com",
-      "discord": "shem#0226",
+      "discord": "shemetz#0226",
       "reddit": "u/Shemetz"
     }
   ],
@@ -43,12 +43,12 @@
   "media": [
     {
       "type": "screenshot",
-      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/screenshots/Screenshot_1.png",
+      "url": "https://raw.githubusercontent.com/shemetz/roll-from-compendium/master/metadata/screenshots/Screenshot_1.png",
       "caption": "Quick Roll To Chat - Fireball example"
     },
     {
       "type": "cover",
-      "url": "https://raw.githubusercontent.com/itamarcu/roll-from-compendium/master/metadata/screenshots/Screenshot_1.png",
+      "url": "https://raw.githubusercontent.com/shemetz/roll-from-compendium/master/metadata/screenshots/Screenshot_1.png",
       "caption": "Quick Roll To Chat"
     }
   ]
