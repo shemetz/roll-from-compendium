@@ -5,8 +5,8 @@ import {
 } from './menu-buttons.js'
 import { MODULE_ID, MODULE_NAME } from './consts.js'
 import {
-  DND5e_AbilityUseDialog__getSpellData_Wrapper,
-  DND5e_AbilityUseDialog_create_Wrapper
+  abilityUseRenderHook,
+  abilityUseQuickCastingHook
 } from './dnd5e-compatibility.js'
 
 Hooks.once('init', function () {
@@ -27,18 +27,8 @@ Hooks.once('init', function () {
 
 Hooks.once('setup', function () {
   if (game?.dnd5e?.applications?.item?.AbilityUseDialog?._getSpellData) {
-    libWrapper.register(
-      MODULE_ID,
-      `dnd5e.applications.item.AbilityUseDialog._getSpellData`,
-      DND5e_AbilityUseDialog__getSpellData_Wrapper,
-      'WRAPPER',
-    )
-    libWrapper.register(
-      MODULE_ID,
-      `dnd5e.applications.item.AbilityUseDialog.create`,
-      DND5e_AbilityUseDialog_create_Wrapper,
-      'WRAPPER',
-    )
+    Hooks.on('renderAbilityUseDialog', abilityUseRenderHook)
+    Hooks.on('dnd5e.preItemUsageConsumption', abilityUseQuickCastingHook)
   }
   Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)

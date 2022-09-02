@@ -57,22 +57,30 @@ export const dnd5eInitializeDummyActor = async (compendiumRollActor) => {
   return compendiumRollActor
 }
 
-let isQuickCasting = false
-export const DND5e_AbilityUseDialog__getSpellData_Wrapper = (originalFunction, actorData, itemData, data, ...args) => {
-  const mergedData = originalFunction(actorData, itemData, data, ...args)  // same data object;  mutated argument!
-  if (mergedData?.item?.actor?.name === DUMMY_ACTOR_NAME) {
-    for (const spLev of mergedData.spellLevels) { spLev.hasSlots = true }
-    mergedData.errors = ['Quick Roll To Chat: no real slots will be used']
-    isQuickCasting = true
-  } else {
-    isQuickCasting = false
+export const abilityUseRenderHook = (app, html, data) => {
+  if (app.item?.actor?.name !== DUMMY_ACTOR_NAME) return
+
+  // Ensure no spell slots are disabled
+  const options = html[0].querySelectorAll('[name="consumeSpellLevel"] option')
+  options.forEach(o => o.disabled = false)
+
+  // Uncheck consume spell slots
+  const consumeSpellSlot = html[0].querySelector('[name="consumeSpellSlot"]')
+  if (consumeSpellSlot) consumeSpellSlot.checked = false
+
+  // Replace error with quick roll message
+  const message = 'Quick Roll To Chat: no real slots will be used'
+  let error = html[0].querySelector('.notification.error')
+  if (!error) {
+    error = document.createElement('p')
+    error.classList.add('notification', 'error')
+    const insertPoint = html[0].querySelector('.form-group')
+    insertPoint.insertAdjacentElement('beforestart', error)
   }
-  return mergedData
+  error.innerText = message
 }
-export const DND5e_AbilityUseDialog_create_Wrapper = async (originalFunction, item, ...args) => {
-  const formResult = await originalFunction(item, ...args)
-  if (formResult && isQuickCasting) {
-    formResult.consumeSpellSlot = false
+export const abilityUseQuickCastingHook = (item, config, options) => {
+  if (item.actor?.name === DUMMY_ACTOR_NAME) {
+    config.consumeSpellSlot = false
   }
-  return formResult
 }
