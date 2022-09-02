@@ -6,7 +6,7 @@ let dummyActor = null
 
 export async function quickRollToChat (item, event, overrideImg) {
   console.log(`${MODULE_NAME} | Rolling item: ${item.name}`)
-  if (item instanceof JournalEntry) return rollSimple(item, item.content, overrideImg)
+  if (item instanceof JournalEntry) return rollJournal(item, overrideImg)
   if (item instanceof Actor) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Scene) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Macro) return rollMacro(item)
@@ -38,6 +38,39 @@ export async function rollSimple (item, extraContents, overrideImg) {
       </div>
       ${extraContents || ''}
       `
+    })
+  }
+}
+
+export async function rollJournal (item, overrideImg) {
+  const page0 = item.pages.filter(p => p)[0]
+  const img = overrideImg || page0.src
+  const imgElem = img ? `<img src=${img} alt="${item.name || img}"/>` : ''
+  const journalTitle = item.pages.size <= 1 ? item.name : `${item.name} (page 1/${item.pages.size})`
+  // first message - private, only name
+  await ChatMessage.create({
+    whisper: [game.user.id],
+    content:
+      `<div class="${game.system.id} chat-card item-card">
+          <header class="card-header flexrow">
+          <h3 class="item-name">${journalTitle}</h3>
+          </header>
+      </div>
+      `
+  })
+  // second message - public, image/text
+  if (page0.type === 'image') {
+    await ChatMessage.create({
+      content:
+        `<div class="${game.system.id} chat-card item-card">
+          ${imgElem}
+      </div>
+      ${page0.image.caption}
+      `
+    })
+  } else {
+    await ChatMessage.create({
+      content: page0.text.content
     })
   }
 }
