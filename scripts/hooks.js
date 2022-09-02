@@ -1,7 +1,7 @@
 import {
   addButtonToSheetHeader,
-  Compendium__getEntryContextOptions_Wrapper,
-  SidebarDirectory__getEntryContextOptions_Wrapper,
+  addCompendiumContextOptions,
+  addSidebarContextOptions,
 } from './menu-buttons.js'
 import { MODULE_ID, MODULE_NAME } from './consts.js'
 import {
@@ -26,28 +26,16 @@ Hooks.once('init', function () {
 })
 
 Hooks.once('setup', function () {
-  libWrapper.register(
-    MODULE_ID,
-    'Compendium.prototype._getEntryContextOptions',
-    Compendium__getEntryContextOptions_Wrapper,
-    'WRAPPER',
-  )
-  libWrapper.register(
-    MODULE_ID,
-    `SidebarDirectory.prototype._getEntryContextOptions`,
-    SidebarDirectory__getEntryContextOptions_Wrapper,
-    'WRAPPER',
-  )
-  if (game?.dnd5e?.applications?.AbilityUseDialog?._getSpellData) {
+  if (dnd5e?.applications?.item?.AbilityUseDialog?._getSpellData) {
     libWrapper.register(
       MODULE_ID,
-      `game.dnd5e.applications.AbilityUseDialog._getSpellData`,
+      `dnd5e.applications.item.AbilityUseDialog._getSpellData`,
       DND5e_AbilityUseDialog__getSpellData_Wrapper,
       'WRAPPER',
     )
     libWrapper.register(
       MODULE_ID,
-      `game.dnd5e.applications.AbilityUseDialog.create`,
+      `dnd5e.applications.item.AbilityUseDialog.create`,
       DND5e_AbilityUseDialog_create_Wrapper,
       'WRAPPER',
     )
@@ -55,5 +43,7 @@ Hooks.once('setup', function () {
   Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
+  Hooks.on("getCompendiumEntryContext", addCompendiumContextOptions)
+  Hooks.on("getSidebarTabEntryContext", addSidebarContextOptions)
   console.log(`${MODULE_NAME} | Done setting up.`)
 })
