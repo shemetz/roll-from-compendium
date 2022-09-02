@@ -14,15 +14,15 @@ export const dnd5eRollItem = (item, actor, actorHasItem) => {
     if (item.labels?.save && item.labels.save.includes('DC  '))
       item.labels.save = item.labels.save.replace('DC  ', `DC ${dc} `)
   }
-  if (!event.altKey && window.BetterRolls) {
+  if (!event?.altKey && window.BetterRolls) {
     const customRollItem = BetterRolls.rollItem(item, { event: event, preset: 0 })
     customRollItem.consumeCharge = () => Promise.resolve(true)
     return customRollItem.toMessage()
   }
-  return item.roll().then(chatDataOrMessage => {
+  return item.use().then(chatDataOrMessage => {
     if (!chatDataOrMessage) return chatDataOrMessage
     // embed the item data in the chat message
-    chatDataOrMessage.setFlag('dnd5e', 'itemData', item.data)
+    chatDataOrMessage.setFlag('dnd5e', 'itemData', item.toObject(false))
     return chatDataOrMessage
   })
 }
@@ -60,7 +60,7 @@ export const dnd5eInitializeDummyActor = async (compendiumRollActor) => {
 let isQuickCasting = false
 export const DND5e_AbilityUseDialog__getSpellData_Wrapper = (originalFunction, actorData, itemData, data, ...args) => {
   const mergedData = originalFunction(actorData, itemData, data, ...args)  // same data object;  mutated argument!
-  if (mergedData?.item?.document?.actor?.name === DUMMY_ACTOR_NAME) {
+  if (mergedData?.item?.actor?.name === DUMMY_ACTOR_NAME) {
     for (const spLev of mergedData.spellLevels) { spLev.hasSlots = true }
     mergedData.errors = ['Quick Roll To Chat: no real slots will be used']
     isQuickCasting = true
@@ -69,8 +69,8 @@ export const DND5e_AbilityUseDialog__getSpellData_Wrapper = (originalFunction, a
 }
 export const DND5e_AbilityUseDialog_create_Wrapper = async (originalFunction, item, ...args) => {
   const formResult = await originalFunction(item, ...args)
-  if (isQuickCasting) {
-    formResult.consumeSlot = false
+  if (formResult && isQuickCasting) {
+    formResult.consumeSpellSlot = false
   }
   return formResult
 }

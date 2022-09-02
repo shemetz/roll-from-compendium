@@ -28,23 +28,21 @@ export function addButtonToSheetHeader (sheet, buttons) {
   return buttons
 }
 
-export function Compendium__getEntryContextOptions_Wrapper (wrapped) {
-  const buttons = wrapped.bind(this)()
-  const documentName = this.collection.documentName
-  if (!COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) {
-    return buttons
-  }
+export function addCompendiumContextOptions (application, buttons) {
+  const pack = game.packs.get(application[0].dataset.pack);
+  const documentName = pack?.metadata.type
+  if (!pack || !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) return
 
   // Add a Sheet To Chat button
   buttons.unshift({
-    name: getRollActionName(documentName, guessCompendiumSubtype(this.collection.metadata)),
+    name: getRollActionName(documentName, guessCompendiumSubtype(pack.metadata)),
     class: 'sheet-to-chat',
     icon: '<i class="fas fa-dice-d20"></i>',
     callback: async li => {
       const mouseEvent = event
       const entryId = li.data('documentId')
-      const thumbImg = this.collection.index.get(entryId).thumb
-      return this.collection.getDocument(entryId).then(async item => {
+      const thumbImg = pack.index.get(entryId).thumb
+      return pack.getDocument(entryId).then(async item => {
         if (item.img?.includes('default-icons') && thumbImg) {
           // little trick to use the trick that PF2e modules use, which updates thumbnail images but not data images
           await quickRollToChat(item, mouseEvent, thumbImg)
@@ -53,15 +51,13 @@ export function Compendium__getEntryContextOptions_Wrapper (wrapped) {
       })
     },
   })
-  return buttons
 }
 
-export function SidebarDirectory__getEntryContextOptions_Wrapper (wrapped) {
-  const buttons = wrapped.bind(this)()
-  const documentName = this.constructor.documentName
-  if (!COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) {
-    return buttons
-  }
+
+export function addSidebarContextOptions (application, buttons) {
+  const tab = ui[application[0].dataset.tab]
+  const documentName = tab?.constructor.documentName
+  if (!COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) return
 
   // Add a Sheet To Chat button
   buttons.unshift({
@@ -76,5 +72,4 @@ export function SidebarDirectory__getEntryContextOptions_Wrapper (wrapped) {
       return false
     },
   })
-  return buttons
 }

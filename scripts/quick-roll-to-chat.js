@@ -51,7 +51,7 @@ async function rollRollableTable (item) {
 }
 
 export async function rollItem (item, event) {
-  event && event.preventDefault()
+  event?.preventDefault()
   if (dummyActor === null) {
     dummyActor = await findOrCreateDummyActor()
   }
@@ -200,7 +200,7 @@ export const getRollActionName = (documentName, documentSubtype) => {
 }
 
 export const guessCompendiumSubtype = (compendiumMetadata) => {
-  const packageName = compendiumMetadata.package
+  const packageName = compendiumMetadata.packageName
   const name = compendiumMetadata.name.toLowerCase()
   if (packageName === 'pf2e') {
     if (name.includes('iconics')) return 'character'
