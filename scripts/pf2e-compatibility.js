@@ -74,9 +74,9 @@ export const pf2eItemToMessage = async (item) => {
 
   if (['effect', 'condition'].includes(originalItemDataType) && !!item.sourceId) {
     // add an extra chat message for draggable effects
-    const contentStr = item.pack
-      ? `@Compendium[${item.pack}.${item.id}]{${item.name}}`
-      : `@Item[${item.id}]{${item.name}}`
+    // e.g. @UUID[Actor.mcnoyziJ3Je4nVoU.Item.3UpSQ68WFokLJ8kh]{Effect: Inspiring Presence}
+    // or @UUID[Compendium.pf2e.bestiary-effects.wX9L6fbqVMLP05hn]{Effect: Stench}
+    const contentStr = item.link
     await ChatMessage.create({
       user: game.user.id,
       speaker: { user: game.user, alias: `Draggable ${originalItemDataType}:` },
