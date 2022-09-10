@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2022-09-11
+- Fixed several D&D 5e compatibility bugs
+- Improved PF2e Effect linking
+- Removed dependency on LibWrapper, thanks to new dnd5e hooks (thanks @arbron!)
+
 ## [1.4.1] - 2022-09-03
 - Improved support for V10 journals (will show page 1 content)
 - Minor pf2e and dnd5e bugfixes and improvements
@@ -75,4 +80,5 @@ See https://github.com/shemetz/roll-from-compendium/issues/4 for details.
 [1.3.2]: https://github.com/shemetz/roll-from-compendium/compare/1.3.1...1.3.2
 [1.4.0]: https://github.com/shemetz/roll-from-compendium/compare/1.3.2...1.4.0
 [1.4.1]: https://github.com/shemetz/roll-from-compendium/compare/1.4.0...1.4.1
-[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.4.1...HEAD
+[1.5.0]: https://github.com/shemetz/roll-from-compendium/compare/1.4.1...1.5.0
+[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.5.0...HEAD

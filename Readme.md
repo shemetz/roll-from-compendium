@@ -66,14 +66,10 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
 This module is compatible with [BetterRolls for 5e](https://github.com/RedReign/FoundryVTT-BetterRolls5e), and will call
  the BetterRolls' "quick roll" option on items.  If you want to disable/ignore it, hold the Alt key while clicking.
 
-# Note for D&D 5th Edition
-- If you press a button on the rolled item's chat message (e.g. the damage of a sword attack) - it will treat the item
- as if it belongs to the latest actor that used the compendium item, regardless of which actor was linked to the message.
-  This means it might be using the wrong actor's stats if you press a button on an "old" message after switching your
-  selected actor.
-  This is a known bug (that I don't know how to solve).
-
 ![](metadata/screenshots/Screenshot_9.png)
 
 # Note for Pathfinder 2nd Edition (pf2e)
-- Fully compatible! (as of v1.3.0)
+- Fully compatible! (as of v4.0.0-beta3)
+
+# Note for D&D 5th edition (dnd5e)
+- Fully compatible! (as of v2.0.2)

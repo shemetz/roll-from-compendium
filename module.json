@@ -1,8 +1,10 @@
 {
+  "name": "roll-from-compendium",
+  "minimumCoreVersion": "10",
   "id": "roll-from-compendium",
   "title": "Quick Roll To Chat",
   "description": "Add easy buttons to post things to chat.  Quickly cast a spell from a compendium, roll from a table, post the image of an NPC, or share an item's description.  Extra integration for DND5e and PF2e",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "compatibility": {
     "minimum": "10",
     "verified": "10"
