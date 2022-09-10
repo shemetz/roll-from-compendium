@@ -83,6 +83,66 @@ async function rollRollableTable (item) {
   return await item.draw()
 }
 
+function activateUglyHackThatLinksItemToActor (item, actor, shouldAffectActor) {
+  console.log(`${MODULE_NAME} | temporarily binding item to actor: ${item.name} +-> ${actor.name}`)
+  if (shouldAffectActor) {
+    // overriding to pretend like the actor owns the item
+    actor.getOwnedItem_prevDefinitions = [
+      ...(actor.getOwnedItem_prevDefinitions || []),
+      actor.getOwnedItem,
+    ]
+    actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
+    actor.items_get_prevDefinitions = [
+      ...(actor.items_get_prevDefinitions || []),
+      actor.items.get,
+    ]
+    actor.items.get = (key, ...args) => {
+      if (key === item.id) {
+        return item
+      } else return actor.items_get_prevDefinitions.at(-1).bind(actor.items)(key, ...args)
+    }
+  }
+  // overriding to pretend like the item is owned by the actor
+  // (overriding the read-only item.actor with some UGLY HACKS)
+  Object.defineProperty(item, 'actor', {
+    value: actor,
+    configurable: true,
+  })
+  Object.defineProperty(item, 'isOwned', {
+    value: true,
+    configurable: true,
+  })
+  // overriding item.clone so that it maintains the dummy actor link
+  item.clone_prevDefinitions = [
+    ...(item.clone_prevDefinitions || []),
+    item.clone,
+  ]
+  item.clone = (...args) => {
+    console.log(`${MODULE_NAME} | item ${item.name} is being cloned; assuming temporary clone`)
+    const cloneOfItem = item.clone_prevDefinitions.at(-1).bind(item)(...args)
+    activateUglyHackThatLinksItemToActor(cloneOfItem, actor, false)
+    // ugly hack doesn't need to be activated because clone exists only temporarily
+    return cloneOfItem
+  }
+}
+
+function deactivateUglyHackThatLinksItemToActor (item, actor) {
+  console.log(`${MODULE_NAME} | undoing temporary binding of item to actor: ${item.name} +-> ${actor.name}`)
+  actor.getOwnedItem = actor.getOwnedItem_prevDefinitions.pop()
+  actor.items.get = actor.items_get_prevDefinitions.pop()
+  Object.defineProperty(item, 'actor', {
+    value: undefined,
+    writable: true,
+    configurable: true,
+  })
+  Object.defineProperty(item, 'isOwned', {
+    value: false,
+    writable: true,
+    configurable: true,
+  })
+  item.clone = item.clone_prevDefinitions.pop()
+}
+
 export async function rollItem (item, event) {
   event?.preventDefault()
   if (dummyActor === null) {
@@ -91,42 +151,13 @@ export async function rollItem (item, event) {
   const actor = canvas.tokens.controlled[0]?.actor || dummyActor
   const actorHasItem = !!actor.items.get(item.id)
   if (!actorHasItem) {
-    // overriding to pretend like the actor owns the item
-    actor.originalGetOwnedItem = actor.getOwnedItem
-    actor.getOwnedItem = getOwnedItemOrCompendiumItem.bind(actor)(actor.getOwnedItem, item)
-    actor.originalActorItemsGet = actor.items.get
-    actor.items.get = (key, ...args) => {
-      if (key === item.id) {
-        return item
-      } else return actor.originalActorItemsGet.bind(actor.items)(key, ...args)
-    }
-    // overriding to pretend like the item is owned by the actor
-    // (overriding the read-only item.actor with some UGLY HACKS)
-    Object.defineProperty(item, 'actor', {
-      value: actor,
-      configurable: true,
-    })
-    Object.defineProperty(item, 'isOwned', {
-      value: true,
-      configurable: true,
-    })
+    activateUglyHackThatLinksItemToActor(item, actor, true)
   }
   return rollDependingOnSystem(item, actor, dummyActor)
     .finally(() => {
       // undoing ugly hack override
       if (!actorHasItem) {
-        actor.getOwnedItem = actor.originalGetOwnedItem
-        actor.items.get = actor.originalActorItemsGet
-        Object.defineProperty(item, 'actor', {
-          value: undefined,
-          writable: true,
-          configurable: true,
-        })
-        Object.defineProperty(item, 'isOwned', {
-          value: false,
-          writable: true,
-          configurable: true,
-        })
+        deactivateUglyHackThatLinksItemToActor(item, actor)
       }
     })
 }

@@ -58,29 +58,56 @@ export const dnd5eInitializeDummyActor = async (compendiumRollActor) => {
 }
 
 export const abilityUseRenderHook = (app, html, data) => {
-  if (app.item?.actor?.name !== DUMMY_ACTOR_NAME) return
-
-  // Ensure no spell slots are disabled
+  // Ensure all spell slots of the actor are enabled (will be up to 9th level spells, for dummy)
   const options = html[0].querySelectorAll('[name="consumeSpellLevel"] option')
   options.forEach(o => o.disabled = false)
 
-  // Uncheck consume spell slots
-  const consumeSpellSlot = html[0].querySelector('[name="consumeSpellSlot"]')
-  if (consumeSpellSlot) consumeSpellSlot.checked = false
-
-  // Replace error with quick roll message
-  const message = 'Quick Roll To Chat: no real slots will be used'
-  let error = html[0].querySelector('.notification.error')
-  if (!error) {
-    error = document.createElement('p')
-    error.classList.add('notification', 'error')
-    const insertPoint = html[0].querySelector('.form-group')
-    insertPoint.insertAdjacentElement('beforestart', error)
+  // Uncheck consume spell slots, usage, etc
+  for (const consumeString of [
+    'consumeQuantity',
+    'consumeRecharge',
+    'consumeResource',
+    'consumeSpellLevel',
+    'consumeSpellSlot',
+    'consumeUsage',
+  ]) {
+    const consumeElem = html[0].querySelector(`[name="${consumeString}"]`)
+    if (consumeElem) {
+      consumeElem.checked = false
+    }
   }
-  error.innerText = message
+
+  if (app.item?.actor?.name === DUMMY_ACTOR_NAME) {
+    // delete "You have no available Nth Level spell slots with which to cast S"
+    const errorNode = html[0].querySelector(`.notification.error`)
+    if (errorNode.textContent.includes('no available')) {
+      errorNode?.remove()
+    }
+  }
 }
-export const abilityUseQuickCastingHook = (item, config, options) => {
+
+export const abilityPreUseItemHook = (item, config, options) => {
   if (item.actor?.name === DUMMY_ACTOR_NAME) {
+    config.consumeQuantity = false
+    config.consumeRecharge = false
+    config.consumeResource = false
+    config.consumeSpellLevel = null
     config.consumeSpellSlot = false
+    config.consumeUsage = false
+  }
+  if (!!item.pack) {
+    // items from packs should never reduce any resource, except spell slots
+    config.consumeQuantity = false
+    config.consumeRecharge = false
+    config.consumeResource = false
+    config.consumeUsage = false
+  }
+  if (config.needsConfiguration) {
+    // recalculate config.needsConfiguration after the changes
+    config.needsConfiguration = config.createMeasuredTemplate
+      || config.consumeRecharge
+      || config.consumeResource
+      || config.consumeSpellSlot
+      || config.consumeUsage
   }
 }

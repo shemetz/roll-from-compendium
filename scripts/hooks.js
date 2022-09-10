@@ -6,7 +6,7 @@ import {
 import { MODULE_ID, MODULE_NAME } from './consts.js'
 import {
   abilityUseRenderHook,
-  abilityUseQuickCastingHook
+  abilityPreUseItemHook
 } from './dnd5e-compatibility.js'
 
 Hooks.once('init', function () {
@@ -28,7 +28,7 @@ Hooks.once('init', function () {
 Hooks.once('setup', function () {
   if (game?.dnd5e?.applications?.item?.AbilityUseDialog?._getSpellData) {
     Hooks.on('renderAbilityUseDialog', abilityUseRenderHook)
-    Hooks.on('dnd5e.preItemUsageConsumption', abilityUseQuickCastingHook)
+    Hooks.on('dnd5e.preUseItem', abilityPreUseItemHook)
   }
   Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
