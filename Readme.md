@@ -63,8 +63,10 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
 
 # BetterRolls
 
-This module is compatible with [BetterRolls for 5e](https://github.com/RedReign/FoundryVTT-BetterRolls5e), and will call
+This module was compatible with [BetterRolls for 5e](https://github.com/RedReign/FoundryVTT-BetterRolls5e), and will call
  the BetterRolls' "quick roll" option on items.  If you want to disable/ignore it, hold the Alt key while clicking.
+
+Foundry V10 compatibility with Ready Set Roll - TBD. (let me know if this is critical for you).
 
 ![](metadata/screenshots/Screenshot_9.png)
 
