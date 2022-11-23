@@ -27,7 +27,7 @@ export async function rollSimple (item, extraContents, overrideImg) {
           <h3 class="item-name">${item.name}</h3>
           </header>
       </div>
-      `
+      `,
   })
   // second message - public, image/text
   if (imgElem || extraContents) {
@@ -37,7 +37,7 @@ export async function rollSimple (item, extraContents, overrideImg) {
           ${imgElem}
       </div>
       ${extraContents || ''}
-      `
+      `,
     })
   }
 }
@@ -56,7 +56,7 @@ export async function rollJournal (item, overrideImg) {
           <h3 class="item-name">${journalTitle}</h3>
           </header>
       </div>
-      `
+      `,
   })
   // second message - public, image/text
   if (page0.type === 'image') {
@@ -66,11 +66,11 @@ export async function rollJournal (item, overrideImg) {
           ${imgElem}
       </div>
       ${page0.image.caption}
-      `
+      `,
     })
   } else {
     await ChatMessage.create({
-      content: page0.text.content
+      content: page0.text.content,
     })
   }
 }
@@ -84,7 +84,7 @@ async function rollRollableTable (item) {
 }
 
 function activateUglyHackThatLinksItemToActor (item, actor, shouldAffectActor) {
-  console.log(`${MODULE_NAME} | temporarily binding item to actor: ${item.name} +-> ${actor.name}`)
+  console.log(`${MODULE_NAME} | temporarily binding item to actor: ${item.name} + -> ${actor.name}`)
   if (shouldAffectActor) {
     // overriding to pretend like the actor owns the item
     actor.getOwnedItem_prevDefinitions = [
@@ -121,13 +121,13 @@ function activateUglyHackThatLinksItemToActor (item, actor, shouldAffectActor) {
     console.log(`${MODULE_NAME} | item ${item.name} is being cloned; assuming temporary clone`)
     const cloneOfItem = item.clone_prevDefinitions.at(-1).bind(item)(...args)
     activateUglyHackThatLinksItemToActor(cloneOfItem, actor, false)
-    // ugly hack doesn't need to be activated because clone exists only temporarily
+    // ugly hack doesn't need to be deactivated because clone probably exists only temporarily
     return cloneOfItem
   }
 }
 
 function deactivateUglyHackThatLinksItemToActor (item, actor) {
-  console.log(`${MODULE_NAME} | undoing temporary binding of item to actor: ${item.name} +-> ${actor.name}`)
+  console.log(`${MODULE_NAME} | undoing temporary binding of item to actor: ${item.name} - -> ${actor.name}`)
   actor.getOwnedItem = actor.getOwnedItem_prevDefinitions.pop()
   actor.items.get = actor.items_get_prevDefinitions.pop()
   Object.defineProperty(item, 'actor', {
@@ -141,6 +141,15 @@ function deactivateUglyHackThatLinksItemToActor (item, actor) {
     configurable: true,
   })
   item.clone = item.clone_prevDefinitions.pop()
+  if (actor.getOwnedItem_prevDefinitions?.length === 0) {
+    delete actor.getOwnedItem_prevDefinitions
+  }
+  if (actor.items_get_prevDefinitions?.length === 0) {
+    delete actor.items_get_prevDefinitions
+  }
+  if (item.clone_prevDefinitions?.length === 0) {
+    delete item.clone_prevDefinitions
+  }
 }
 
 export async function rollItem (item, event) {
@@ -153,13 +162,12 @@ export async function rollItem (item, event) {
   if (!actorHasItem) {
     activateUglyHackThatLinksItemToActor(item, actor, true)
   }
-  return rollDependingOnSystem(item, actor, dummyActor)
-    .finally(() => {
-      // undoing ugly hack override
-      if (!actorHasItem) {
-        deactivateUglyHackThatLinksItemToActor(item, actor)
-      }
-    })
+  return rollDependingOnSystem(item, actor, dummyActor).finally(() => {
+    // undoing ugly hack override
+    if (!actorHasItem) {
+      deactivateUglyHackThatLinksItemToActor(item, actor)
+    }
+  })
 }
 
 async function rollDependingOnSystem (item, actor, dummyActor) {

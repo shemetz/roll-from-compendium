@@ -58,10 +58,10 @@ export const dnd5eInitializeDummyActor = async (compendiumRollActor) => {
 }
 
 export const abilityUseRenderHook = (app, html, data) => {
-  // Ensure all spell slots of the actor are enabled (will be up to 9th level spells, for dummy)
-  const options = html[0].querySelectorAll('[name="consumeSpellLevel"] option')
-  options.forEach(o => o.disabled = false)
-
+  // if it's the dummy actor or if the item doesn't belong to the actor - avoid consuming resources and allow upcasting
+  if (app.item?.actor?.name !== DUMMY_ACTOR_NAME && app.item?.clone_prevDefinitions === undefined) {
+    return
+  }
   // Uncheck consume spell slots, usage, etc
   for (const consumeString of [
     'consumeQuantity',
@@ -76,13 +76,13 @@ export const abilityUseRenderHook = (app, html, data) => {
       consumeElem.checked = false
     }
   }
-
-  if (app.item?.actor?.name === DUMMY_ACTOR_NAME) {
-    // delete "You have no available Nth Level spell slots with which to cast S"
-    const errorNode = html[0].querySelector(`.notification.error`)
-    if (errorNode.textContent.includes('no available')) {
-      errorNode?.remove()
-    }
+  // Ensure all spell slots of the actor are enabled (will be up to 9th level spells, for dummy)
+  const options = html[0].querySelectorAll('[name="consumeSpellLevel"] option')
+  options?.forEach(o => o.disabled = false)
+  // delete "You have no available Nth Level spell slots with which to cast S"
+  const errorNode = html[0].querySelector(`.notification.error`)
+  if (errorNode?.textContent.includes('no available')) {
+    errorNode?.remove()
   }
 }
 
