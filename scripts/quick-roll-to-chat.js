@@ -75,6 +75,23 @@ export async function rollJournal (item, overrideImg) {
   }
 }
 
+async function rollItemDescription (item) {
+  const img = item.img
+  const imgElem = img ? `<img src=${img} alt="${item.name || img}" style="max-height: 80px"/>` : ''
+  // one message, public, has: name, image, and description
+  await ChatMessage.create({
+    content:
+      `<div class="${game.system.id} chat-card item-card">
+          <header class="card-header flexrow">
+          <h3 class="item-name">${item.name}</h3>
+          </header>
+        ${imgElem}
+    </div>
+    ${item.system.description || ''}
+    `,
+  })
+}
+
 async function rollMacro (item) {
   return await item.execute()
 }
@@ -182,7 +199,11 @@ async function rollDependingOnSystem (item, actor, dummyActor) {
     const actorHasItem = !!actor.items.get(item.id)
     return dnd5eRollItem(item, actor, actorHasItem)
   }
-  return item.roll()
+  if (item.roll !== undefined) {
+    return item.roll()
+  }
+  // used for systems like Simple Worldbuilding that have no item.roll function
+  return rollItemDescription(item)
 }
 
 export function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
