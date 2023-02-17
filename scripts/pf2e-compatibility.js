@@ -41,6 +41,8 @@ const getSpellcasting = (actor, dummyActor) => {
 /**
  * KNOWN BUG:  Casting spells with "variants" (e.g. Acid Splash, Heal) will not show buttons.
  * https://github.com/foundryvtt/pf2e/issues/3382
+ *
+ * KNOWN BUG: heightening no longer works
  */
 export const pf2eCastSpell = async (item, actor, dummyActor) => {
   const spellcasting = getSpellcasting(actor, dummyActor)
@@ -70,13 +72,18 @@ export const pf2eItemToMessage = async (item) => {
     item.type = 'feat'
   }
   const chatMessage = await item.toMessage()
-  item.type = originalItemDataType
+  item.type = originalItemDataType // undo change
 
   if (['effect', 'condition'].includes(originalItemDataType) && !!item.sourceId) {
     // add an extra chat message for draggable effects
     // e.g. @UUID[Actor.mcnoyziJ3Je4nVoU.Item.3UpSQ68WFokLJ8kh]{Effect: Inspiring Presence}
     // or @UUID[Compendium.pf2e.bestiary-effects.wX9L6fbqVMLP05hn]{Effect: Stench}
-    const contentStr = item.link
+    let contentStr = item.link
+    if (originalItemDataType === 'condition') {
+      // add condition value to this draggable, because it will actually apply the same condition number (e.g. Sickened 5)
+      const valueNum = item.value
+      contentStr = contentStr.replace('}', ` ${valueNum}}`)
+    }
     await ChatMessage.create({
       user: game.user.id,
       speaker: { user: game.user, alias: `Draggable ${originalItemDataType}:` },
@@ -110,9 +117,13 @@ const upcastSpellLevel = async (item) => {
         <select id="selectedLevel">`
   for (const spellLevel of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
     if (spellLevel === item.level) {
-      content += `<option value="${spellLevel}" selected>${spellLevel}${th(spellLevel)} Level (Base)</option>`
+      content += `<option value="${spellLevel}" selected>
+${spellLevel}${th(spellLevel)} Level (Base)
+</option>`
     } else if (spellLevel > item.level) {
-      content += `<option value="${spellLevel}">${spellLevel}${th(spellLevel)} Level (+${spellLevel - item.level})</option>`
+      content += `<option value="${spellLevel}">
+${spellLevel}${th(spellLevel)} Level (+${spellLevel - item.level})
+</option>`
     }
   }
   content += `</select>
@@ -129,14 +140,14 @@ const upcastSpellLevel = async (item) => {
           callback: html => {
             const spellLevel = parseInt(html.find('#selectedLevel')[0].value)
             resolve(spellLevel)
-          }
+          },
         },
         cancel: {
           label: 'Cancel',
           callback: () => {
             reject()
-          }
-        }
+          },
+        },
       },
       default: 'cancel',
     }).render(true)
