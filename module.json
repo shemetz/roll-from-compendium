@@ -5,7 +5,7 @@
   "version": "1.5.2",
   "compatibility": {
     "minimum": "10",
-    "verified": "10"
+    "verified": "11"
   },
   "esmodules": [
     "scripts/roll-from-compendium-was-renamed.js",
@@ -22,7 +22,7 @@
     {
       "name": "shemetz",
       "email": "itamarcu+foundry@gmail.com",
-      "discord": "shemetz#0226",
+      "discord": "shemetz",
       "reddit": "u/Shemetz"
     }
   ],
