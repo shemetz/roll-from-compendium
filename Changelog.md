@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.3] - 2023-07-01
+- Improved condition text for PF2E
+- Marked as v11 compatible
+
 ## [1.5.2] - 2022-12-29
 - Fixed rolling items in basic game systems (#19)
 
@@ -89,4 +93,5 @@ See https://github.com/shemetz/roll-from-compendium/issues/4 for details.
 [1.5.0]: https://github.com/shemetz/roll-from-compendium/compare/1.4.1...1.5.0
 [1.5.1]: https://github.com/shemetz/roll-from-compendium/compare/1.5.0...1.5.1
 [1.5.2]: https://github.com/shemetz/roll-from-compendium/compare/1.5.1...1.5.2
-[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.5.2...HEAD
+[1.5.3]: https://github.com/shemetz/roll-from-compendium/compare/1.5.2...1.5.3
+[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.5.3...HEAD
