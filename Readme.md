@@ -43,9 +43,9 @@ Hold Ctrl to make the message private ("self" only visibility), just like how ma
 ![](metadata/screenshots/Screenshot_5.png)
 
 # Dummy Actor
-When "Item" items (spells, weapons, equipment, features...) are rolled, they will be rolled as if they belong to an actor.
+When "Item" items (spells, weapons, equipment, features...) are sent, they will be sent as if they belong to an actor.
 
-If you are selecting a token while rolling (or if you're rolling from the sheet header on an item that belongs to an 
+If you are selecting a token while sending to chat (or if you're doing it from the sheet header on an item that belongs to an 
  actor), it will be as if the item is used by that actor. This means that, for example, a weapon will use the abilities 
  of the character, and a 5e spell will have a saving throw DC based on the
  character's statistics.
