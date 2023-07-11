@@ -1,6 +1,6 @@
 import { DUMMY_ACTOR_NAME } from './consts.js'
 
-export const dnd5eRollItem = (item, actor, actorHasItem) => {
+export const dnd5eRollItem = (item, actor, actorHasItem, clickEvent) => {
   if (item.system?.preparation?.mode !== undefined && !actorHasItem) {
     // setting preparation mode to innate so that it doesn't try to consume slots
     // (this also prevents upcasting, but that's okay for most use cases anyways)
@@ -17,7 +17,7 @@ export const dnd5eRollItem = (item, actor, actorHasItem) => {
   if (!event?.altKey && window.BetterRolls) {
     const customRollItem = BetterRolls.rollItem(item, { event: event, preset: 0 })
     customRollItem.consumeCharge = () => Promise.resolve(true)
-    return customRollItem.toMessage()
+    return customRollItem.toMessage(clickEvent)
   }
   return item.use().then(chatDataOrMessage => {
     if (!chatDataOrMessage) return chatDataOrMessage
@@ -57,7 +57,7 @@ export const dnd5eInitializeDummyActor = async (compendiumRollActor) => {
   return compendiumRollActor
 }
 
-export const abilityUseRenderHook = (app, html, data) => {
+export const abilityUseRenderHook = (app, html, _data) => {
   // if it's the dummy actor or if the item doesn't belong to the actor - avoid consuming resources and allow upcasting
   if (app.item?.actor?.name !== DUMMY_ACTOR_NAME && app.item?.clone_prevDefinitions === undefined) {
     return
@@ -86,7 +86,7 @@ export const abilityUseRenderHook = (app, html, data) => {
   }
 }
 
-export const abilityPreUseItemHook = (item, config, options) => {
+export const abilityPreUseItemHook = (item, config, _options) => {
   if (item.actor?.name === DUMMY_ACTOR_NAME) {
     config.consumeQuantity = false
     config.consumeRecharge = false

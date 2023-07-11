@@ -1,17 +1,18 @@
 import { dnd5eInitializeDummyActor, dnd5eRollItem } from './dnd5e-compatibility.js'
 import { pf2eInitializeDummyActor, pf2eCastSpell, pf2eItemToMessage } from './pf2e-compatibility.js'
 import { DUMMY_ACTOR_IMAGE, DUMMY_ACTOR_NAME, MODULE_NAME } from './consts.js'
+import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
 
 let dummyActor = null
 
-export async function quickSendToChat (item, event, overrideImg) {
+export async function quickSendToChat (item, clickEvent, overrideImg) {
   console.log(`${MODULE_NAME} | Rolling item: ${item.name}`)
   if (item instanceof JournalEntry) return rollJournal(item, overrideImg)
   if (item instanceof Actor) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Scene) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Macro) return rollMacro(item)
   if (item instanceof RollTable) return rollRollableTable(item)
-  if (item instanceof Item) return rollItem(item, event)
+  if (item instanceof Item) return rollItem(item, clickEvent)
   console.error(`${MODULE_NAME} | Unknown class for ${item.name}: ${item.constructor.name}`)
 }
 
@@ -29,9 +30,10 @@ export async function rollSimple (item, extraContents, overrideImg) {
       </div>
       `,
   })
-  // second message - public, image/text
+  // second message - public (unless Ctrl is held), image/text
   if (imgElem || extraContents) {
     await ChatMessage.create({
+      ...whisperToSelfIfCtrlIsHeld(),
       content:
         `<div class="${game.system.id} chat-card item-card">
           ${imgElem}
@@ -58,9 +60,10 @@ export async function rollJournal (item, overrideImg) {
       </div>
       `,
   })
-  // second message - public, image/text
+  // second message - public (unless ctrl is held), image/text
   if (page0.type === 'image') {
     await ChatMessage.create({
+      ...whisperToSelfIfCtrlIsHeld(),
       content:
         `<div class="${game.system.id} chat-card item-card">
           ${imgElem}
@@ -70,6 +73,7 @@ export async function rollJournal (item, overrideImg) {
     })
   } else {
     await ChatMessage.create({
+      ...whisperToSelfIfCtrlIsHeld(),
       content: page0.text.content,
     })
   }
@@ -80,6 +84,7 @@ async function rollItemDescription (item) {
   const imgElem = img ? `<img src=${img} alt="${item.name || img}" style="max-height: 80px"/>` : ''
   // one message, public, has: name, image, and description
   await ChatMessage.create({
+    ...whisperToSelfIfCtrlIsHeld(),
     content:
       `<div class="${game.system.id} chat-card item-card">
           <header class="card-header flexrow">
@@ -169,8 +174,8 @@ function deactivateUglyHackThatLinksItemToActor (item, actor) {
   }
 }
 
-export async function rollItem (item, event) {
-  event?.preventDefault()
+export async function rollItem (item, clickEvent) {
+  clickEvent?.preventDefault()
   if (dummyActor === null) {
     dummyActor = await findOrCreateDummyActor()
   }
@@ -179,7 +184,7 @@ export async function rollItem (item, event) {
   if (!actorHasItem) {
     activateUglyHackThatLinksItemToActor(item, actor, true)
   }
-  return rollDependingOnSystem(item, actor, dummyActor).finally(() => {
+  return rollDependingOnSystem(item, actor, dummyActor, clickEvent).finally(() => {
     // undoing ugly hack override
     if (!actorHasItem) {
       deactivateUglyHackThatLinksItemToActor(item, actor)
@@ -187,17 +192,17 @@ export async function rollItem (item, event) {
   })
 }
 
-async function rollDependingOnSystem (item, actor, dummyActor) {
+async function rollDependingOnSystem (item, actor, dummyActor, clickEvent) {
   if (game.system.id === 'pf2e') {
     if (item.type === 'spell') {
-      return pf2eCastSpell(item, actor, dummyActor)
+      return pf2eCastSpell(item, actor, dummyActor, clickEvent)
     } else {
-      return pf2eItemToMessage(item)
+      return pf2eItemToMessage(item, clickEvent)
     }
   }
   if (game.system.id === 'dnd5e') {
     const actorHasItem = !!actor.items.get(item.id)
-    return dnd5eRollItem(item, actor, actorHasItem)
+    return dnd5eRollItem(item, actor, actorHasItem, clickEvent)
   }
   if (item.roll !== undefined) {
     return item.roll()

@@ -36,6 +36,8 @@ When clicking this option, the sheet's contents will be used to post a card in t
 - Rollable Tables will have a random item drawn from them.
 - Macros will be executed.
 
+Hold Ctrl to make the message private ("self" only visibility), just like how many systems already do it.
+
 ![](metadata/screenshots/Screenshot_3.png)
 
 ![](metadata/screenshots/Screenshot_4.png)
@@ -61,12 +63,7 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
 
 ![](metadata/screenshots/Screenshot_6.png)
 
-# BetterRolls
-
-This module was compatible with [BetterRolls for 5e](https://github.com/RedReign/FoundryVTT-BetterRolls5e), and will call
- the BetterRolls' "quick roll" option on items.  If you want to disable/ignore it, hold the Alt key while clicking.
-
-Foundry V10 compatibility with Ready Set Roll - TBD. (let me know if this is critical for you).
+No special compatibility with Ready Set Roll; Please let me know if this is important to you!
 
 ![](metadata/screenshots/Screenshot_9.png)
 

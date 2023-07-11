@@ -1,4 +1,6 @@
 // https://gitlab.com/hooking/foundry-vtt---pathfinder-2e/-/blob/master/src/module/actor/sheet/base.ts#L1048
+import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
+
 export const pf2eInitializeDummyActor = async (compendiumRollActor) => {
   // setting to Level 0, for total Trained modifier of +2.  (-2 is no longer possible)
   await compendiumRollActor.update({ data: { details: { level: { value: 0 } } } })
@@ -45,7 +47,7 @@ const getSpellcasting = (actor, dummyActor) => {
  *
  * KNOWN BUG: heightening no longer works
  */
-export const pf2eCastSpell = async (item, actor, dummyActor) => {
+export const pf2eCastSpell = async (item, actor, dummyActor, clickEvent) => {
   const spellcasting = getSpellcasting(actor, dummyActor)
   Object.defineProperty(item, 'spellcasting', {
     value: spellcasting,
@@ -57,7 +59,7 @@ export const pf2eCastSpell = async (item, actor, dummyActor) => {
   const originalAutoHeightenLevel = item.system.location.autoHeightenLevel
   item.system.location.autoHeightenLevel = overrideSpellLevel || originalAutoHeightenLevel
   item.isFromConsumable = true // to make it embed data
-  const chatMessage = await item.toMessage(undefined, { create: false, data: { spellLvl: overrideSpellLevel } })
+  const chatMessage = await item.toMessage(clickEvent, { create: false, data: { spellLvl: overrideSpellLevel } })
 
   const dataItemId = `data-item-id="${item.id}"`
   item.system.location.value = spellcasting.id
@@ -67,12 +69,12 @@ export const pf2eCastSpell = async (item, actor, dummyActor) => {
   return ChatMessage.create(chatMessage)
 }
 
-export const pf2eItemToMessage = async (item) => {
+export const pf2eItemToMessage = async (item, clickEvent) => {
   const originalItemDataType = item.type
   if (['ancestry', 'background', 'class', 'deity'].includes(originalItemDataType)) {
     item.type = 'feat'
   }
-  const chatMessage = await item.toMessage()
+  const chatMessage = await item.toMessage(clickEvent)
   item.type = originalItemDataType // undo change
 
   if (['effect', 'condition'].includes(originalItemDataType) && !!item.sourceId) {
@@ -86,6 +88,7 @@ export const pf2eItemToMessage = async (item) => {
       contentStr = contentStr.replace('}', ` ${valueNum}}`)
     }
     await ChatMessage.create({
+      ...whisperToSelfIfCtrlIsHeld(),
       user: game.user.id,
       speaker: { user: game.user, alias: `Draggable ${originalItemDataType}:` },
       content: contentStr,
