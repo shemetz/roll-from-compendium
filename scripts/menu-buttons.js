@@ -56,7 +56,10 @@ export function addCompendiumContextOptions (application, buttons) {
 export function addSidebarContextOptions (application, buttons) {
   const tab = ui[application[0].dataset.tab]
   const documentName = tab?.constructor.documentName
-  if (!COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) return
+  if (
+    !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)
+    || documentName === 'RollTable' // Roll tables have a "Roll" button added to them in core foundry, but only in sidebar and not in compendium list
+  ) return
 
   // Add a Send To Chat button
   buttons.unshift({
