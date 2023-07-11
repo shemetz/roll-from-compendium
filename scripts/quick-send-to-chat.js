@@ -229,7 +229,7 @@ async function findOrCreateDummyActor () {
   }
 
   // migration from older module name
-  let oldActor = game.actors.find(a => a.name === '(Compendium Roll)')
+  let oldActor = game.actors.find(a => a.name === '(Quick Roll To Chat)')
   if (oldActor) {
     console.log(`${MODULE_NAME} | Migrating actor: ${oldActor.name}`)
     let updatedActor = await oldActor.update({ name: DUMMY_ACTOR_NAME })
@@ -292,7 +292,7 @@ export const getRollActionName = (documentName, documentSubtype) => {
     'Item': 'Send To Chat',
     'Macro': 'Execute',
     'JournalEntry': 'Text+Image To Chat',
-    'RollTable': 'Draw From Table',
+    'RollTable': 'Roll',
     'Scene': 'Image to Chat',
   }[documentName] || 'Send To Chat'
 }

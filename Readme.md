@@ -22,9 +22,7 @@ Right click (context menu options) are added to:
 - Compendium pack contents
 - Sidebar entries (including in folders) for actors, items, journals, scenes, etc
 
-As are header buttons for sheets of Actors, Items, and Journals.
-
-The new option is named "To Chat".
+Header buttons are also added to sheets. The new option is named "💬 To Chat".
 
 When clicking this option, the sheet's contents will be used to post a card in the chat, depending on the exact document type:
 - (dnd5e, pf2e) A spell will be cast.  Spell slot can be chosen.
@@ -33,8 +31,8 @@ When clicking this option, the sheet's contents will be used to post a card in t
 - Any other Item will have its name, image, and full description posted.
 - Actors, and Scenes will post the name and the image (name will be a separate private message which you can choose to reveal)
 - Journal Entries will show their contents along with an image if one exists.
-- Rollable Tables will have a random item drawn from them.
-- Macros will be executed.
+- Rollable Tables will have a random item drawn from them. (icon isn't perfect, oh well)
+- Macros will be executed. (icon isn't perfect, oh well)
 
 Hold Ctrl to make the message private ("self" only visibility), just like how many systems already do it.
 
@@ -43,10 +41,6 @@ Hold Ctrl to make the message private ("self" only visibility), just like how ma
 ![](metadata/screenshots/Screenshot_4.png)
 
 ![](metadata/screenshots/Screenshot_5.png)
-
-![](metadata/screenshots/Screenshot_7.png)
-
-![](metadata/screenshots/Screenshot_8.png)
 
 # Dummy Actor
 When "Item" items (spells, weapons, equipment, features...) are rolled, they will be rolled as if they belong to an actor.
@@ -57,7 +51,7 @@ If you are selecting a token while rolling (or if you're rolling from the sheet 
  character's statistics.
 
 However, if no token is selected, a "dummy actor" will be created (once) and used for that purpose. The dummy actor can
- be found in the Actors tab, named "(Compendium Roll)". If you want to change the default actor used for this purpose,
+ be found in the Actors tab, named "(Quick Send To Chat)". If you want to change the default actor used for this purpose,
  you'll need to alter this actor after it has been created for the first time, or rename an existing actor to have that
  name.
 
@@ -66,9 +60,3 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
 No special compatibility with Ready Set Roll; Please let me know if this is important to you!
 
 ![](metadata/screenshots/Screenshot_9.png)
-
-# Note for Pathfinder 2nd Edition (pf2e)
-- Fully compatible! (as of v4.0.0-beta3)
-
-# Note for D&D 5th edition (dnd5e)
-- Fully compatible! (as of v2.0.2)
