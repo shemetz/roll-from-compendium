@@ -1,8 +1,8 @@
 import {
   getRollActionName,
   guessCompendiumSubtype,
-  quickRollToChat,
-} from './quick-roll-to-chat.js'
+  quickSendToChat,
+} from './quick-send-to-chat.js'
 import { MODULE_ID } from './consts.js'
 import { COMPATIBLE_DOCUMENT_TYPES } from './consts.js'
 
@@ -16,13 +16,13 @@ export function addButtonToSheetHeader (sheet, buttons) {
     && !sheet.object.pack
   ) return buttons
 
-  // Add a Sheet To Chat button
+  // Add a Send To Chat button
   buttons.unshift({
     label: setting === 'Only icon' ? '' : getRollActionName(sheet.document.documentName, sheet.document.type),
-    class: 'sheet-to-chat',
-    icon: 'fas fa-dice-d20',
+    class: 'send-to-chat',
+    icon: 'fas fa-comment-alt',
     onclick: async ev => {
-      return quickRollToChat(sheet.object, ev)
+      return quickSendToChat(sheet.object, ev)
     },
   })
   return buttons
@@ -33,11 +33,11 @@ export function addCompendiumContextOptions (application, buttons) {
   const documentName = pack?.metadata.type
   if (!pack || !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) return
 
-  // Add a Sheet To Chat button
+  // Add a Send To Chat button
   buttons.unshift({
     name: getRollActionName(documentName, guessCompendiumSubtype(pack.metadata)),
-    class: 'sheet-to-chat',
-    icon: '<i class="fas fa-dice-d20"></i>',
+    class: 'send-to-chat',
+    icon: '<i class="fas fa-comment-alt"></i>',
     callback: async li => {
       const mouseEvent = event
       const entryId = li.data('documentId')
@@ -45,8 +45,8 @@ export function addCompendiumContextOptions (application, buttons) {
       return pack.getDocument(entryId).then(async item => {
         if (item.img?.includes('default-icons') && thumbImg) {
           // little trick to use the trick that PF2e modules use, which updates thumbnail images but not data images
-          await quickRollToChat(item, mouseEvent, thumbImg)
-        } else await quickRollToChat(item, mouseEvent)
+          await quickSendToChat(item, mouseEvent, thumbImg)
+        } else await quickSendToChat(item, mouseEvent)
         return false
       })
     },
@@ -58,16 +58,16 @@ export function addSidebarContextOptions (application, buttons) {
   const documentName = tab?.constructor.documentName
   if (!COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) return
 
-  // Add a Sheet To Chat button
+  // Add a Send To Chat button
   buttons.unshift({
     name: getRollActionName(documentName, undefined),
-    class: 'sheet-to-chat',
-    icon: '<i class="fas fa-dice-d20"></i>',
+    class: 'send-to-chat',
+    icon: '<i class="fas fa-comment-alt"></i>',
     callback: async li => {
       const mouseEvent = event
       const entryId = li.data('documentId')
       const item = game.collections.get(documentName).get(entryId)
-      await quickRollToChat(item, mouseEvent)
+      await quickSendToChat(item, mouseEvent)
       return false
     },
   })

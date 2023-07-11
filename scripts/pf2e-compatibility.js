@@ -12,7 +12,8 @@ const createSpellcastingEntry = (compendiumRollActor) => {
   const ability = 'int'
   const flexible = false
 
-  const name = '(Quick Roll To Chat; Spellcasting)'
+  // note:  an old "(Quick Roll To Chat; Spellcasting)" may exist, but I don't think anyone minds
+  const name = '(Quick Send To Chat; Spellcasting)'
 
   // Define new spellcasting entry
   const spellcastingEntry = {
@@ -35,7 +36,7 @@ const createSpellcastingEntry = (compendiumRollActor) => {
 const getSpellcasting = (actor, dummyActor) => {
   const existingSpellcasting = actor.spellcasting.filter(sc => sc)[0]
   if (existingSpellcasting) return existingSpellcasting
-  else return dummyActor.spellcasting.getName('(Quick Roll To Chat; Spellcasting)')
+  else return dummyActor.spellcasting.getName('(Quick Send To Chat; Spellcasting)')
 }
 
 /**

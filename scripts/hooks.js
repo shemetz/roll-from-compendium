@@ -6,7 +6,7 @@ import {
 import { MODULE_ID, MODULE_NAME } from './consts.js'
 import {
   abilityUseRenderHook,
-  abilityPreUseItemHook
+  abilityPreUseItemHook,
 } from './dnd5e-compatibility.js'
 
 Hooks.once('init', function () {
@@ -17,8 +17,8 @@ Hooks.once('init', function () {
     config: true,
     type: String,
     choices: {
-      'Full': 'Full (default): will look like "🎲 Quick Roll To Chat"',
-      'Only icon': 'Only icon: "🎲"',
+      'Full': 'Full (default): will look like "💬 To Chat"',
+      'Only icon': 'Only icon: "💬"',
       'Hide': 'Hide: will not add any header button to sheets',
     },
     default: 'Full',

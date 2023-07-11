@@ -1,6 +1,6 @@
 {
   "id": "roll-from-compendium",
-  "title": "Quick Roll To Chat",
+  "title": "Quick Send To Chat",
   "description": "Add easy buttons to post things to chat.  Quickly cast a spell from a compendium, roll from a table, post the image of an NPC, or share an item's description.  Extra integration for DND5e and PF2e",
   "version": "1.5.3",
   "compatibility": {
@@ -8,7 +8,7 @@
     "verified": "11"
   },
   "esmodules": [
-    "scripts/roll-from-compendium-was-renamed.js",
+    "scripts/quick-roll-to-chat-was-renamed.js",
     "scripts/hooks.js"
   ],
   "url": "https://github.com/shemetz/roll-from-compendium",
@@ -31,12 +31,12 @@
     {
       "type": "screenshot",
       "url": "https://raw.githubusercontent.com/shemetz/roll-from-compendium/master/metadata/screenshots/Screenshot_1.png",
-      "caption": "Quick Roll To Chat - Fireball example"
+      "caption": "Quick Send To Chat - Fireball example"
     },
     {
       "type": "cover",
       "url": "https://raw.githubusercontent.com/shemetz/roll-from-compendium/master/metadata/screenshots/Screenshot_1.png",
-      "caption": "Quick Roll To Chat"
+      "caption": "Quick Send To Chat"
     }
   ]
 }

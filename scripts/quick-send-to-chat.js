@@ -4,7 +4,7 @@ import { DUMMY_ACTOR_IMAGE, DUMMY_ACTOR_NAME, MODULE_NAME } from './consts.js'
 
 let dummyActor = null
 
-export async function quickRollToChat (item, event, overrideImg) {
+export async function quickSendToChat (item, event, overrideImg) {
   console.log(`${MODULE_NAME} | Rolling item: ${item.name}`)
   if (item instanceof JournalEntry) return rollJournal(item, overrideImg)
   if (item instanceof Actor) return rollSimple(item, undefined, overrideImg)
@@ -275,7 +275,7 @@ export const getRollActionName = (documentName, documentSubtype) => {
     'heritage': 'Description To Chat',
     'kit': 'Description To Chat',
     'spell': 'Cast To Chat',
-    'weapon': game.system.id === 'dnd5e' ? 'Quick Roll To Chat' : 'Description To Chat',
+    'weapon': 'Send To Chat',
     'treasure': 'Description To Chat',
     // Actor
     'npc': 'Image To Chat',
@@ -284,12 +284,12 @@ export const getRollActionName = (documentName, documentSubtype) => {
     'vehicle': 'Image To Chat',
   }[documentSubtype] || {
     'Actor': 'Image To Chat',
-    'Item': 'Quick Roll To Chat',
+    'Item': 'Send To Chat',
     'Macro': 'Execute',
     'JournalEntry': 'Text+Image To Chat',
     'RollTable': 'Draw From Table',
     'Scene': 'Image to Chat',
-  }[documentName] || 'Quick Roll To Chat'
+  }[documentName] || 'Send To Chat'
 }
 
 export const guessCompendiumSubtype = (compendiumMetadata) => {

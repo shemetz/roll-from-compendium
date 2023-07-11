@@ -1,4 +1,4 @@
-# [Quick Roll To Chat](https://foundryvtt.com/packages/roll-from-compendium/)
+# [Quick Send To Chat](https://foundryvtt.com/packages/roll-from-compendium/)
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/shemetz/roll-from-compendium?style=for-the-badge) 
 ![GitHub Releases](https://img.shields.io/github/downloads/shemetz/roll-from-compendium/latest/total?style=for-the-badge) 
@@ -24,7 +24,7 @@ Right click (context menu options) are added to:
 
 As are header buttons for sheets of Actors, Items, and Journals.
 
-The new option is named Quick Roll To Chat, Description To Chat, Cast To Chat, Image To Chat, etc.
+The new option is named "To Chat".
 
 When clicking this option, the sheet's contents will be used to post a card in the chat, depending on the exact document type:
 - (dnd5e, pf2e) A spell will be cast.  Spell slot can be chosen.
