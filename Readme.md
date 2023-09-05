@@ -25,11 +25,11 @@ Right click (context menu options) are added to:
 Header buttons are also added to sheets. The new option is named "💬 To Chat".
 
 When clicking this option, the sheet's contents will be used to post a card in the chat, depending on the exact document type:
-- (dnd5e, pf2e) A spell will be cast.  Spell slot can be chosen.
-- (dnd5e) A weapon will be used, allowing an attack and damage roll (compatible with Better Rolls for 5e)
+- (dnd5e, pf2e) A spell will be cast.
+- (dnd5e) A weapon will be used, allowing an attack and damage roll
 - (pf2e) An Effect will be posted to the chat, along with an embedded link that can be immediately dragged onto a token.
 - Any other Item will have its name, image, and full description posted.
-- Actors, and Scenes will post the name and the image (name will be a separate private message which you can choose to reveal)
+- Actors, and Scenes will post the name and the image
 - Journal Entries will show their contents along with an image if one exists.
 - Rollable Tables will have a random item drawn from them. (icon isn't perfect, oh well)
 - Macros will be executed. (icon isn't perfect, oh well)
@@ -39,7 +39,13 @@ Hold Ctrl to make the message private ("self" only visibility), just like how ma
 Hold Shift to send a link to the item, rather than the item itself.  This link will be a small clickable button, shown
 as its own message, with the text being the item's name.  Clicking it will open the item sheet (if user has permissions).
 
+![](metadata/screenshots/Screenshot_11.png)
+
+Pathfinder 2E - draggable effect:
+
 ![](metadata/screenshots/Screenshot_3.png)
+
+Actors will only have their name and image revealed, with name being a private message which you can choose to reveal to your players
 
 ![](metadata/screenshots/Screenshot_4.png)
 
@@ -57,6 +63,9 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
  be found in the Actors tab, named "(Quick Send To Chat)". If you want to change the default actor used for this purpose,
  you'll need to alter this actor after it has been created for the first time, or rename an existing actor to have that
  name.
+
+You can disable this dummy actor in the settings;  if you find yourself needing to do that, let me know, and I'll change
+ the defaults for that system to be enabled/disabled as necessary.
 
 ![](metadata/screenshots/Screenshot_6.png)
 
