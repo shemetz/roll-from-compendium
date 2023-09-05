@@ -39,7 +39,7 @@ const createSpellcastingEntry = (compendiumRollActor) => {
 const getSpellcasting = (actor, dummyActor) => {
   const existingSpellcasting = actor.spellcasting.filter(sc => sc)[0]
   if (existingSpellcasting) return existingSpellcasting
-  else return dummyActor.spellcasting.getName('(Quick Send To Chat; Spellcasting)')
+  else return dummyActor?.spellcasting.getName('(Quick Send To Chat; Spellcasting)')
 }
 
 /**

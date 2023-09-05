@@ -23,7 +23,7 @@ const justSendLink = async (item) => {
   await ChatMessage.create({
     ...whisperToSelfIfCtrlIsHeld(),
     user: game.user.id,
-    speaker: { user: game.user, alias: `Link to ${item.type}` },
+    speaker: { user: game.user, alias: `${MODULE_NAME} - Link` },
     content: contentStr,
   })
 }
@@ -187,10 +187,15 @@ function deactivateUglyHackThatLinksItemToActor (item, actor) {
 }
 
 export async function rollItem (item) {
+  const controlledActor = canvas.tokens.controlled[0]?.actor
+  if (game.settings.get(MODULE_ID, 'use-dummy-actor') === false) {
+    return rollDependingOnSystem(item, controlledActor, undefined)
+  }
+
   if (dummyActor === null) {
     dummyActor = await findOrCreateDummyActor()
   }
-  const actor = canvas.tokens.controlled[0]?.actor || dummyActor
+  const actor = controlledActor || dummyActor
   const actorHasItem = !!actor.items.get(item.id)
   if (!actorHasItem) {
     activateUglyHackThatLinksItemToActor(item, actor, true)
@@ -206,13 +211,14 @@ export async function rollItem (item) {
 async function rollDependingOnSystem (item, actor, dummyActor) {
   if (game.system.id === 'pf2e') {
     if (item.type === 'spell') {
+      if (!actor) return ui.notifications.error(`PF2E system requires an actor for spellcasting;  please enable Dummy Actor in Quick Send to Chat settings`)
       return pf2eCastSpell(item, actor, dummyActor)
     } else {
       return pf2eItemToMessage(item)
     }
   }
   if (game.system.id === 'dnd5e') {
-    const actorHasItem = !!actor.items.get(item.id)
+    const actorHasItem = !!actor?.items.get(item.id)
     return dnd5eRollItem(item, actor, actorHasItem)
   }
   if (item.roll !== undefined) {

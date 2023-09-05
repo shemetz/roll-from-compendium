@@ -7,7 +7,7 @@ export const dnd5eRollItem = (item, actor, actorHasItem) => {
     // (this also prevents upcasting, but that's okay for most use cases anyway)
     item.system.preparation.mode = 'innate'
   }
-  if (!actorHasItem && item.system?.save?.ability) {
+  if (actor && !actorHasItem && item.system?.save?.ability) {
     // adding a saving throw DC to spells rolled from a compendium
     const dc = getProperty(actor.data, 'data.attributes.spelldc')
     if (!item.system?.save?.dc)
