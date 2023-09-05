@@ -103,7 +103,7 @@ async function rollItemDescription (item) {
           </header>
         ${imgElem}
     </div>
-    ${item.system.description || ''}
+    ${getItemDescription(item)}
     `,
   })
 }
@@ -337,4 +337,16 @@ export const guessCompendiumSubtype = (compendiumMetadata) => {
     if (name.includes('ac-eidolons')) return 'ancestry'
   }
   return undefined
+}
+
+const getItemDescription = (item) => {
+  return (
+    item.system.description // simple, works in most game systems
+    || item.system.props?.Description // Custom System Builder often uses these (though it's custom)
+    || item.system.props?.description // extra blind guess, in case of unusual capitalization
+    || item.system.props?.DESCRIPTION // extra blind guess, in case of unusual capitalization
+    || item.system.DESCRIPTION // extra blind guess, in case of unusual capitalization
+    || item.system.Description // extra blind guess, in case of unusual capitalization
+    || '' // default: blank (note that not everything has a description!)
+  )
 }
