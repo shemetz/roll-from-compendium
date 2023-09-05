@@ -1,19 +1,20 @@
 import { dnd5eInitializeDummyActor, dnd5eRollItem } from './dnd5e-compatibility.js'
 import { pf2eInitializeDummyActor, pf2eCastSpell, pf2eItemToMessage } from './pf2e-compatibility.js'
-import { DUMMY_ACTOR_IMAGE, DUMMY_ACTOR_NAME, MODULE_NAME } from './consts.js'
+import { DUMMY_ACTOR_IMAGE, DUMMY_ACTOR_NAME, MODULE_ID, MODULE_NAME } from './consts.js'
 import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
 
 let dummyActor = null
 
-export async function quickSendToChat (item, clickEvent, overrideImg) {
+export async function quickSendToChat (item, overrideImg) {
   console.log(`${MODULE_NAME} | Sending item to chat: ${item.name}`)
-  if (clickEvent.shiftKey) return justSendLink(item)
+  const shiftIsHeld = game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.SHIFT)
+  if (shiftIsHeld) return justSendLink(item)
   if (item instanceof JournalEntry) return rollJournal(item, overrideImg)
   if (item instanceof Actor) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Scene) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Macro) return rollMacro(item)
   if (item instanceof RollTable) return rollRollableTable(item)
-  if (item instanceof Item) return rollItem(item, clickEvent)
+  if (item instanceof Item) return rollItem(item)
   console.error(`${MODULE_NAME} | Unknown class for ${item.name}: ${item.constructor.name}`)
 }
 
@@ -185,8 +186,7 @@ function deactivateUglyHackThatLinksItemToActor (item, actor) {
   }
 }
 
-export async function rollItem (item, clickEvent) {
-  clickEvent?.preventDefault()
+export async function rollItem (item) {
   if (dummyActor === null) {
     dummyActor = await findOrCreateDummyActor()
   }
@@ -195,7 +195,7 @@ export async function rollItem (item, clickEvent) {
   if (!actorHasItem) {
     activateUglyHackThatLinksItemToActor(item, actor, true)
   }
-  return rollDependingOnSystem(item, actor, dummyActor, clickEvent).finally(() => {
+  return rollDependingOnSystem(item, actor, dummyActor).finally(() => {
     // undoing ugly hack override
     if (!actorHasItem) {
       deactivateUglyHackThatLinksItemToActor(item, actor)
@@ -203,17 +203,17 @@ export async function rollItem (item, clickEvent) {
   })
 }
 
-async function rollDependingOnSystem (item, actor, dummyActor, clickEvent) {
+async function rollDependingOnSystem (item, actor, dummyActor) {
   if (game.system.id === 'pf2e') {
     if (item.type === 'spell') {
-      return pf2eCastSpell(item, actor, dummyActor, clickEvent)
+      return pf2eCastSpell(item, actor, dummyActor)
     } else {
-      return pf2eItemToMessage(item, clickEvent)
+      return pf2eItemToMessage(item)
     }
   }
   if (game.system.id === 'dnd5e') {
     const actorHasItem = !!actor.items.get(item.id)
-    return dnd5eRollItem(item, actor, actorHasItem, clickEvent)
+    return dnd5eRollItem(item, actor, actorHasItem)
   }
   if (item.roll !== undefined) {
     return item.roll()

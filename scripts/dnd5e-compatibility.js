@@ -1,9 +1,10 @@
 import { DUMMY_ACTOR_NAME } from './consts.js'
+import { createFakeMouseEvent } from './create-fake-mouse-event.js'
 
-export const dnd5eRollItem = (item, actor, actorHasItem, clickEvent) => {
+export const dnd5eRollItem = (item, actor, actorHasItem) => {
   if (item.system?.preparation?.mode !== undefined && !actorHasItem) {
     // setting preparation mode to innate so that it doesn't try to consume slots
-    // (this also prevents upcasting, but that's okay for most use cases anyways)
+    // (this also prevents upcasting, but that's okay for most use cases anyway)
     item.system.preparation.mode = 'innate'
   }
   if (!actorHasItem && item.system?.save?.ability) {
@@ -14,10 +15,11 @@ export const dnd5eRollItem = (item, actor, actorHasItem, clickEvent) => {
     if (item.labels?.save && item.labels.save.includes('DC  '))
       item.labels.save = item.labels.save.replace('DC  ', `DC ${dc} `)
   }
-  if (!event?.altKey && window.BetterRolls) {
+  if (!game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.ALT) && window.BetterRolls) {
     const customRollItem = BetterRolls.rollItem(item, { event: event, preset: 0 })
     customRollItem.consumeCharge = () => Promise.resolve(true)
-    return customRollItem.toMessage(clickEvent)
+    const fakeMouseEvent = createFakeMouseEvent()
+    return customRollItem.toMessage(fakeMouseEvent)
   }
   return item.use().then(chatDataOrMessage => {
     if (!chatDataOrMessage) return chatDataOrMessage

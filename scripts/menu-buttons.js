@@ -21,8 +21,8 @@ export function addButtonToSheetHeader (sheet, buttons) {
     label: setting === 'Only icon' ? '' : getRollActionName(sheet.document.documentName, sheet.document.type),
     class: 'send-to-chat',
     icon: 'fas fa-comment-alt',
-    onclick: async ev => {
-      return quickSendToChat(sheet.object, ev)
+    onclick: async () => {
+      return quickSendToChat(sheet.object)
     },
   })
   return buttons
@@ -39,14 +39,13 @@ export function addCompendiumContextOptions (application, buttons) {
     class: 'send-to-chat',
     icon: '<i class="fas fa-comment-alt"></i>',
     callback: async li => {
-      const mouseEvent = event
       const entryId = li.data('documentId')
       const thumbImg = pack.index.get(entryId).thumb
       return pack.getDocument(entryId).then(async item => {
         if (item.img?.includes('default-icons') && thumbImg) {
           // little trick to use the trick that PF2e modules use, which updates thumbnail images but not data images
-          await quickSendToChat(item, mouseEvent, thumbImg)
-        } else await quickSendToChat(item, mouseEvent)
+          await quickSendToChat(item, thumbImg)
+        } else await quickSendToChat(item)
         return false
       })
     },
@@ -67,10 +66,9 @@ export function addSidebarContextOptions (application, buttons) {
     class: 'send-to-chat',
     icon: '<i class="fas fa-comment-alt"></i>',
     callback: async li => {
-      const mouseEvent = event
       const entryId = li.data('documentId')
       const item = game.collections.get(documentName).get(entryId)
-      await quickSendToChat(item, mouseEvent)
+      await quickSendToChat(item)
       return false
     },
   })

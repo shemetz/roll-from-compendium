@@ -1,5 +1,6 @@
 // https://gitlab.com/hooking/foundry-vtt---pathfinder-2e/-/blob/master/src/module/actor/sheet/base.ts#L1048
 import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
+import { createFakeMouseEvent } from './create-fake-mouse-event.js'
 
 export const pf2eInitializeDummyActor = async (compendiumRollActor) => {
   // setting to Level 0, for total Trained modifier of +2.  (-2 is no longer possible)
@@ -47,7 +48,7 @@ const getSpellcasting = (actor, dummyActor) => {
  *
  * KNOWN BUG: heightening no longer works
  */
-export const pf2eCastSpell = async (item, actor, dummyActor, clickEvent) => {
+export const pf2eCastSpell = async (item, actor, dummyActor) => {
   const spellcasting = getSpellcasting(actor, dummyActor)
   Object.defineProperty(item, 'spellcasting', {
     value: spellcasting,
@@ -59,7 +60,8 @@ export const pf2eCastSpell = async (item, actor, dummyActor, clickEvent) => {
   const originalAutoHeightenLevel = item.system.location.autoHeightenLevel
   item.system.location.autoHeightenLevel = overrideSpellLevel || originalAutoHeightenLevel
   item.isFromConsumable = true // to make it embed data
-  const chatMessage = await item.toMessage(clickEvent, { create: false, data: { spellLvl: overrideSpellLevel } })
+  const fakeMouseEvent = createFakeMouseEvent()
+  const chatMessage = await item.toMessage(fakeMouseEvent, { create: false, data: { spellLvl: overrideSpellLevel } })
 
   const dataItemId = `data-item-id="${item.id}"`
   item.system.location.value = spellcasting.id
@@ -69,12 +71,13 @@ export const pf2eCastSpell = async (item, actor, dummyActor, clickEvent) => {
   return ChatMessage.create(chatMessage)
 }
 
-export const pf2eItemToMessage = async (item, clickEvent) => {
+export const pf2eItemToMessage = async (item) => {
   const originalItemDataType = item.type
   if (['ancestry', 'background', 'class', 'deity'].includes(originalItemDataType)) {
     item.type = 'feat'
   }
-  const chatMessage = await item.toMessage(clickEvent)
+  const fakeMouseEvent = createFakeMouseEvent()
+  const chatMessage = await item.toMessage(fakeMouseEvent)
   item.type = originalItemDataType // undo change
 
   if (['effect', 'condition'].includes(originalItemDataType) && !!item.sourceId) {
