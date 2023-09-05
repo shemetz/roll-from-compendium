@@ -36,6 +36,9 @@ When clicking this option, the sheet's contents will be used to post a card in t
 
 Hold Ctrl to make the message private ("self" only visibility), just like how many systems already do it.
 
+Hold Shift to send a link to the item, rather than the item itself.  This link will be a small clickable button, shown
+as its own message, with the text being the item's name.  Clicking it will open the item sheet (if user has permissions).
+
 ![](metadata/screenshots/Screenshot_3.png)
 
 ![](metadata/screenshots/Screenshot_4.png)

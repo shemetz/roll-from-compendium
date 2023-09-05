@@ -6,7 +6,8 @@ import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
 let dummyActor = null
 
 export async function quickSendToChat (item, clickEvent, overrideImg) {
-  console.log(`${MODULE_NAME} | Rolling item: ${item.name}`)
+  console.log(`${MODULE_NAME} | Sending item to chat: ${item.name}`)
+  if (clickEvent.shiftKey) return justSendLink(item)
   if (item instanceof JournalEntry) return rollJournal(item, overrideImg)
   if (item instanceof Actor) return rollSimple(item, undefined, overrideImg)
   if (item instanceof Scene) return rollSimple(item, undefined, overrideImg)
@@ -14,6 +15,16 @@ export async function quickSendToChat (item, clickEvent, overrideImg) {
   if (item instanceof RollTable) return rollRollableTable(item)
   if (item instanceof Item) return rollItem(item, clickEvent)
   console.error(`${MODULE_NAME} | Unknown class for ${item.name}: ${item.constructor.name}`)
+}
+
+const justSendLink = async (item) => {
+  const contentStr = item.link
+  await ChatMessage.create({
+    ...whisperToSelfIfCtrlIsHeld(),
+    user: game.user.id,
+    speaker: { user: game.user, alias: `Link to ${item.type}` },
+    content: contentStr,
+  })
 }
 
 export async function rollSimple (item, extraContents, overrideImg) {
