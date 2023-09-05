@@ -88,7 +88,9 @@ export const pf2eItemToMessage = async (item) => {
     if (originalItemDataType === 'condition') {
       // add condition value to this draggable, because it will actually apply the same condition number (e.g. Sickened 5)
       const valueNum = item.value
-      contentStr = contentStr.replace('}', ` ${valueNum}}`)
+      if (valueNum) {
+        contentStr = contentStr.replace('}', ` ${valueNum}}`)
+      }
     }
     await ChatMessage.create({
       ...whisperToSelfIfCtrlIsHeld(),
