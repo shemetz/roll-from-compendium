@@ -211,7 +211,8 @@ export async function rollItem (item) {
 async function rollDependingOnSystem (item, actor, dummyActor) {
   if (game.system.id === 'pf2e') {
     if (item.type === 'spell') {
-      if (!actor) return ui.notifications.error(`PF2E system requires an actor for spellcasting;  please enable Dummy Actor in Quick Send to Chat settings`)
+      if (!actor) return ui.notifications.error(
+        `PF2E system requires an actor for spellcasting;  please enable Dummy Actor in Quick Send to Chat settings`)
       return pf2eCastSpell(item, actor, dummyActor)
     } else {
       return pf2eItemToMessage(item)
@@ -237,6 +238,13 @@ export function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
 
 async function findOrCreateDummyActor () {
   let foundActor = game.actors.find(a => a.name === DUMMY_ACTOR_NAME)
+
+  // v1.7.1 patch to fix "broken" dummy actors with the wrong type
+  if (foundActor.type !== 'character' && ['pf2e', 'dnd5e'].includes(game.system.id)) {
+    await foundActor.delete()
+    foundActor = null
+  }
+
   if (foundActor) {
     // migration to v9
     if (game.system.id === 'pf2e' && !foundActor.spellcasting.filter(sc => sc)[0]) {
@@ -261,14 +269,16 @@ async function findOrCreateDummyActor () {
 
   const cls = CONFIG.Actor.documentClass
   const types = game.system.documentTypes.Actor
+  // actor type should be 'character' in dnd5e and pf2e, but not sure what it should be in other systems, defaulting to 0th
+  const actorType = (types.includes('character') ? 'character' : types[0])
 
   // Setup document data
   console.log(`${MODULE_NAME} | Creating actor: ${DUMMY_ACTOR_NAME}`)
   const createData = {
     name: DUMMY_ACTOR_NAME,
     img: DUMMY_ACTOR_IMAGE,
-    type: types[0],  // e.g. 'character' in dnd5e and pf2e
-    types: types[0],
+    type: actorType,
+    types: actorType,
   }
   let actor = await cls.create(createData, { renderSheet: false })
   if (game.system.id === 'pf2e') {
