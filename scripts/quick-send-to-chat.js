@@ -239,13 +239,12 @@ export function getOwnedItemOrCompendiumItem (getOwnedItem, compendiumItem) {
 async function findOrCreateDummyActor () {
   let foundActor = game.actors.find(a => a.name === DUMMY_ACTOR_NAME)
 
-  // v1.7.1 patch to fix "broken" dummy actors with the wrong type
-  if (foundActor.type !== 'character' && ['pf2e', 'dnd5e'].includes(game.system.id)) {
-    await foundActor.delete()
-    foundActor = null
-  }
-
   if (foundActor) {
+    // v1.7.1 patch to fix "broken" dummy actors with the wrong type
+    if (foundActor.type !== 'character' && ['pf2e', 'dnd5e'].includes(game.system.id)) {
+      await foundActor.delete()
+      foundActor = null
+    }
     // migration to v9
     if (game.system.id === 'pf2e' && !foundActor.spellcasting.filter(sc => sc)[0]) {
       foundActor = await pf2eInitializeDummyActor(foundActor)
