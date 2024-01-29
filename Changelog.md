@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.2] - 2024-01-29
+- Fixed null bug that prevented any new dummy actors from being created (#25)
+
 ## [1.7.1] - 2023-09-27
 - Fixed broken dummy actor in pf2e and dnd5e (#21, #22)
 
@@ -110,4 +113,5 @@ See https://github.com/shemetz/roll-from-compendium/issues/4 for details.
 [1.6.0]: https://github.com/shemetz/roll-from-compendium/compare/1.5.3...1.6.0
 [1.7.0]: https://github.com/shemetz/roll-from-compendium/compare/1.6.0...1.7.0
 [1.7.1]: https://github.com/shemetz/roll-from-compendium/compare/1.7.0...1.7.1
-[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.7.1...HEAD
+[1.7.2]: https://github.com/shemetz/roll-from-compendium/compare/1.7.1...1.7.2
+[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.7.2...HEAD
