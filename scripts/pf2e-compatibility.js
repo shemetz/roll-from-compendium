@@ -36,10 +36,8 @@ const createSpellcastingEntry = (compendiumRollActor) => {
   return compendiumRollActor.createEmbeddedDocuments('Item', [data])
 }
 
-const getSpellcasting = (actor, dummyActor) => {
-  const existingSpellcasting = actor.spellcasting.filter(sc => sc)[0]
-  if (existingSpellcasting) return existingSpellcasting
-  else return dummyActor?.spellcasting.getName('(Quick Send To Chat; Spellcasting)')
+const getSpellcasting = (actor) => {
+  return actor.spellcasting.regular[0]
 }
 
 /**
@@ -48,8 +46,8 @@ const getSpellcasting = (actor, dummyActor) => {
  *
  * KNOWN BUG: heightening no longer works
  */
-export const pf2eCastSpell = async (item, actor, dummyActor) => {
-  const spellcasting = getSpellcasting(actor, dummyActor)
+export const pf2eCastSpell = async (item, actor) => {
+  const spellcasting = getSpellcasting(actor)
   Object.defineProperty(item, 'spellcasting', {
     value: spellcasting,
     configurable: true,
@@ -67,7 +65,8 @@ export const pf2eCastSpell = async (item, actor, dummyActor) => {
   item.system.location.value = spellcasting.id
   const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
   chatMessage.content = chatMessage.content.replace(dataItemId, `${dataItemId} ${dataEmbeddedItem}`)
-
+  chatMessage.flags.pf2e.casting.embeddedSpell = item.toObject()
+  chatMessage._source.flags.pf2e.casting.embeddedSpell = item.toObject()
   return ChatMessage.create(chatMessage)
 }
 
@@ -86,10 +85,10 @@ export const pf2eItemToMessage = async (item) => {
     // or @UUID[Compendium.pf2e.bestiary-effects.wX9L6fbqVMLP05hn]{Effect: Stench}
     let contentStr = item.link
     if (originalItemDataType === 'condition') {
-      // add condition value to this draggable, because it will actually apply the same condition number (e.g. Sickened 5)
+      // add condition value to this draggable, so that it will apply the same condition number on drag (e.g. Sickened 5)
       const valueNum = item.value
       if (valueNum) {
-        contentStr = contentStr.replace('}', ` ${valueNum}}`)
+        contentStr = contentStr.replace(/( \d+)?}/, ` ${valueNum}}`)
       }
     }
     await ChatMessage.create({
