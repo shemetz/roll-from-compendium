@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added clickability to posted image (will open in new tab)
 - Fixed sending scene images to chat
 - Fixed PF2E numbered condition dragggable links (#24)
+- [1.7.4] Fixed dummy actor creation bug (#27)
 
 ## [1.7.2] - 2024-01-29
 - Fixed null bug that prevented any new dummy actors from being created (#25)
@@ -122,4 +123,5 @@ See https://github.com/shemetz/roll-from-compendium/issues/4 for details.
 [1.7.1]: https://github.com/shemetz/roll-from-compendium/compare/1.7.0...1.7.1
 [1.7.2]: https://github.com/shemetz/roll-from-compendium/compare/1.7.1...1.7.2
 [1.7.3]: https://github.com/shemetz/roll-from-compendium/compare/1.7.2...1.7.3
-[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.7.3...HEAD
+[1.7.4]: https://github.com/shemetz/roll-from-compendium/compare/1.7.3...1.7.4
+[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.7.4...HEAD
