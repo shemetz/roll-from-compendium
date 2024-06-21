@@ -45,7 +45,7 @@ export function addCompendiumContextOptions (application, buttons) {
         if (item.img?.includes('default-icons') && thumbImg) {
           // little trick to use the trick that PF2e modules use, which updates thumbnail images but not data images
           await quickSendToChat(item, thumbImg)
-        } else await quickSendToChat(item)
+        } else await quickSendToChat(item, undefined)
         return false
       })
     },
@@ -53,8 +53,7 @@ export function addCompendiumContextOptions (application, buttons) {
 }
 
 export function addSidebarContextOptions (application, buttons) {
-  const tab = ui[application[0].dataset.tab]
-  const documentName = tab?.constructor.documentName
+  const documentName = application.entryType
   if (
     !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)
     || documentName === 'RollTable' // Roll tables have a "Roll" button added to them in core foundry, but only in sidebar and not in compendium list
@@ -68,7 +67,7 @@ export function addSidebarContextOptions (application, buttons) {
     callback: async li => {
       const entryId = li.data('documentId')
       const item = game.collections.get(documentName).get(entryId)
-      await quickSendToChat(item)
+      await quickSendToChat(item, undefined)
       return false
     },
   })
