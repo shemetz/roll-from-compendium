@@ -29,7 +29,7 @@ const justSendLink = async (item) => {
 }
 
 export async function rollSimple (item, extraContents, overrideImg) {
-  const img = overrideImg || item.img
+  const img = overrideImg ?? item.img ?? item.thumb
   const imgElem = img ? `<img src=${img} alt="${item.name || img}"/>` : ''
   // first message - private, only name
   await ChatMessage.create({
