@@ -48,7 +48,9 @@ export async function rollSimple (item, extraContents, overrideImg) {
       ...whisperToSelfIfCtrlIsHeld(),
       content:
         `<div class="${game.system.id} chat-card item-card">
-          ${imgElem}
+          <a href=${img} target="_blank">
+            ${imgElem}
+          </a>
       </div>
       ${extraContents || ''}
       `,
