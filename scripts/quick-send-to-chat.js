@@ -193,16 +193,19 @@ export async function rollItem (item) {
   if (game.settings.get(MODULE_ID, 'use-dummy-actor') === false) {
     return rollDependingOnSystem(item, controlledActor, undefined)
   }
-
   if (dummyActor === null) {
     dummyActor = await findOrCreateDummyActor()
   }
-  const actor = controlledActor || dummyActor
+  let actor = controlledActor ?? dummyActor
+  if (game.system.id === 'pf2e' && item.type === 'spell' && actor.spellcasting.regular.length === 0) {
+    // in pf2e, casting spells requires an actor with spellcasting, so sometimes we need to still use dummy actor
+    actor = dummyActor
+  }
   const actorHasItem = !!actor.items.get(item.id)
   if (!actorHasItem) {
     activateUglyHackThatLinksItemToActor(item, actor, true)
   }
-  return rollDependingOnSystem(item, actor, dummyActor).finally(() => {
+  return rollDependingOnSystem(item, actor).finally(() => {
     // undoing ugly hack override
     if (!actorHasItem) {
       deactivateUglyHackThatLinksItemToActor(item, actor)
@@ -210,12 +213,12 @@ export async function rollItem (item) {
   })
 }
 
-async function rollDependingOnSystem (item, actor, dummyActor) {
+async function rollDependingOnSystem (item, actor) {
   if (game.system.id === 'pf2e') {
     if (item.type === 'spell') {
       if (!actor) return ui.notifications.error(
         `PF2E system requires an actor for spellcasting;  please enable Dummy Actor in Quick Send to Chat settings`)
-      return pf2eCastSpell(item, actor, dummyActor)
+      return pf2eCastSpell(item, actor)
     } else {
       return pf2eItemToMessage(item)
     }
