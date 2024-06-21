@@ -272,7 +272,7 @@ async function findOrCreateDummyActor () {
   }
 
   const cls = CONFIG.Actor.documentClass
-  const types = game.system.documentTypes.Actor
+  const types = Object.keys(game.system.documentTypes.Actor)
   // actor type should be 'character' in dnd5e and pf2e, but not sure what it should be in other systems, defaulting to 0th
   const actorType = (types.includes('character') ? 'character' : types[0])
 
