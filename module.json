@@ -2,7 +2,7 @@
   "id": "roll-from-compendium",
   "title": "Quick Send To Chat",
   "description": "Add easy buttons to post things to chat.  Quickly cast a spell from a compendium, roll from a table, post the image of an NPC, or share an item's description.  Extra integration for DND5e and PF2e",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "compatibility": {
     "minimum": "12",
     "verified": "12"
