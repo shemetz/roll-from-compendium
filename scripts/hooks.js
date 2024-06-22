@@ -7,7 +7,7 @@ import { MODULE_ID, MODULE_NAME } from './consts.js'
 import {
   abilityUseRenderHook,
   abilityPreUseItemHook,
-} from './dnd5e-compatibility.js'
+} from './compatibility/dnd5e-compatibility.js'
 
 Hooks.once('init', function () {
   game.settings.register(MODULE_ID, 'window-header-button', {

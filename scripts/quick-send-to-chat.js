@@ -1,7 +1,8 @@
-import { dnd5eInitializeDummyActor, dnd5eRollItem } from './dnd5e-compatibility.js'
-import { pf2eInitializeDummyActor, pf2eCastSpell, pf2eItemToMessage } from './pf2e-compatibility.js'
 import { DUMMY_ACTOR_IMAGE, DUMMY_ACTOR_NAME, MODULE_ID, MODULE_NAME } from './consts.js'
 import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
+import { dnd5eInitializeDummyActor, dnd5eRollItem } from './compatibility/dnd5e-compatibility.js'
+import { pf2eInitializeDummyActor, pf2eCastSpell, pf2eItemToMessage } from './compatibility/pf2e-compatibility.js'
+import { ageSystemItemToMessage } from './compatibility/age-system-compatibility.js'
 
 let dummyActor = null
 
@@ -226,6 +227,9 @@ async function rollDependingOnSystem (item, actor) {
   if (game.system.id === 'dnd5e') {
     const actorHasItem = !!actor?.items.get(item.id)
     return dnd5eRollItem(item, actor, actorHasItem)
+  }
+  if (game.system.id === 'age-system') {
+    return ageSystemItemToMessage(item)
   }
   if (item.roll !== undefined) {
     return item.roll()

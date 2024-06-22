@@ -1,6 +1,6 @@
 // https://gitlab.com/hooking/foundry-vtt---pathfinder-2e/-/blob/master/src/module/actor/sheet/base.ts#L1048
-import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
-import { createFakeMouseEvent } from './create-fake-mouse-event.js'
+import { whisperToSelfIfCtrlIsHeld } from '../keybindings.js'
+import { createFakeMouseEvent } from '../create-fake-mouse-event.js'
 
 export const pf2eInitializeDummyActor = async (compendiumRollActor) => {
   // setting to Level 0, for total Trained modifier of +2.  (-2 is no longer possible)

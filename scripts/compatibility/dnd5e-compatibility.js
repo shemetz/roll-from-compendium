@@ -1,5 +1,5 @@
-import { DUMMY_ACTOR_NAME } from './consts.js'
-import { createFakeMouseEvent } from './create-fake-mouse-event.js'
+import { DUMMY_ACTOR_NAME } from '../consts.js'
+import { createFakeMouseEvent } from '../create-fake-mouse-event.js'
 
 export const dnd5eRollItem = (item, actor, actorHasItem) => {
   if (item.system?.preparation?.mode !== undefined && !actorHasItem) {

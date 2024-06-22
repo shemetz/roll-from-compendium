@@ -1,6 +1,6 @@
 import { DUMMY_ACTOR_NAME, MODULE_ID, MODULE_NAME } from './consts.js'
-import { pf2eInitializeDummyActor } from './pf2e-compatibility.js'
-import { dnd5eInitializeDummyActor } from './dnd5e-compatibility.js'
+import { pf2eInitializeDummyActor } from './compatibility/pf2e-compatibility.js'
+import { dnd5eInitializeDummyActor } from './compatibility/dnd5e-compatibility.js'
 
 Hooks.once('ready', async () => {
   let oldActor = game.actors.find(a => a.name === '(Quick Roll To Chat)')
