@@ -1,6 +1,5 @@
 import {
   addButtonToSheetHeader,
-  addCompendiumContextOptions,
   addSidebarContextOptions,
 } from './menu-buttons.js'
 import { MODULE_ID, MODULE_NAME } from './consts.js'
@@ -51,7 +50,6 @@ Hooks.once('setup', function () {
   Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getCompendiumEntryContext', addCompendiumContextOptions)
   Hooks.on('getSidebarTabEntryContext', addSidebarContextOptions)
   console.log(`${MODULE_NAME} | Done setting up.`)
 })

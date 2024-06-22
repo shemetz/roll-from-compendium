@@ -28,31 +28,8 @@ export function addButtonToSheetHeader (sheet, buttons) {
   return buttons
 }
 
-export function addCompendiumContextOptions (application, buttons) {
-  const pack = game.packs.get(application[0].dataset.pack)
-  const documentName = pack?.metadata.type
-  if (!pack || !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)) return
-
-  // Add a Send To Chat button
-  buttons.unshift({
-    name: getRollActionName(documentName, guessCompendiumSubtype(pack.metadata)),
-    class: 'send-to-chat',
-    icon: '<i class="fas fa-comment-alt"></i>',
-    callback: async li => {
-      const entryId = li.data('documentId')
-      const thumbImg = pack.index.get(entryId).thumb
-      return pack.getDocument(entryId).then(async item => {
-        if (item.img?.includes('default-icons') && thumbImg) {
-          // little trick to use the trick that PF2e modules use, which updates thumbnail images but not data images
-          await quickSendToChat(item, thumbImg)
-        } else await quickSendToChat(item, undefined)
-        return false
-      })
-    },
-  })
-}
-
 export function addSidebarContextOptions (application, buttons) {
+  const pack = application.collection?.applicationClass?.name === 'Compendium' ? application.collection : undefined
   const documentName = application.entryType
   if (
     !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)
@@ -61,12 +38,22 @@ export function addSidebarContextOptions (application, buttons) {
 
   // Add a Send To Chat button
   buttons.unshift({
-    name: getRollActionName(documentName, undefined),
+    name: getRollActionName(documentName, pack ? guessCompendiumSubtype(pack.metadata) : undefined),
     class: 'send-to-chat',
     icon: '<i class="fas fa-comment-alt"></i>',
     callback: async li => {
       const entryId = li.data('documentId')
-      const item = game.collections.get(documentName).get(entryId)
+      let item
+      if (pack) {
+        const thumbImg = pack.index.get(entryId).thumb
+        item = await pack.getDocument(entryId)
+        if (item.img?.includes('default-icons') && thumbImg) {
+          // little trick to use the trick that PF2e modules use, which updates thumbnail images but not data images
+          await quickSendToChat(item, thumbImg)
+        }
+      } else {
+        item = game.collections.get(documentName).get(entryId)
+      }
       await quickSendToChat(item, undefined)
       return false
     },
