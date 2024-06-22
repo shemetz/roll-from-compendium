@@ -24,13 +24,12 @@ Hooks.once('init', function () {
     default: 'Full',
   })
   game.settings.register(MODULE_ID, 'use-dummy-actor', {
-    name: 'Use dummy "(Quick Send To Chat)" actor?',
-    hint: 'A "dummy" actor is necessary in some game systems (like dnd5e, pf2e...) to allow special item automation, such' +
-      ' as rolling damage for a fireball spell.  The dummy actor will be created only once (and recreated if you delete it);  it' +
-      ' will be as "empty" as possible, and you can put it in whichever directory you want.  However, some systems (like' +
-      ' Custom System Builder) don\'t need' +
-      ' it and will have errors if they detect such an unusual actor, which is why you might wish to toggle this off and' +
-      ' delete that actor.',
+    name: 'Use dummy "(Quick Send To Chat)" actor',
+    hint: 'A "dummy" actor is necessary in some game systems (like dnd5e, pf2e...) to allow sending items to chat,' +
+      ' or to roll damage for spells.  The dummy actor will be created only once (and recreated if you delete it); ' +
+      ' Feel free to move it into a folder.  Some systems (like Custom System Builder) don\'t need' +
+      ' it and will have errors if they detect such an unusual actor;  if that happens to you, disable this setting' +
+      ' and delete that actor.',
     scope: 'world',
     config: true,
     type: Boolean,

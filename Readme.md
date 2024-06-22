@@ -67,6 +67,8 @@ However, if no token is selected, a "dummy actor" will be created (once) and use
 You can disable this dummy actor in the settings;  if you find yourself needing to do that, let me know, and I'll change
  the defaults for that system to be enabled/disabled as necessary.
 
+This dummy actor is necessary in D&D 5e and in PF2E, at least.
+
 ![](metadata/screenshots/Screenshot_6.png)
 
 No special compatibility with Ready Set Roll; Please let me know if this is important to you!
