@@ -1,4 +1,5 @@
 import {
+  addButtonToImagePopoutHeader,
   addButtonToSheetHeader,
   addSidebarContextOptions,
 } from './menu-buttons.js'
@@ -7,7 +8,7 @@ import { MODULE_ID, MODULE_NAME } from './consts.js'
 Hooks.once('init', function () {
   game.settings.register(MODULE_ID, 'window-header-button', {
     name: 'Window header button',
-    hint: 'Affects how the added header button looks in sheets for the following documents:  Actor, Item, JournalEntry, Scene.',
+    hint: 'Affects how the added header button looks in sheets for the following documents:  Actor, Item, JournalEntry, Scene, ImagePopout.',
     scope: 'client',
     config: true,
     type: String,
@@ -51,6 +52,7 @@ Hooks.once('setup', function () {
   Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getSceneConfigHeaderButtons', addButtonToSheetHeader)
+  Hooks.on('getImagePopoutHeaderButtons', addButtonToImagePopoutHeader)
   // not hooking for macros or roll tables;  they already have a button to use them from the sheet
 
   Hooks.on('getSidebarTabEntryContext', addSidebarContextOptions)

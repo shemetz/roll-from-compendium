@@ -329,6 +329,7 @@ export const getRollActionName = (documentName, documentSubtype) => {
     'JournalEntry': 'Text+Image To Chat',
     'RollTable': 'Roll',
     'Scene': 'Image to Chat',
+    'ImagePopout': 'Image to Chat', // not a real document type
   }[documentName] || 'Send To Chat'
 }
 

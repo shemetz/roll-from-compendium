@@ -1,7 +1,7 @@
 import {
   getRollActionName,
   guessCompendiumSubtype,
-  quickSendToChat,
+  quickSendToChat, rollSimple,
 } from './quick-send-to-chat.js'
 import { MODULE_ID } from './consts.js'
 import { COMPATIBLE_DOCUMENT_TYPES } from './consts.js'
@@ -62,4 +62,23 @@ export function addSidebarContextOptions (application, buttons) {
       return false
     },
   })
+}
+
+export function addButtonToImagePopoutHeader (imagePopout, buttons) {
+  const setting = game.settings.get(MODULE_ID, 'window-header-button')
+  if (setting === 'Hide')
+    return buttons
+  if (game.settings.get(MODULE_ID, 'ignored-document-names').split(',').includes('ImagePopout'))
+    return buttons
+
+  // Add a Send To Chat button
+  buttons.unshift({
+    label: setting === 'Only icon' ? '' : getRollActionName('ImagePopout', undefined),
+    class: 'send-to-chat',
+    icon: 'fas fa-comment-alt',
+    onclick: async () => {
+      return rollSimple({ img: imagePopout.object, name: imagePopout.options.title })
+    },
+  })
+  return buttons
 }
