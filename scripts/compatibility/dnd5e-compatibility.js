@@ -59,7 +59,7 @@ export const dnd5eInitializeDummyActor = async (compendiumRollActor) => {
   return compendiumRollActor
 }
 
-export const abilityUseRenderHook = (app, html, _data) => {
+const abilityUseRenderHook = (app, html, _data) => {
   // if it's the dummy actor or if the item doesn't belong to the actor - avoid consuming resources and allow upcasting
   if (app.item?.actor?.name !== DUMMY_ACTOR_NAME && app.item?.clone_prevDefinitions === undefined) {
     return
@@ -88,7 +88,7 @@ export const abilityUseRenderHook = (app, html, _data) => {
   }
 }
 
-export const abilityPreUseItemHook = (item, config, _options) => {
+const abilityPreUseItemHook = (item, config, _options) => {
   if (item.actor?.name === DUMMY_ACTOR_NAME) {
     config.consumeQuantity = false
     config.consumeRecharge = false
@@ -113,3 +113,10 @@ export const abilityPreUseItemHook = (item, config, _options) => {
       || config.consumeUsage
   }
 }
+
+Hooks.once('setup', function () {
+  if (game?.dnd5e?.applications?.item?.AbilityUseDialog?._getSpellData) {
+    Hooks.on('renderAbilityUseDialog', abilityUseRenderHook)
+    Hooks.on('dnd5e.preUseItem', abilityPreUseItemHook)
+  }
+});

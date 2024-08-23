@@ -3,21 +3,17 @@ import {
   addSidebarContextOptions,
 } from './menu-buttons.js'
 import { MODULE_ID, MODULE_NAME } from './consts.js'
-import {
-  abilityUseRenderHook,
-  abilityPreUseItemHook,
-} from './compatibility/dnd5e-compatibility.js'
 
 Hooks.once('init', function () {
   game.settings.register(MODULE_ID, 'window-header-button', {
     name: 'Window header button',
-    hint: 'Affects how the added header button looks in sheet windows',
+    hint: 'Affects how the added header button looks in sheets for the following documents:  Actor, Item, JournalEntry, Scene.',
     scope: 'client',
     config: true,
     type: String,
     choices: {
       'Full': 'Full (default): will look like "💬 To Chat"',
-      'Only icon': 'Only icon: "💬"',
+      'Only icon': 'Only icon: will look like "💬"',
       'Hide': 'Hide: will not add any header button to sheets',
     },
     default: 'Full',
@@ -40,16 +36,23 @@ Hooks.once('init', function () {
       return true
     })(),
   })
+  game.settings.register(MODULE_ID, 'ignored-document-names', {
+    name: 'Ignored document names',
+    hint: 'comma-separated list of document names that you don\'t want to see the header button in.  Example: "JournalEntry,Scene"',
+    scope: 'world',
+    config: true,
+    type: String,
+    default: '',
+  })
 })
 
 Hooks.once('setup', function () {
-  if (game?.dnd5e?.applications?.item?.AbilityUseDialog?._getSpellData) {
-    Hooks.on('renderAbilityUseDialog', abilityUseRenderHook)
-    Hooks.on('dnd5e.preUseItem', abilityPreUseItemHook)
-  }
   Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
+  Hooks.on('getSceneConfigHeaderButtons', addButtonToSheetHeader)
+  // not hooking for macros or roll tables;  they already have a button to use them from the sheet
+
   Hooks.on('getSidebarTabEntryContext', addSidebarContextOptions)
   console.log(`${MODULE_NAME} | Done setting up.`)
 })
