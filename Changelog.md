@@ -1,8 +1,7 @@
-# Changelog
-All notable changes to this project will be documented in this file.
-
-The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [1.8.0] - 2024-08-23
+- Added button to scene headers, to show their name and artwork in chat
+- Added button to image popouts, to show their name and artwork in chat
+- Added a new setting, "Ignored document names" - for users who don't like e.g. the button on Journals
 
 ## [1.7.6] - 2024-06-22
 - Added compatibility with AGE System Unofficial (#26)
@@ -103,33 +102,3 @@ See https://github.com/shemetz/roll-from-compendium/issues/4 for details.
 
 ## 1.0.3 and earlier
 - prehistory
-
-## See also: [Unreleased]
-
-[1.0.5]: https://github.com/shemetz/roll-from-compendium/compare/1.0.3...1.0.5
-[1.1.0]: https://github.com/shemetz/roll-from-compendium/compare/1.0.5...1.1.0
-[1.1.2]: https://github.com/shemetz/roll-from-compendium/compare/1.1.0...1.1.2
-[1.1.3]: https://github.com/shemetz/roll-from-compendium/compare/1.1.2...1.1.3
-[1.2.0]: https://github.com/shemetz/roll-from-compendium/compare/1.1.3...1.2.0
-[1.2.1]: https://github.com/shemetz/roll-from-compendium/compare/1.2.0...1.2.1
-[1.2.2]: https://github.com/shemetz/roll-from-compendium/compare/1.2.1...1.2.2
-[1.2.4]: https://github.com/shemetz/roll-from-compendium/compare/1.2.2...1.2.4
-[1.3.0]: https://github.com/shemetz/roll-from-compendium/compare/1.2.4...1.3.0
-[1.3.1]: https://github.com/shemetz/roll-from-compendium/compare/1.3.0...1.3.1
-[1.3.2]: https://github.com/shemetz/roll-from-compendium/compare/1.3.1...1.3.2
-[1.4.0]: https://github.com/shemetz/roll-from-compendium/compare/1.3.2...1.4.0
-[1.4.1]: https://github.com/shemetz/roll-from-compendium/compare/1.4.0...1.4.1
-[1.5.0]: https://github.com/shemetz/roll-from-compendium/compare/1.4.1...1.5.0
-[1.5.1]: https://github.com/shemetz/roll-from-compendium/compare/1.5.0...1.5.1
-[1.5.2]: https://github.com/shemetz/roll-from-compendium/compare/1.5.1...1.5.2
-[1.5.3]: https://github.com/shemetz/roll-from-compendium/compare/1.5.2...1.5.3
-[1.6.0]: https://github.com/shemetz/roll-from-compendium/compare/1.5.3...1.6.0
-[1.7.0]: https://github.com/shemetz/roll-from-compendium/compare/1.6.0...1.7.0
-[1.7.1]: https://github.com/shemetz/roll-from-compendium/compare/1.7.0...1.7.1
-[1.7.2]: https://github.com/shemetz/roll-from-compendium/compare/1.7.1...1.7.2
-[1.7.3]: https://github.com/shemetz/roll-from-compendium/compare/1.7.2...1.7.3
-[1.7.4]: https://github.com/shemetz/roll-from-compendium/compare/1.7.3...1.7.4
-[1.7.5]: https://github.com/shemetz/roll-from-compendium/compare/1.7.4...1.7.5
-[1.7.6]: https://github.com/shemetz/roll-from-compendium/compare/1.7.5...1.7.6
-[1.7.7]: https://github.com/shemetz/roll-from-compendium/compare/1.7.6...1.7.7
-[Unreleased]: https://github.com/shemetz/roll-from-compendium/compare/1.7.7...HEAD
