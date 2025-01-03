@@ -1,3 +1,6 @@
+## 1.8.1 - 2025-01-03
+- Improved github workflow automation
+
 ## 1.8.0 - 2024-08-23
 - Added button to scene headers, to show their name and artwork in chat
 - Added button to image popouts, to show their name and artwork in chat
