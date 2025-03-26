@@ -7,19 +7,6 @@ import {
 import { MODULE_ID, MODULE_NAME } from './consts.js'
 
 Hooks.once('init', function () {
-  game.settings.register(MODULE_ID, 'window-header-button', {
-    name: 'Window header button',
-    hint: 'Affects how the added header button looks in sheets for the following documents:  Actor, Item, JournalEntry, Scene, ImagePopout.',
-    scope: 'client',
-    config: true,
-    type: String,
-    choices: {
-      'Full': 'Full (default): will look like "💬 To Chat"',
-      'Only icon': 'Only icon: will look like "💬"',
-      'Hide': 'Hide: will not add any header button to sheets',
-    },
-    default: 'Full',
-  })
   game.settings.register(MODULE_ID, 'use-dummy-actor', {
     name: 'Use dummy "(Quick Send To Chat)" actor',
     hint: 'A "dummy" actor is necessary in some game systems (like dnd5e, pf2e...) to allow sending items to chat,' +

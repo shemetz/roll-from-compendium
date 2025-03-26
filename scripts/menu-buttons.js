@@ -8,9 +8,6 @@ import { COMPATIBLE_DOCUMENT_TYPES } from './consts.js'
 import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
 
 export function addButtonToSheetHeader (sheet, buttons) {
-  const setting = game.settings.get(MODULE_ID, 'window-header-button')
-  if (setting === 'Hide')
-    return buttons
   if (game.settings.get(MODULE_ID, 'ignored-document-names').split(',').includes(sheet.document.documentName))
     return buttons
   if (
@@ -22,10 +19,11 @@ export function addButtonToSheetHeader (sheet, buttons) {
     return buttons
 
   // Add a Send To Chat button
-  buttons.unshift({
-    label: setting === 'Only icon' ? '' : getRollActionName(sheet.document.documentName, sheet.document.type),
-    icon: '<i class="fa-solid fa-comment-alt"></i>',
-    onclick: async () => {
+  buttons.push({
+    action: 'quick-send-to-chat',
+    label: getRollActionName(sheet.document.documentName, sheet.document.type),
+    icon: "fa-solid fa-comment-alt",
+    onClick: async () => {
       return quickSendToChat(sheet.object)
     },
   })
@@ -41,7 +39,7 @@ export function addSidebarContextOptions (application, buttons) {
   ) return
 
   // Add a Send To Chat button
-  buttons.unshift({
+  buttons.push({
     name: getRollActionName(documentName, pack ? guessCompendiumSubtype(pack.metadata) : undefined),
     icon: '<i class="fa-solid fa-comment-alt"></i>',
     callback: async li => {
@@ -79,17 +77,15 @@ export function addJournalContextOptions (application, buttons) {
 }
 
 export function addButtonToImagePopoutHeader (imagePopout, buttons) {
-  const setting = game.settings.get(MODULE_ID, 'window-header-button')
-  if (setting === 'Hide')
-    return buttons
   if (game.settings.get(MODULE_ID, 'ignored-document-names').split(',').includes('ImagePopout'))
     return buttons
 
   // Add a Send To Chat button
-  buttons.unshift({
-    label: setting === 'Only icon' ? '' : getRollActionName('ImagePopout', undefined),
-    icon: '<i class="fa-solid fa-comment-alt"></i>',
-    onclick: async () => {
+  buttons.push({
+    action: 'quick-send-to-chat',
+    label: getRollActionName('ImagePopout', undefined),
+    icon: "fa-solid fa-comment-alt",
+    onClick: async () => {
       return rollSimple({ img: imagePopout.object, name: imagePopout.options.title })
     },
   })
