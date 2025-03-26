@@ -62,7 +62,7 @@ export async function rollSimple (item, extraContents, overrideImg) {
   }
 }
 
-export async function rollJournal (item, overrideImg) {
+async function rollJournal (item, overrideImg) {
   const page0 = item.pages.filter(p => p)[0]
   const img = overrideImg || page0.src
   const imgElem = img ? `<img src=${img} alt="${item.name || img}"/>` : ''

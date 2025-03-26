@@ -2,6 +2,7 @@ import {
   addButtonToImagePopoutHeader,
   addButtonToSheetHeader,
   addSidebarContextOptions,
+  addJournalContextOptions,
 } from './menu-buttons.js'
 import { MODULE_ID, MODULE_NAME } from './consts.js'
 
@@ -55,6 +56,7 @@ Hooks.once('setup', function () {
   Hooks.on('getImagePopoutHeaderButtons', addButtonToImagePopoutHeader)
   // not hooking for macros or roll tables;  they already have a button to use them from the sheet
 
+  Hooks.on('getJournalSheetEntryContext', addJournalContextOptions)
   Hooks.on('getSidebarTabEntryContext', addSidebarContextOptions)
   console.log(`${MODULE_NAME} | Done setting up.`)
 })

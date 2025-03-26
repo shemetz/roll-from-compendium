@@ -5,6 +5,7 @@ import {
 } from './quick-send-to-chat.js'
 import { MODULE_ID } from './consts.js'
 import { COMPATIBLE_DOCUMENT_TYPES } from './consts.js'
+import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
 
 export function addButtonToSheetHeader (sheet, buttons) {
   const setting = game.settings.get(MODULE_ID, 'window-header-button')
@@ -23,8 +24,7 @@ export function addButtonToSheetHeader (sheet, buttons) {
   // Add a Send To Chat button
   buttons.unshift({
     label: setting === 'Only icon' ? '' : getRollActionName(sheet.document.documentName, sheet.document.type),
-    class: 'send-to-chat',
-    icon: 'fas fa-comment-alt',
+    icon: '<i class="fa-solid fa-comment-alt"></i>',
     onclick: async () => {
       return quickSendToChat(sheet.object)
     },
@@ -43,8 +43,7 @@ export function addSidebarContextOptions (application, buttons) {
   // Add a Send To Chat button
   buttons.unshift({
     name: getRollActionName(documentName, pack ? guessCompendiumSubtype(pack.metadata) : undefined),
-    class: 'send-to-chat',
-    icon: '<i class="fas fa-comment-alt"></i>',
+    icon: '<i class="fa-solid fa-comment-alt"></i>',
     callback: async li => {
       const entryId = li.data('documentId')
       let item
@@ -64,6 +63,21 @@ export function addSidebarContextOptions (application, buttons) {
   })
 }
 
+export function addJournalContextOptions (application, buttons) {
+  // Add a Send To Chat button
+  buttons.push({
+    name: 'Contents To Chat',
+    icon: '<i class="fa-solid fa-comment-alt"></i>',
+    callback: async li => {
+      const page = application.object.pages.get(li.dataset.pageId)
+      await ChatMessage.create({
+        ...whisperToSelfIfCtrlIsHeld(),
+        content: page.text.content,
+      })
+    },
+  })
+}
+
 export function addButtonToImagePopoutHeader (imagePopout, buttons) {
   const setting = game.settings.get(MODULE_ID, 'window-header-button')
   if (setting === 'Hide')
@@ -74,8 +88,7 @@ export function addButtonToImagePopoutHeader (imagePopout, buttons) {
   // Add a Send To Chat button
   buttons.unshift({
     label: setting === 'Only icon' ? '' : getRollActionName('ImagePopout', undefined),
-    class: 'send-to-chat',
-    icon: 'fas fa-comment-alt',
+    icon: '<i class="fa-solid fa-comment-alt"></i>',
     onclick: async () => {
       return rollSimple({ img: imagePopout.object, name: imagePopout.options.title })
     },
