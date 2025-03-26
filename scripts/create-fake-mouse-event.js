@@ -1,3 +1,5 @@
+const { KeyboardManager } = foundry.helpers.interaction
+
 export const createFakeMouseEvent = () => {
   return {
     ctrlKey: game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.CONTROL),

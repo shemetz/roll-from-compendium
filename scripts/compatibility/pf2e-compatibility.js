@@ -2,6 +2,10 @@
 import { whisperToSelfIfCtrlIsHeld } from '../keybindings.js'
 import { createFakeMouseEvent } from '../create-fake-mouse-event.js'
 
+const { KeyboardManager } = foundry.helpers.interaction
+const { ChatMessage } = foundry.documents
+const { DialogV2 } = foundry.applications.api
+
 export const pf2eInitializeDummyActor = async (compendiumRollActor) => {
   // setting to Level 0, for total Trained modifier of +2.  (-2 is no longer possible)
   await compendiumRollActor.update({ data: { details: { level: { value: 0 } } } })
@@ -137,28 +141,34 @@ ${spellLevel}${th(spellLevel)} Level (+${spellLevel - item.level})
   content += `</select>
     </div>
 </div>`
+  const contentDiv = document.createElement('div')
+  contentDiv.innerHTML = content
 
   return new Promise((resolve, reject) => {
-    new Dialog({
+    DialogV2.wait({
       title: `Upcast ${item.name}`,
-      content: content,
-      buttons: {
-        cast: {
+      content: contentDiv,
+      buttons: [
+        {
+          name: 'cast',
           label: 'Cast',
+          icon: 'fa-solid fa-magic',
           callback: html => {
             const spellLevel = parseInt(html.find('#selectedLevel')[0].value)
             resolve(spellLevel)
           },
         },
-        cancel: {
+        {
+          default: true,
+          name: 'cancel',
           label: 'Cancel',
+          icon: 'fa-solid fa-times',
           callback: () => {
             reject()
           },
         },
-      },
-      default: 'cancel',
-    }).render(true)
+      ],
+    })
   })
 }
 

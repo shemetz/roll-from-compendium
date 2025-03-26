@@ -4,6 +4,9 @@ import { dnd5eInitializeDummyActor, dnd5eRollItem } from './compatibility/dnd5e-
 import { pf2eInitializeDummyActor, pf2eCastSpell, pf2eItemToMessage } from './compatibility/pf2e-compatibility.js'
 import { ageSystemItemToMessage } from './compatibility/age-system-compatibility.js'
 
+const { KeyboardManager } = foundry.helpers.interaction
+const { ChatMessage, JournalEntry, Actor, Scene, Macro, RollTable, Item } = foundry.documents
+
 let dummyActor = null
 
 export async function quickSendToChat (item, overrideImg) {

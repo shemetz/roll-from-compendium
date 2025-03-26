@@ -2,6 +2,8 @@ import { DUMMY_ACTOR_NAME, MODULE_ID, MODULE_NAME } from './consts.js'
 import { pf2eInitializeDummyActor } from './compatibility/pf2e-compatibility.js'
 import { dnd5eInitializeDummyActor } from './compatibility/dnd5e-compatibility.js'
 
+const { DialogV2 } = foundry.applications.api
+
 Hooks.once('ready', async () => {
   let oldActor = game.actors.find(a => a.name === '(Quick Roll To Chat)')
   if (!oldActor) {
@@ -29,16 +31,18 @@ Hooks.once('ready', async () => {
   if (game.user.isGM && !game.settings.get(MODULE_ID, DONT_REMIND_AGAIN_KEY_2)) {
     await migrate(oldActor)
     console.warn(`Quick Send To Chat rename message shown successfully, should not repeat again.`)
-    new Dialog({
+    DialogV2.wait({
       title: MESSAGE_TITLE,
-      content: MESSAGE, buttons: {
-        dont_remind: {
-          icon: '<i class="fas fa-check"></i>',
+      content: MESSAGE,
+      buttons: [
+        {
+          action: 'dont_remind',
+          icon: 'fa-solid fa-check',
           label: 'Don\'t remind me again',
           callback: () => game.settings.set(MODULE_ID, DONT_REMIND_AGAIN_KEY_2, true),
         },
-      },
-    }).render(true)
+      ],
+    })
   }
 })
 

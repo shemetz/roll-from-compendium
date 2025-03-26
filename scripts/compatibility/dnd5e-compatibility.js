@@ -1,6 +1,8 @@
 import { DUMMY_ACTOR_NAME } from '../consts.js'
 import { createFakeMouseEvent } from '../create-fake-mouse-event.js'
 
+const { KeyboardManager } = foundry.helpers.interaction
+
 export const dnd5eRollItem = (item, actor, actorHasItem) => {
   if (item.system?.preparation?.mode !== undefined && !actorHasItem) {
     // setting preparation mode to innate so that it doesn't try to consume slots
