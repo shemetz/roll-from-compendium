@@ -44,26 +44,29 @@ const getSpellcasting = (actor) => {
   return actor.spellcasting.regular[0]
 }
 
-/**
- * KNOWN BUG:  Casting spells with "variants" (e.g. Acid Splash, Heal) will not show buttons.
- * https://github.com/foundryvtt/pf2e/issues/3382
- *
- * KNOWN BUG: heightening no longer works
- */
 export const pf2eCastSpell = async (item, actor) => {
   const spellcasting = getSpellcasting(actor)
   Object.defineProperty(item, 'spellcasting', {
     value: spellcasting,
     configurable: true,
   })
-  const shiftPressed = game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.SHIFT)
-  const overrideSpellLevel = shiftPressed ? await upcastSpellLevel(item) : undefined
+  const altPressed = game.keyboard.isModifierActive(KeyboardManager.MODIFIER_KEYS.ALT)
+  let overrideSpellRank = undefined
+  if (altPressed) {
+    overrideSpellRank = await upcastSpellRank(item)
+    if (overrideSpellRank === null) {
+      // user canceled, do nothing, not casting the spell
+      return Promise.resolve()
+    }
+  }
 
-  const originalAutoHeightenLevel = item.system.location.autoHeightenLevel
-  item.system.location.autoHeightenLevel = overrideSpellLevel || originalAutoHeightenLevel
-  item.isFromConsumable = true // to make it embed data
+  item.system.location.heightenedLevel = overrideSpellRank
   const fakeMouseEvent = createFakeMouseEvent()
-  const chatMessage = await item.toMessage(fakeMouseEvent, { create: false, data: { spellLvl: overrideSpellLevel } })
+  const chatMessage = await item.toMessage(fakeMouseEvent, {
+    create: false,
+    data: {},
+    rollMode: undefined,
+  })
 
   const dataItemId = `data-item-id="${item.id}"`
   item.system.location.value = spellcasting.id
@@ -122,7 +125,7 @@ function escapeHtml (string) {
   })
 }
 
-const upcastSpellLevel = async (item) => {
+const upcastSpellRank = async (item) => {
   let content = `
 <div>
     <div class="form-group">
@@ -144,32 +147,20 @@ ${spellLevel}${th(spellLevel)} Level (+${spellLevel - item.level})
   const contentDiv = document.createElement('div')
   contentDiv.innerHTML = content
 
-  return new Promise((resolve, reject) => {
-    DialogV2.wait({
-      title: `Upcast ${item.name}`,
-      content: contentDiv,
-      buttons: [
-        {
-          name: 'cast',
-          label: 'Cast',
-          icon: 'fa-solid fa-magic',
-          callback: html => {
-            const spellLevel = parseInt(html.find('#selectedLevel')[0].value)
-            resolve(spellLevel)
-          },
+  return DialogV2.wait({
+    title: `Upcast ${item.name}`,
+    content: contentDiv,
+    buttons: [
+      {
+        action: 'cast',
+        label: 'Cast',
+        icon: 'fa-solid fa-magic',
+        callback: (_event, _button, dialog) => {
+          return parseInt($(dialog).find('#selectedLevel')[0].value)
         },
-        {
-          default: true,
-          name: 'cancel',
-          label: 'Cancel',
-          icon: 'fa-solid fa-times',
-          callback: () => {
-            reject()
-          },
-        },
-      ],
-    })
-  })
+      },
+    ],
+  }).catch(() => undefined)
 }
 
 const th = (num) => {
