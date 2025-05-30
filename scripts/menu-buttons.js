@@ -7,6 +7,8 @@ import { MODULE_ID } from './consts.js'
 import { COMPATIBLE_DOCUMENT_TYPES } from './consts.js'
 import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
 
+const { ChatMessage } = foundry.documents
+
 export function addButtonToSheetHeader (sheet, buttons) {
   if (game.settings.get(MODULE_ID, 'ignored-document-names').split(',').includes(sheet.document.documentName))
     return buttons
@@ -22,7 +24,7 @@ export function addButtonToSheetHeader (sheet, buttons) {
   buttons.push({
     action: 'quick-send-to-chat',
     label: getRollActionName(sheet.document.documentName, sheet.document.type),
-    icon: "fa-solid fa-comment-alt",
+    icon: 'fa-solid fa-comment-alt',
     onClick: async () => {
       return quickSendToChat(sheet.object)
     },
@@ -30,9 +32,12 @@ export function addButtonToSheetHeader (sheet, buttons) {
   return buttons
 }
 
+/**
+ * Used for sidebar items and also for items in compendium
+ */
 export function addSidebarContextOptions (application, buttons) {
   const pack = application.collection?.applicationClass?.name === 'Compendium' ? application.collection : undefined
-  const documentName = application.entryType
+  const documentName = application.documentName
   if (
     !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)
     || documentName === 'RollTable' // Roll tables have a "Roll" button added to them in core foundry, but only in sidebar and not in compendium list
@@ -70,7 +75,7 @@ export function addJournalContextOptions (application, buttons) {
       const page = application.object.pages.get(li.dataset.pageId)
       await ChatMessage.create({
         ...whisperToSelfIfCtrlIsHeld(),
-        content: page.text.content,
+        content: `<h1>${page.name}</h1>` + page.text.content,
       })
     },
   })
@@ -84,9 +89,9 @@ export function addButtonToImagePopoutHeader (imagePopout, buttons) {
   buttons.push({
     action: 'quick-send-to-chat',
     label: getRollActionName('ImagePopout', undefined),
-    icon: "fa-solid fa-comment-alt",
+    icon: 'fa-solid fa-comment-alt',
     onClick: async () => {
-      return rollSimple({ img: imagePopout.object, name: imagePopout.options.title })
+      return rollSimple({ img: imagePopout.options.src, name: imagePopout.options.window.title })
     },
   })
   return buttons

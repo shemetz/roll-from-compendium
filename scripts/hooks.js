@@ -36,14 +36,15 @@ Hooks.once('init', function () {
 })
 
 Hooks.once('setup', function () {
-  Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getSceneConfigHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getImagePopoutHeaderButtons', addButtonToImagePopoutHeader)
+  Hooks.on('getHeaderControlsItemSheet', addButtonToSheetHeader)
+  Hooks.on('getHeaderControlsActorSheet', addButtonToSheetHeader)
+  Hooks.on('getHeaderControlsJournalSheet', addButtonToSheetHeader)
+  Hooks.on('getHeaderControlsSceneConfig', addButtonToSheetHeader)
+  Hooks.on('getHeaderControlsImagePopout', addButtonToImagePopoutHeader)
   // not hooking for macros or roll tables;  they already have a button to use them from the sheet
 
   Hooks.on('getJournalSheetEntryContext', addJournalContextOptions)
   Hooks.on('getSidebarTabEntryContext', addSidebarContextOptions)
+  Hooks.on('getItemContextOptions', addSidebarContextOptions)
   console.log(`${MODULE_NAME} | Done setting up.`)
 })
