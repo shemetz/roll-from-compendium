@@ -1,3 +1,6 @@
+## 1.9.0 - 2025-05-30
+- Upgraded to V13+ compatibility
+
 ## 1.8.1 - 2025-01-03
 - Improved github workflow automation
 
