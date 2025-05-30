@@ -1,8 +1,9 @@
 import {
   addButtonToImagePopoutHeader,
   addButtonToSheetHeader,
-  addSidebarContextOptions,
-  addJournalContextOptions,
+  addContextOptions,
+  addJournalEntryPageContextOptions,
+  addJournalEntryContextOptions,
 } from './menu-buttons.js'
 import { MODULE_ID, MODULE_NAME } from './consts.js'
 
@@ -36,14 +37,26 @@ Hooks.once('init', function () {
 })
 
 Hooks.once('setup', function () {
+  // TODO I'm really not sure which of these sets of hooks should be used... I'm guessing it's about Application V1/V2
   Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getSceneConfigHeaderButtons', addButtonToSheetHeader)
   Hooks.on('getImagePopoutHeaderButtons', addButtonToImagePopoutHeader)
+
+  Hooks.on('getHeaderControlsItemSheet', addButtonToSheetHeader)
+  Hooks.on('getHeaderControlsActorSheet', addButtonToSheetHeader)
+  Hooks.on('getHeaderControlsJournalSheet', addButtonToSheetHeader)
+  Hooks.on('getHeaderControlsSceneConfig', addButtonToSheetHeader)
+  Hooks.on('getHeaderControlsImagePopout', addButtonToImagePopoutHeader)
   // not hooking for macros or roll tables;  they already have a button to use them from the sheet
 
-  Hooks.on('getJournalSheetEntryContext', addJournalContextOptions)
-  Hooks.on('getSidebarTabEntryContext', addSidebarContextOptions)
+  Hooks.on('getJournalEntryContextOptions', addJournalEntryContextOptions)
+  Hooks.on('getJournalEntryPageContextOptions', addJournalEntryPageContextOptions)
+  Hooks.on('getItemContextOptions', addContextOptions)
+  Hooks.on('getActorContextOptions', addContextOptions)
+  Hooks.on('getSceneContextOptions', addContextOptions)
+  Hooks.on('getRollTableContextOptions', addContextOptions)
+  Hooks.on('getMacroContextOptions', addContextOptions)
   console.log(`${MODULE_NAME} | Done setting up.`)
 })

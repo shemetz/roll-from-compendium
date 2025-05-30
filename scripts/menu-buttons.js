@@ -7,6 +7,8 @@ import { MODULE_ID } from './consts.js'
 import { COMPATIBLE_DOCUMENT_TYPES } from './consts.js'
 import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
 
+const { ChatMessage } = foundry.documents
+
 export function addButtonToSheetHeader (sheet, buttons) {
   if (game.settings.get(MODULE_ID, 'ignored-document-names').split(',').includes(sheet.document.documentName))
     return buttons
@@ -19,23 +21,28 @@ export function addButtonToSheetHeader (sheet, buttons) {
     return buttons
 
   // Add a Send To Chat button
-  buttons.push({
-    action: 'quick-send-to-chat',
+  // put it second-from-last, because with application v1 the last button is Close
+  buttons.splice(buttons.length - 1, 0, {
+    class: 'quick-send-to-chat',
     label: getRollActionName(sheet.document.documentName, sheet.document.type),
-    icon: "fa-solid fa-comment-alt",
-    onClick: async () => {
+    icon: 'fa-solid fa-comment-alt',
+    onclick: async () => {
       return quickSendToChat(sheet.object)
     },
   })
   return buttons
 }
 
-export function addSidebarContextOptions (application, buttons) {
+/**
+ * Used for sidebar entries and also for entries in compendium -- item, actor, etc
+ */
+export function addContextOptions (application, buttons) {
   const pack = application.collection?.applicationClass?.name === 'Compendium' ? application.collection : undefined
-  const documentName = application.entryType
+  const documentName = application.documentName
   if (
     !COMPATIBLE_DOCUMENT_TYPES.includes(documentName)
-    || documentName === 'RollTable' // Roll tables have a "Roll" button added to them in core foundry, but only in sidebar and not in compendium list
+    // Roll tables have a "Roll" button added to them in core foundry, but only in sidebar and not in compendium list
+    || (documentName === 'RollTable' && !pack)
   ) return
 
   // Add a Send To Chat button
@@ -43,7 +50,7 @@ export function addSidebarContextOptions (application, buttons) {
     name: getRollActionName(documentName, pack ? guessCompendiumSubtype(pack.metadata) : undefined),
     icon: '<i class="fa-solid fa-comment-alt"></i>',
     callback: async li => {
-      const entryId = li.data('documentId')
+      const entryId = li.dataset['entryId']
       let item
       if (pack) {
         const thumbImg = pack.index.get(entryId).thumb
@@ -53,7 +60,7 @@ export function addSidebarContextOptions (application, buttons) {
           await quickSendToChat(item, thumbImg)
         }
       } else {
-        item = game.collections.get(documentName).get(entryId)
+        item = application.collection.get(entryId)
       }
       await quickSendToChat(item, undefined)
       return false
@@ -61,16 +68,32 @@ export function addSidebarContextOptions (application, buttons) {
   })
 }
 
-export function addJournalContextOptions (application, buttons) {
+export function addJournalEntryContextOptions (application, buttons) {
   // Add a Send To Chat button
   buttons.push({
     name: 'Contents To Chat',
     icon: '<i class="fa-solid fa-comment-alt"></i>',
     callback: async li => {
-      const page = application.object.pages.get(li.dataset.pageId)
+      const journal = application.collection.get(li.dataset['entryId'])
+      const firstPageContents = journal.pages.contents[0]?.text.content ?? '(Empty journal)'
       await ChatMessage.create({
         ...whisperToSelfIfCtrlIsHeld(),
-        content: page.text.content,
+        content: `<h1>${journal.name}</h1>` + firstPageContents,
+      })
+    },
+  })
+}
+
+export function addJournalEntryPageContextOptions (application, buttons) {
+  // Add a Send To Chat button
+  buttons.push({
+    name: 'Contents To Chat',
+    icon: '<i class="fa-solid fa-comment-alt"></i>',
+    callback: async li => {
+      const page = application.document.pages.get(li.dataset['pageId'])
+      await ChatMessage.create({
+        ...whisperToSelfIfCtrlIsHeld(),
+        content: `<h1>${page.name}</h1>` + page.text.content,
       })
     },
   })
@@ -82,11 +105,11 @@ export function addButtonToImagePopoutHeader (imagePopout, buttons) {
 
   // Add a Send To Chat button
   buttons.push({
-    action: 'quick-send-to-chat',
+    class: 'quick-send-to-chat',
     label: getRollActionName('ImagePopout', undefined),
-    icon: "fa-solid fa-comment-alt",
-    onClick: async () => {
-      return rollSimple({ img: imagePopout.object, name: imagePopout.options.title })
+    icon: 'fa-solid fa-comment-alt',
+    onclick: async () => {
+      return rollSimple({ img: imagePopout.options.src, name: imagePopout.options.window.title })
     },
   })
   return buttons

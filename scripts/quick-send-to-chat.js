@@ -34,7 +34,7 @@ const justSendLink = async (item) => {
 
 export async function rollSimple (item, extraContents, overrideImg) {
   const img = overrideImg ?? item.img ?? item.thumb
-  const imgElem = img ? `<img src=${img} alt="${item.name || img}"/>` : ''
+  const imgElem = img ? `<img src="${img}" alt="${item.name || img}"/>` : ''
   // first message - private, only name
   await ChatMessage.create({
     whisper: [game.user.id],
@@ -325,15 +325,15 @@ export const getRollActionName = (documentName, documentSubtype) => {
     'character': 'Image To Chat',
     'hazard': 'Image To Chat',
     'vehicle': 'Image To Chat',
-  }[documentSubtype] || {
+  }[documentSubtype] ?? {
     'Actor': 'Image To Chat',
     'Item': 'Send To Chat',
     'Macro': 'Execute',
-    'JournalEntry': 'Text+Image To Chat',
+    'JournalEntry': 'Contents To Chat',
     'RollTable': 'Roll',
     'Scene': 'Image to Chat',
     'ImagePopout': 'Image to Chat', // not a real document type
-  }[documentName] || 'Send To Chat'
+  }[documentName] ?? 'Send To Chat'
 }
 
 export const guessCompendiumSubtype = (compendiumMetadata) => {
