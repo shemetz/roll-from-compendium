@@ -24,10 +24,11 @@ export const dnd5eRollItem = (item, actor, actorHasItem) => {
     return customRollItem.toMessage(fakeMouseEvent)
   }
   return item.use().then(chatDataOrMessage => {
-    if (!chatDataOrMessage) return chatDataOrMessage
+    const message = chatDataOrMessage?.message ?? chatDataOrMessage
+    if (!message) return message
     // embed the item data in the chat message
-    chatDataOrMessage.setFlag('dnd5e', 'itemData', item.toObject(false))
-    return chatDataOrMessage
+    message.setFlag('dnd5e', 'itemData', item.toObject(false))
+    return message
   })
 }
 
