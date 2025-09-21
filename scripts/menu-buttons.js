@@ -9,7 +9,7 @@ import { whisperToSelfIfCtrlIsHeld } from './keybindings.js'
 
 const { ChatMessage } = foundry.documents
 
-export function addButtonToSheetHeader (sheet, buttons) {
+export function addButtonToSheetHeaderAppV1 (sheet, buttons) {
   if (game.settings.get(MODULE_ID, 'ignored-document-names').split(',').includes(sheet.document.documentName))
     return buttons
   if (
@@ -28,6 +28,29 @@ export function addButtonToSheetHeader (sheet, buttons) {
     icon: 'fa-solid fa-comment-alt',
     onclick: async () => {
       return quickSendToChat(sheet.object)
+    },
+  })
+  return buttons
+}
+
+export function addButtonToSheetHeaderAppV2 (sheet, buttons) {
+  if (game.settings.get(MODULE_ID, 'ignored-document-names').split(',').includes(sheet.document.documentName))
+    return buttons
+  if (
+    // special case:  hide button if it's a journal temporarily shown to the players
+    sheet.document.documentName === 'JournalEntry'
+    && !sheet.document.testUserPermission(game.user, 'OBSERVER')
+    && !sheet.document.pack
+  )
+    return buttons
+
+  // Add a Send To Chat button
+  buttons.push({
+    action: 'quick-send-to-chat',
+    label: getRollActionName(sheet.document.documentName, sheet.document.type),
+    icon: 'fa-solid fa-comment-alt',
+    onClick: async () => {
+      return quickSendToChat(sheet.document)
     },
   })
   return buttons
@@ -105,10 +128,10 @@ export function addButtonToImagePopoutHeader (imagePopout, buttons) {
 
   // Add a Send To Chat button
   buttons.push({
-    class: 'quick-send-to-chat',
+    action: 'quick-send-to-chat',
     label: getRollActionName('ImagePopout', undefined),
     icon: 'fa-solid fa-comment-alt',
-    onclick: async () => {
+    onClick: async () => {
       return rollSimple({ img: imagePopout.options.src, name: imagePopout.options.window.title })
     },
   })

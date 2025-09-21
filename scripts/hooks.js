@@ -1,6 +1,7 @@
 import {
   addButtonToImagePopoutHeader,
-  addButtonToSheetHeader,
+  addButtonToSheetHeaderAppV1,
+  addButtonToSheetHeaderAppV2,
   addContextOptions,
   addJournalEntryPageContextOptions,
   addJournalEntryContextOptions,
@@ -37,26 +38,28 @@ Hooks.once('init', function () {
 })
 
 Hooks.once('setup', function () {
-  // TODO I'm really not sure which of these sets of hooks should be used... I'm guessing it's about Application V1/V2
-  Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getSceneConfigHeaderButtons', addButtonToSheetHeader)
-  Hooks.on('getImagePopoutHeaderButtons', addButtonToImagePopoutHeader)
+  Hooks.on('getHeaderControlsActorSheetV2', addButtonToSheetHeaderAppV2) // TODO, ActorSheetV2 or BaseActorSheet, which is better?  or CharacterActorSheet even?
+  Hooks.on('getHeaderControlsItemSheet5e', addButtonToSheetHeaderAppV2) // 5e-specific
+  Hooks.on('getHeaderControlsItemSheet', addButtonToSheetHeaderAppV2) // TODO hope this actually gets used for other systems
+  Hooks.on('getHeaderControlsSceneConfig', addButtonToSheetHeaderAppV2)
+  Hooks.on('getHeaderControlsCardConfig', addButtonToSheetHeaderAppV2)
+  Hooks.on('getHeaderControlsJournalEntrySheet', addButtonToSheetHeaderAppV2)
+  Hooks.on('getHeaderControlsJournalEntryPageTextSheet', addButtonToSheetHeaderAppV2)
 
-  Hooks.on('getHeaderControlsItemSheet', addButtonToSheetHeader)
-  Hooks.on('getHeaderControlsActorSheet', addButtonToSheetHeader)
-  Hooks.on('getHeaderControlsJournalSheet', addButtonToSheetHeader)
-  Hooks.on('getHeaderControlsSceneConfig', addButtonToSheetHeader)
   Hooks.on('getHeaderControlsImagePopout', addButtonToImagePopoutHeader)
-  // not hooking for macros or roll tables;  they already have a button to use them from the sheet
 
-  Hooks.on('getJournalEntryContextOptions', addJournalEntryContextOptions)
+  Hooks.on('getJournalSheetHeaderButtons', addButtonToSheetHeaderAppV1) // still used in dnd5e
+  Hooks.on('getActorSheetHeaderButtons', addButtonToSheetHeaderAppV1) // still used in pf2e
+  Hooks.on('getItemSheetHeaderButtons', addButtonToSheetHeaderAppV1) // still used in pf2e
+  // not hooking header buttons for macros or roll tables;  they already have a button to use them from the sheet
+
   Hooks.on('getJournalEntryPageContextOptions', addJournalEntryPageContextOptions)
+  Hooks.on('getJournalEntryContextOptions', addJournalEntryContextOptions)
   Hooks.on('getItemContextOptions', addContextOptions)
   Hooks.on('getActorContextOptions', addContextOptions)
   Hooks.on('getSceneContextOptions', addContextOptions)
   Hooks.on('getRollTableContextOptions', addContextOptions)
   Hooks.on('getMacroContextOptions', addContextOptions)
+
   console.log(`${MODULE_NAME} | Done setting up.`)
 })
