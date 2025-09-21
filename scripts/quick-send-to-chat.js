@@ -339,31 +339,37 @@ export const getRollActionName = (documentName, documentSubtype) => {
 
 export const guessCompendiumSubtype = (compendiumMetadata) => {
   const packageName = compendiumMetadata.packageName
+  const type = compendiumMetadata.type
   const name = compendiumMetadata.name.toLowerCase()
   if (packageName === 'pf2e') {
-    if (name.includes('iconics')) return 'character'
-    if (name.includes('paizo-pregens')) return 'character'
-    if (name.includes('bestiary')) return 'npc'
-    if (name.includes('npc')) return 'npc'
-    if (name.includes('hazards')) return 'hazard'
-    if (name.includes('vehicles')) return 'vehicle'
-    if (name.includes('actions')) return 'action'
-    if (name.includes('feats')) return 'feat'
-    if (name.includes('features')) return 'feat'
-    if (name.includes('ancestries')) return 'ancestry'
-    if (name.includes('backgrounds')) return 'background'
-    if (name.includes('classes')) return 'class'
-    if (name.includes('familiar-abilities')) return 'effect'
-    if (name.includes('heritages')) return 'heritage'
-    if (name.includes('spells')) return 'spell'
-    if (name.includes('boons-and-curses')) return 'feat'
-    if (name.includes('conditionitems')) return 'effect'
-    if (name.includes('effects')) return 'effect'
-    if (name.includes('pathfinder-society-boons')) return 'feat'
-    if (name.includes('deities')) return 'background'
-    if (name.includes('ac-advanced-maneuvers')) return 'feat'
-    if (name.includes('ac-support')) return 'action'
-    if (name.includes('ac-eidolons')) return 'ancestry'
+    if (type === 'Actor') {
+      if (name.includes('iconics')) return 'character'
+      if (name.includes('paizo-pregens')) return 'character'
+      if (name.includes('bestiary')) return 'npc'
+      if (name.includes('npc')) return 'npc'
+      if (name.includes('hazards')) return 'hazard'
+      if (name.includes('vehicles')) return 'vehicle'
+    }
+    if (type === 'Item') {
+      if (name.includes('actions')) return 'action'
+      if (name.includes('feats')) return 'feat'
+      if (name.includes('features')) return 'feat'
+      if (name.includes('ancestries')) return 'ancestry'
+      if (name.includes('backgrounds')) return 'background'
+      if (name.includes('classes')) return 'class'
+      if (name.includes('familiar-abilities')) return 'effect'
+      if (name.includes('heritages')) return 'heritage'
+      if (name.includes('spells')) return 'spell'
+      if (name.includes('boons-and-curses')) return 'feat'
+      if (name.includes('conditionitems')) return 'effect'
+      if (name.includes('effects')) return 'effect'
+      if (name.includes('pathfinder-society-boons')) return 'feat'
+      if (name.includes('deities')) return 'background'
+      if (name.includes('ac-advanced-maneuvers')) return 'feat'
+      if (name.includes('ac-support')) return 'action'
+      if (name.includes('ac-eidolons')) return 'ancestry'
+    }
+
   }
   return undefined
 }
