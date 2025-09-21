@@ -1,3 +1,8 @@
+## 1.9.1 - 2025-09-20
+- Fixed #32, sometimes dnd5e item usage was broken.  It's still broken for sidebar items!
+- Maybe fixed something else for 5e compatibility
+- Fixed pf2e "bestiary effects" action preview naming, and other potential issues there
+
 ## 1.9.0 - 2025-05-30
 - Upgraded to V13+ compatibility
 
