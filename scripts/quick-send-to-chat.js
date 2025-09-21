@@ -123,6 +123,7 @@ async function rollRollableTable (item) {
   return await item.draw()
 }
 
+// TODO - this hack would probably be much more stable if it actually gave a copy of the item to the actor, and then deleted it later, but that's complicated...
 function activateUglyHackThatLinksItemToActor (item, actor, shouldAffectActor) {
   console.log(`${MODULE_NAME} | temporarily binding item to actor: ${item.name} + -> ${actor.name}`)
   if (shouldAffectActor) {

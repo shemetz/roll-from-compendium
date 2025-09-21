@@ -51,6 +51,11 @@ Actors will only have their name and image revealed, with name being a private m
 
 ![](metadata/screenshots/Screenshot_5.png)
 
+# Known issues
+
+In Foundry V13 with D&D 5e, using items from the items directory (not in an actor and not in a compendium pack) will silently fail.
+(this is because of internal code in the dnd5e "use" function that requires the item to be embedded or in a pack)
+
 # Dummy Actor
 When "Item" items (spells, weapons, equipment, features...) are sent, they will be sent as if they belong to an actor.
 
