@@ -46,6 +46,9 @@ const getSpellcasting = (actor) => {
 
 export const pf2eCastSpell = async (item, actor) => {
   const spellcasting = getSpellcasting(actor)
+  await spellcasting.update({
+    "system.tradition.value": item.system.traits?.traditions?.[0] ?? "arcane"
+  });
   Object.defineProperty(item, 'spellcasting', {
     value: spellcasting,
     configurable: true,
