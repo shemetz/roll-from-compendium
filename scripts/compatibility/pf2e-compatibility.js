@@ -1,6 +1,7 @@
 // https://gitlab.com/hooking/foundry-vtt---pathfinder-2e/-/blob/master/src/module/actor/sheet/base.ts#L1048
 import { whisperToSelfIfCtrlIsHeld } from '../keybindings.js'
 import { createFakeMouseEvent } from '../create-fake-mouse-event.js'
+import { DUMMY_ACTOR_NAME } from '../consts.js'
 
 const { KeyboardManager } = foundry.helpers.interaction
 const { ChatMessage } = foundry.documents
@@ -46,9 +47,11 @@ const getSpellcasting = (actor) => {
 
 export const pf2eCastSpell = async (item, actor) => {
   const spellcasting = getSpellcasting(actor)
-  await spellcasting.update({
-    "system.tradition.value": item.system.traits?.traditions?.[0] ?? "arcane"
-  });
+  if (actor.name === DUMMY_ACTOR_NAME) {
+    await spellcasting.update({
+      "system.tradition.value": item.system.traits?.traditions?.[0] ?? 'arcane'
+    })
+  }
   Object.defineProperty(item, 'spellcasting', {
     value: spellcasting,
     configurable: true,
@@ -164,7 +167,7 @@ ${spellLevel}${th(spellLevel)} Level (+${spellLevel - item.level})
       },
     ],
     default: 'cast'
-  }).catch(() => undefined);
+  }).catch(() => undefined)
 }
 
 const th = (num) => {
