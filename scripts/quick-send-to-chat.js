@@ -194,14 +194,18 @@ function deactivateUglyHackThatLinksItemToActor (item, actor) {
 }
 
 export async function rollItem (item) {
-  const controlledActor = canvas.tokens.controlled[0]?.actor
-  if (game.settings.get(MODULE_ID, 'use-dummy-actor') === false) {
-    return rollDependingOnSystem(item, controlledActor, undefined)
+  let actorUuid = item.uuid.match(/Actor\.[^\.]+/)?.[0]
+  let actor = actorUuid ? await fromUuid(actorUuid) : undefined
+  if (actor === undefined) {
+    const controlledActor = canvas.tokens.controlled[0]?.actor
+    if (game.settings.get(MODULE_ID, 'use-dummy-actor') === false) {
+      return rollDependingOnSystem(item, controlledActor, undefined)
+    }
+    if (dummyActor === null) {
+      dummyActor = await findOrCreateDummyActor()
+    }
+    actor = controlledActor ?? dummyActor
   }
-  if (dummyActor === null) {
-    dummyActor = await findOrCreateDummyActor()
-  }
-  let actor = controlledActor ?? dummyActor
   if (game.system.id === 'pf2e' && item.type === 'spell' && actor.spellcasting.regular.length === 0) {
     // in pf2e, casting spells requires an actor with spellcasting, so sometimes we need to still use dummy actor
     actor = dummyActor
