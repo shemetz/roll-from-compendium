@@ -47,7 +47,7 @@ const getSpellcasting = (actor) => {
 
 export const pf2eCastSpell = async (item, actor) => {
   const spellcasting = getSpellcasting(actor)
-  if (actor.name === DUMMY_ACTOR_NAME) {
+  if (actor.name === DUMMY_ACTOR_NAME && actor.isOwner) {
     await spellcasting.update({
       "system.tradition.value": item.system.traits?.traditions?.[0] ?? 'arcane'
     })
