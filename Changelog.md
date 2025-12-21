@@ -1,3 +1,6 @@
+## 1.9.2 - 2025-12-21
+- Fixed pf2e spell handling, thanks @Anonomit!  (#33)
+
 ## 1.9.1 - 2025-09-20
 - Fixed #32, sometimes dnd5e item usage was broken.  It's still broken for sidebar items!
 - Maybe fixed something else for 5e compatibility
