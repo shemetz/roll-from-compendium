@@ -151,7 +151,7 @@ ${spellLevel}${th(spellLevel)} Level (+${spellLevel - item.level})
   contentDiv.innerHTML = content
 
   return await DialogV2.wait({
-    title: `Upcast ${item.name}`,
+    title: `Heighten ${item.name}`,
     content: contentDiv,
     buttons: [
       {
