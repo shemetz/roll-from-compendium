@@ -150,7 +150,7 @@ ${spellLevel}${th(spellLevel)} Level (+${spellLevel - item.level})
   const contentDiv = document.createElement('div')
   contentDiv.innerHTML = content
 
-  return DialogV2.wait({
+  return await DialogV2.wait({
     title: `Upcast ${item.name}`,
     content: contentDiv,
     buttons: [
@@ -159,11 +159,12 @@ ${spellLevel}${th(spellLevel)} Level (+${spellLevel - item.level})
         label: 'Cast',
         icon: 'fa-solid fa-magic',
         callback: (_event, _button, dialog) => {
-          return parseInt($(dialog).find('#selectedLevel')[0].value)
+          return parseInt($(dialog.element).find('#selectedLevel')[0].value) || 0;
         },
       },
     ],
-  }).catch(() => undefined)
+    default: 'cast'
+  }).catch(() => undefined);
 }
 
 const th = (num) => {
