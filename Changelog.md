@@ -1,4 +1,4 @@
-## 1.9.2 - 2025-12-21
+## 1.9.3 - 2025-12-21
 - Fixed pf2e spell handling, thanks @Anonomit!  (#33)
 
 ## 1.9.1 - 2025-09-20
