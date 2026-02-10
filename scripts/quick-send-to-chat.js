@@ -36,16 +36,19 @@ export async function rollSimple (item, extraContents, overrideImg) {
   const img = overrideImg ?? item.img ?? item.thumb
   const imgElem = img ? `<img src="${img}" alt="${item.name || img}"/>` : ''
   // first message - private, only name
-  await ChatMessage.create({
-    whisper: [game.user.id],
-    content:
-      `<div class="${game.system.id} chat-card item-card">
+  const itemName = item.name?.length > 0 ? item.name : item.uuid ? `@UUID[${item.uuid}]` : undefined
+  if (itemName && itemName.length > 0) {
+    await ChatMessage.create({
+      whisper: [game.user.id],
+      content:
+        `<div class="${game.system.id} chat-card item-card">
           <header class="card-header flexrow">
-          <h3 class="item-name">${item.name}</h3>
+          <h3 class="item-name">${itemName}</h3>
           </header>
       </div>
       `,
-  })
+    })
+  }
   // second message - public (unless Ctrl is held), image/text
   if (imgElem || extraContents) {
     await ChatMessage.create({
