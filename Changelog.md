@@ -1,3 +1,6 @@
+## 1.9.5 - 2026-02-10
+- Stop creating name messages for things with no name
+
 ## 1.9.3 - 2025-12-21
 - Fixed pf2e spell handling, thanks @Anonomit!  (#33)
 
