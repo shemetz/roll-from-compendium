@@ -1,3 +1,6 @@
+## 1.9.6 - 2026-04-24
+- Added compatibility with Starfinder 2e (sf2e)
+
 ## 1.9.5 - 2026-02-10
 - Stop creating name messages for things with no name
 

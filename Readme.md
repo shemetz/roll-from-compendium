@@ -25,9 +25,9 @@ Right click (context menu options) are added to:
 Header buttons are also added to sheets. The new option is named "💬 To Chat".
 
 When clicking this option, the sheet's contents will be used to post a card in the chat, depending on the exact document type:
-- (dnd5e, pf2e) A spell will be cast.
+- (dnd5e, pf2e/sf2e) A spell will be cast.
 - (dnd5e) A weapon will be used, allowing an attack and damage roll
-- (pf2e) An Effect will be posted to the chat, along with an embedded link that can be immediately dragged onto a token.
+- (pf2e/sf2e) An Effect will be posted to the chat, along with an embedded link that can be immediately dragged onto a token.
 - Any other Item will have its name, image, and full description posted.
 - Actors, and Scenes will post the name and the image
 - Journal Entries will show their contents along with an image if one exists.
