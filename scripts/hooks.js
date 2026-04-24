@@ -21,6 +21,7 @@ Hooks.once('init', function () {
     type: Boolean,
     default: (() => {
       if (game.system.id === 'pf2e') return true
+      if (game.system.id === 'sf2e') return true
       if (game.system.id === 'dnd5e') return true
       if (game.system.id === 'custom-system-builder') return false
       // probably true for most other systems?  I don't know

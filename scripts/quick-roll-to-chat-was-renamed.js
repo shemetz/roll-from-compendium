@@ -49,7 +49,7 @@ Hooks.once('ready', async () => {
 const migrate = async (oldActor) => {
   console.log(`${MODULE_NAME} | Migrating actor: ${oldActor.name}`)
   let updatedActor = await oldActor.update({ name: DUMMY_ACTOR_NAME })
-  if (game.system.id === 'pf2e') {
+  if (game.system.id === 'pf2e' || game.system.id === 'sf2e') {
     updatedActor = await pf2eInitializeDummyActor(oldActor)
   }
   if (game.system.id === 'dnd5e') {

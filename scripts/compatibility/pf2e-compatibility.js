@@ -78,8 +78,8 @@ export const pf2eCastSpell = async (item, actor) => {
   item.system.location.value = spellcasting.id
   const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
   chatMessage.content = chatMessage.content.replace(dataItemId, `${dataItemId} ${dataEmbeddedItem}`)
-  chatMessage.flags.pf2e.casting.embeddedSpell = item.toObject()
-  chatMessage._source.flags.pf2e.casting.embeddedSpell = item.toObject()
+  chatMessage.flags[game.system.id].casting.embeddedSpell = item.toObject()
+  chatMessage._source.flags[game.system.id].casting.embeddedSpell = item.toObject()
   return ChatMessage.create(chatMessage)
 }
 

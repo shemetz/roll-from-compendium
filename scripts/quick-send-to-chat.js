@@ -209,7 +209,7 @@ export async function rollItem (item) {
     }
     actor = controlledActor ?? dummyActor
   }
-  if (game.system.id === 'pf2e' && item.type === 'spell' && actor.spellcasting.regular.length === 0) {
+  if ((game.system.id === 'pf2e' || game.system.id === 'sf2e') && item.type === 'spell' && actor.spellcasting.regular.length === 0) {
     // in pf2e, casting spells requires an actor with spellcasting, so sometimes we need to still use dummy actor
     actor = dummyActor
   }
@@ -226,7 +226,7 @@ export async function rollItem (item) {
 }
 
 async function rollDependingOnSystem (item, actor) {
-  if (game.system.id === 'pf2e') {
+  if (game.system.id === 'pf2e' || game.system.id === 'sf2e') {
     if (item.type === 'spell') {
       if (!actor) return ui.notifications.error(
         `PF2E system requires an actor for spellcasting;  please enable Dummy Actor in Quick Send to Chat settings`)
@@ -261,12 +261,12 @@ async function findOrCreateDummyActor () {
 
   if (foundActor) {
     // v1.7.1 patch to fix "broken" dummy actors with the wrong type
-    if (foundActor.type !== 'character' && ['pf2e', 'dnd5e'].includes(game.system.id)) {
+    if (foundActor.type !== 'character' && ['pf2e', 'sf2e', 'dnd5e'].includes(game.system.id)) {
       await foundActor.delete()
       foundActor = null
     }
     // migration to v9
-    if (game.system.id === 'pf2e' && !foundActor.spellcasting.filter(sc => sc)[0]) {
+    if ((game.system.id === 'pf2e' || game.system.id === 'sf2e') && !foundActor.spellcasting.filter(sc => sc)[0]) {
       foundActor = await pf2eInitializeDummyActor(foundActor)
     }
     return foundActor
@@ -277,7 +277,7 @@ async function findOrCreateDummyActor () {
   if (oldActor) {
     console.log(`${MODULE_NAME} | Migrating actor: ${oldActor.name}`)
     let updatedActor = await oldActor.update({ name: DUMMY_ACTOR_NAME })
-    if (game.system.id === 'pf2e') {
+    if (game.system.id === 'pf2e' || game.system.id === 'sf2e') {
       updatedActor = await pf2eInitializeDummyActor(oldActor)
     }
     if (game.system.id === 'dnd5e') {
@@ -300,7 +300,7 @@ async function findOrCreateDummyActor () {
     types: actorType,
   }
   let actor = await cls.create(createData, { renderSheet: false })
-  if (game.system.id === 'pf2e') {
+  if (game.system.id === 'pf2e' || game.system.id === 'sf2e') {
     actor = await pf2eInitializeDummyActor(actor)
   }
   if (game.system.id === 'dnd5e') {
@@ -348,7 +348,7 @@ export const guessCompendiumSubtype = (compendiumMetadata) => {
   const packageName = compendiumMetadata.packageName
   const type = compendiumMetadata.type
   const name = compendiumMetadata.name.toLowerCase()
-  if (packageName === 'pf2e') {
+  if (packageName === 'pf2e' || 'sf2e') {
     if (type === 'Actor') {
       if (name.includes('iconics')) return 'character'
       if (name.includes('paizo-pregens')) return 'character'
@@ -376,7 +376,6 @@ export const guessCompendiumSubtype = (compendiumMetadata) => {
       if (name.includes('ac-support')) return 'action'
       if (name.includes('ac-eidolons')) return 'ancestry'
     }
-
   }
   return undefined
 }
