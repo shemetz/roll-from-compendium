@@ -70,9 +70,9 @@ export function addContextOptions (application, buttons) {
 
   // Add a Send To Chat button
   buttons.push({
-    name: getRollActionName(documentName, pack ? guessCompendiumSubtype(pack.metadata) : undefined),
+    label: getRollActionName(documentName, pack ? guessCompendiumSubtype(pack.metadata) : undefined),
     icon: '<i class="fa-solid fa-comment-alt"></i>',
-    callback: async li => {
+    onClick: async (_event, li) => {
       const entryId = li.dataset['entryId']
       let item
       if (pack) {
@@ -91,13 +91,14 @@ export function addContextOptions (application, buttons) {
   })
 }
 
-export function addJournalEntryContextOptions (application, buttons) {
+export function addJournalEntryContextOptions (compendium, buttons) {
   // Add a Send To Chat button
   buttons.push({
-    name: 'Contents To Chat',
+    label: 'Contents To Chat',
     icon: '<i class="fa-solid fa-comment-alt"></i>',
-    callback: async li => {
-      const journal = application.collection.get(li.dataset['entryId'])
+    onClick: async (_event, li) => {
+      const entryId = li.dataset['entryId']
+      const journal = compendium.collection.get(entryId) ?? await fromUuid(compendium.collection.index.get(entryId).uuid)
       const firstPageContents = journal.pages.contents[0]?.text.content ?? '(Empty journal)'
       await ChatMessage.create({
         ...whisperToSelfIfCtrlIsHeld(),
@@ -110,9 +111,9 @@ export function addJournalEntryContextOptions (application, buttons) {
 export function addJournalEntryPageContextOptions (application, buttons) {
   // Add a Send To Chat button
   buttons.push({
-    name: 'Contents To Chat',
+    label: 'Contents To Chat',
     icon: '<i class="fa-solid fa-comment-alt"></i>',
-    callback: async li => {
+    onClick: async (_event, li) => {
       const page = application.document.pages.get(li.dataset['pageId'])
       await ChatMessage.create({
         ...whisperToSelfIfCtrlIsHeld(),
